@@ -2305,6 +2305,18 @@ allmerdata && allmerdata.map((item,i)=>(
                     </div>
                     <div style={{borderBottom:'1px solid green', paddingBottom:'15px'}} >
                       <p>verified date</p>
+                      {
+
+modelalldata && modelalldata.map(itemnew=>(
+   itemnew.product_Id === item.product_Id ?
+   <p>{itemnew.verifydate.split(' ').slice(0,4).join(' ')}</p>:<p></p>
+
+
+
+
+))
+
+    }
 
 
                     </div>
@@ -2847,7 +2859,7 @@ allmerdata && allmerdata.map((item,i)=>(
 
 
 
-          <p>Verified Date</p>
+          
 
         
 </div>
@@ -3091,6 +3103,20 @@ finalmerdata && finalmerdata.map(item=>(
       ))
     }
   </div>
+}
+
+<p>Verified Date</p>
+{
+   <div style={{borderBottom:'1px solid gray', paddingBottom:'10px'}} >
+
+   {
+     modelalldata && modelalldata.map(item=>(
+       item.product_Id === itemnew ?
+       <p>{item.verifydate.split(' ').slice(0,4).join(' ')}</p> : <p></p>
+     ))
+   }
+ </div>
+
 }
 
 

@@ -9,6 +9,8 @@ const Login = ({history}) => {
     const [loginpassword, setLoginPassword] = useState();
     const [res, setRes]= useState('')
 
+    const [message, setMessage] = useState('')
+
 
     useEffect(()=>{
         if(res === 200){
@@ -33,7 +35,17 @@ const Login = ({history}) => {
         setUserSession(res.data.user, res.data.token) 
       }
     }).catch(error=>{
-      console.log(error)
+    
+        setMessage(error.response.data.message)
+      
+        setTimeout(()=>{
+
+          setMessage('')
+        },[3000])
+      
+
+
+      
     })
   }
 
@@ -49,10 +61,13 @@ const Login = ({history}) => {
   <input type='password'  onChange={event=> setLoginPassword(event.target.value)} placeholder='employee id' />
   <input type="submit" value="Log In" style={{cursor:'pointer'}} />
   <div class="links">
-    <a href="#">Forgot password</a>
+  
    
   </div>
 </form>
+    {
+      message && <p  style={{color:'red'}}>{message}</p>
+    }
       
     </div>
   )
