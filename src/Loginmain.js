@@ -1830,11 +1830,16 @@ allmerdata && allmerdata.map((item,i)=>(
                 <select onChange={event=>setModName(event.target.value)} >
                   <option></option>
                   <option value='modeler1@arnxt.com' >modeler1</option>
-                  <option value='anil@arnxt.com' >modeler2</option>
+                  <option value='modeler2@arnxt.com' >modeler2</option>
 
                   <option value='modeler3@arnxt.com' >modeler3</option>
 
                   <option value='modeler4@arnxt.com' >modeler4</option>
+                  <option value='modeler5@arnxt.com' >modeler5</option>
+                  <option value='modeler6@arnxt.com' >modeler6</option>
+                  <option value='modeler7@arnxt.com' >modeler7</option>
+                  <option value='modeler8@arnxt.com' >modeler8</option>
+                  <option value='modeler9@arnxt.com' >modeler9</option>
 
                 </select>
                 <button  onClick={()=>assignModeler(item.user_Id, itemnew, i)} style={{marginLeft:'20px'}} >Submit</button>
@@ -2185,12 +2190,18 @@ allmerdata && allmerdata.map((item,i)=>(
 
                        <select onChange={event=>setModName(event.target.value)} >
                   <option></option>
-                  <option value='anil1@arnxt.com' >modeler1</option>
-                  <option value='anil@arnxt.com' >modeler2</option>
+                  <option value='modeler1@arnxt.com' >modeler1</option>
+                  <option value='modeler2@arnxt.com' >modeler2</option>
 
-                  <option value='anil2@arnxt.com' >modeler3</option>
+                  <option value='modeler3@arnxt.com' >modeler3</option>
 
-                  <option value='anil3@arnxt.com' >modeler4</option>
+                  <option value='modeler4@arnxt.com' >modeler4</option>
+                  <option value='modeler5@arnxt.com' >modeler5</option>
+                  <option value='modeler6@arnxt.com' >modeler6</option>
+                  <option value='modeler7@arnxt.com' >modeler7</option>
+                  <option value='modeler8@arnxt.com' >modeler8</option>
+                  <option value='modeler9@arnxt.com' >modeler9</option>
+
 
                 </select>
                 <button  onClick={()=>nameHandler(item.product_Id)} style={{marginLeft:'20px'}} >Submit</button>
