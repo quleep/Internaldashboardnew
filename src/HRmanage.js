@@ -16,7 +16,20 @@ const HRmanage = () => {
     };
     axios
       .post(adminurl, requestBody)
-      .then((res) => {})
+      .then((res) => {
+        
+          
+        if(res.status === 201){
+         
+          
+          document.getElementById('submitmessage').innerHTML= 'submitted Successfully'
+          setTimeout(() => {
+          document.getElementById('submitmessage').innerHTML=''
+
+            
+          }, [2000]);
+        }
+      })
       .catch((error) => {
         console.log(error);
       });
@@ -26,6 +39,9 @@ const HRmanage = () => {
     e.preventDefault();
     document.getElementById("addrolesdiv").style.display = "block";
   };
+
+
+ 
 
   const [email, setEmail] = useState();
   const [employeeid, setEmployeeId] = useState();
@@ -75,12 +91,17 @@ const HRmanage = () => {
             Assign roles
           </option>
 
-          <option value="admin">admin</option>
+          <option value="modelhead">modelhead</option>
           <option value="user">user</option>
           <option value="ql">ql</option>
+          <option value="hr">hr</option>
+          <option value="admin">admin</option>
+
+
         </select>
 
         <input type="submit" value="Submit" style={{ cursor: "pointer" }} />
+        <p  style={{color:'green'}} id='submitmessage'></p>
       </form>
     </div>
   );

@@ -96,7 +96,7 @@ const Loginmain = ({history}) => {
 
     const modelerHandler=(e)=>{
         e.preventDefault();
-        if(roleuse === 'admin'){
+        if(roleuse === 'modelhead' || roleuse === 'admin'){
             document.getElementById('main1').style.display= 'block'
           
 
@@ -116,8 +116,7 @@ const Loginmain = ({history}) => {
        
 
     }
-    console.log(admin)
-   console.log(fbx)
+ 
     
   const fileToBase64 = (file, cb) => {
     const reader = new FileReader()
@@ -1256,7 +1255,7 @@ const modelerUploadHandler=(e)=>{
 }
 const qualityHandler=(e)=>{
     e.preventDefault();
-    if(roleuse === 'ql'){
+    if(roleuse === 'ql' || roleuse === 'admin'){
         document.getElementById('main3').style.display= 'block'
     }
     else{
@@ -1541,7 +1540,7 @@ const userHandler=()=>{
 
 
 
-  if(roleuse === 'user'){
+  if(roleuse === 'user' || roleuse === 'admin' ){
 
 
   
