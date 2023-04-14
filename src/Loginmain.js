@@ -21,6 +21,10 @@ const sendimagestatus= 'https://eh16rizdbi.execute-api.ap-south-1.amazonaws.com/
 const allmerchantdataurl= 'https://eh16rizdbi.execute-api.ap-south-1.amazonaws.com/production/getallmerchant'
 const getallmodelsurl= 'https://eh16rizdbi.execute-api.ap-south-1.amazonaws.com/production/getallmodeldata'
 const allmerchantbymodelerurl='https://eh16rizdbi.execute-api.ap-south-1.amazonaws.com/production/allmerchantmodelername'
+const getallproducts= 'https://eh16rizdbi.execute-api.ap-south-1.amazonaws.com/production/getallproducts'
+const getimagestatus= 'https://eh16rizdbi.execute-api.ap-south-1.amazonaws.com/production/getimagestatus'
+const getsinglemodelurl= 'https://eh16rizdbi.execute-api.ap-south-1.amazonaws.com/production/getsingleproduct'
+const getsingleimagestatus= 'https://eh16rizdbi.execute-api.ap-south-1.amazonaws.com/production/getsingleimagestatus'
 
 const Loginmain = ({history}) => {
 
@@ -76,6 +80,19 @@ const Loginmain = ({history}) => {
 
     const [messagemodel, setMessageModel] = useState();
     const [messageimage, setMessageImage] = useState();
+    const [modelerexist, setModelerExist] = useState(false);
+    const [datearray, setDateArray] = useState([]);
+    const [productsget, setProductsGet] = useState();
+
+    const [modeluploaddata, setModelUploadData] = useState();
+
+    const [allproducts, setAllProducts] = useState();
+
+    const [allimagestatus, setAllImageStatus] = useState();
+    const [singlemerchant, setSingleMerchant] = useState();
+    const [singleproductdetails, setSingleProductDetails] = useState();
+
+    const [singleimagestatus, setSingleImageStatus] = useState();
 
     const modelerHandler=(e)=>{
         e.preventDefault();
@@ -114,14 +131,22 @@ const Loginmain = ({history}) => {
   }
   
  
-const imageQualityHandler = (val)=>{
+const imageQualityHandler = (val, len)=>{
   const imgqualitybody={
     merchantid : Number(userid),
     productid: val,
     statusimage: imagestatus
   }
   axios.post(sendimagestatus, imgqualitybody).then(res=>{
-    console.log(res)
+    if(res.status === 201){
+      document.getElementById(`${val}_imgstatus_${len}`).innerHTML= 'Submitted successfully'
+        setTimeout(()=>{
+            document.getElementById(`${val}_imgstatus_${len}`).innerHTML= ''
+       
+       
+
+      },[2000])
+    }
   }).catch(error=>{
     console.log(error)
   })
@@ -605,15 +630,44 @@ const onChangegltf = e => {
 
     const searchHandler=(e)=>{
         e.preventDefault();
-        const requestBody={
+            getproduct()
+
+        async function getproduct(){
+
+           const requestBody={
             userid: Number(userid)
         }
+         await  axios.post(searchurl, requestBody).then(res=>{
+            
+           
+            setSingleMerchant(res.data)
+            
+           }).catch(error=>{
+            console.log(error)
+           })
 
-        axios.post(searchurl, requestBody).then(res=>{
-         
+           const newbody={
+            userid: Number(userid)
+           }
 
+         await  axios.post(getsinglemodelurl, newbody).then(res=>{
+          setSingleProductDetails(res.data)
+            
+           }).catch(error=>{
+            console.log(error)
+           })
+          const imagebody={
+            userid: Number(userid)
+          }
 
-
+           await axios.post(getsingleimagestatus, imagebody).then(res=>{
+            setSingleImageStatus(res.data)
+            
+           }).catch(error=>{
+            console.log(error)
+           })
+    
+        
           document.querySelector('.defaultmerchant').style.display= 'block'
           document.querySelector('.allmerchantdata').style.display= 'none'
 
@@ -622,54 +676,19 @@ const onChangegltf = e => {
           document.querySelector('.allmerchantquality').style.display = 'none'
          
           
-          setDimension(true);
-           setUrlData( res.data );
-
-         if(roleuse === 'admin' || roleuse === 'ql'   ){
-
-             
-       
-
-
-          const modbody={
-            merchantid: Number(userid)
-          }
-          axios.post(getmodelfinaldataurl, modbody).then(res=>{
-            setModelsData(res.data)
-
           
-           
-       
-          }).catch(error=>{
-            console.log(error)
-          })
-
-         }
-
-
-       if(roleuse === 'ql'){
-
-        const newbody={
-          merchantid: Number(userid)
-        }
-        axios.post(fetchmodelerdataurl, newbody).then(res=>{
-         
-          
-          setModelerData(res.data)
-          
-        }).then(error=>{
-          console.log(error)
-        })
         
-       }
+         
 
-        }).catch(error=>{
-            console.log(error)
-        })
+        }
+       
 
-    }
+        
+}
 
-   
+
+
+
 
     const sendfunctionglb=(val,merid,len)=>{
     
@@ -716,7 +735,7 @@ if (fileglb){
            axios.post(uploadmodelfbx, reqbody).then(res=>{
 
             if(res.status === 200){
-              document.getElementById('b2').value= "";
+        
               setUploaded(true)
               document.getElementById(`${val}_glb_${len}`).style.display ='block'
 
@@ -919,7 +938,7 @@ if (fileglb){
         }
 
 
-const nameHandler=(val)=>{
+const nameHandler=(val, len)=>{
 
 
 
@@ -927,7 +946,7 @@ const nameHandler=(val)=>{
 
   
   
-if(result){
+
 
 
 
@@ -943,12 +962,20 @@ if(result){
       }
 
    axios.post(uplodanameurl, body).then(res=>{
-        console.log(res)
+    console.log(res)
+        if(res.status === 200){
+          document.getElementById(`${val}_modelstatus_${len}`).innerHTML ='Submitted successfully'
+          setTimeout(()=>{
+             document.getElementById(`${val}_modelstatus_${len}`).innerHTML =''
+
+
+          },[2000])
+        }
       }).catch(error=>{
         console.log(error)
       })
   
-  }
+  
 
 
   }
@@ -1181,7 +1208,10 @@ const logoutHandler=(e)=>{
 }
 
 
-const statussubmitHandler= (val)=>{
+
+
+
+const statussubmitHandler= (val, len)=>{
 
   const mbody={
     userid: Number(userid),
@@ -1190,7 +1220,16 @@ const statussubmitHandler= (val)=>{
   }
   axios.post(updatestatuurl, mbody).then(res=>{
    
-  console.log(res)
+   if(res.status === 200){
+    document.getElementById(`${val}_modelacceptstatus_${len}`).innerHTML = 'Submitted successfully'
+    setTimeout(() => {
+    document.getElementById(`${val}_modelacceptstatus_${len}`).innerHTML = ''
+
+
+      
+    }, [2000]);
+
+   }
   }).catch(error=>{
     console.log(error)
   })
@@ -1251,13 +1290,23 @@ const allMerchantHandler=()=>{
  
   axios.get(allmerchantdataurl).then(res=>{
     setAllMerchantData(res.data)
+  
     
   }).catch(error=>{
     console.log(error)
   })
 
+  axios.get(getallproducts).then(res=>{
+    console.log(res.data)
+    setProductsGet(res.data)
+  }).catch(error=>{
+    console.log(error)
+  })
+
   axios.get(getallmodelsurl).then(res=>{
-    setModelAllData(res.data)
+    console.log(res.data)
+    setModelUploadData(res.data)
+    
   }).catch(error=>{
     console.log(error)
   })
@@ -1266,7 +1315,11 @@ const allMerchantHandler=()=>{
 
 }
 
+
+
 let newmerdata;
+
+let modeliddata;
 if(modelalldata){
   newmerdata =Object.values(modelalldata.reduce((r, {merchant_Id,product_Id}) => {
     r[merchant_Id] = r[merchant_Id] || {merchant_Id,product_Id: []};
@@ -1276,7 +1329,6 @@ if(modelalldata){
    
   }, {}));
 }
-
 
 
 
@@ -1424,7 +1476,14 @@ const merchantallHandler=()=>{
 
   
   axios.get(allmerchantdataurl).then(res=>{
+   
     setAllMerchantData(res.data)
+  }).catch(error=>{
+    console.log(error)
+  })
+
+  axios.get(getallproducts).then(res=>{
+    setProductsGet(res.data)
   }).catch(error=>{
     console.log(error)
   })
@@ -1435,11 +1494,18 @@ const merchantallHandler=()=>{
     console.log(error)
   })
 
+  axios.get(getimagestatus).then(res=>{
+    setAllImageStatus(res.data)
+  }).catch(error=>{
+    console.log(error)
+  })
+
 }
+
 
 const submitStatus=(pid,uid, len)=>{
   const mbody={
-    userid: Number(uid),
+    merchantid: Number(uid),
     productid: pid,
     statusvalue: statusvalue
   }
@@ -1470,8 +1536,10 @@ let assginvaluenot = ""
 
 const testarr= [];
 
-const userHandler=(e)=>{
-  e.preventDefault();
+const userHandler=()=>{
+
+
+
 
   if(roleuse === 'user'){
 
@@ -1484,6 +1552,9 @@ const userHandler=(e)=>{
       email: loginuser
     }
       axios.post(modelernameurl, emailbody ).then(res=>{
+        
+      
+        document.getElementById('main2').style.display= 'block'
   
     
     setNewUserData(res.data)
@@ -1495,15 +1566,45 @@ const userHandler=(e)=>{
   
 
     axios.get(getallmodelsurl).then(res=>{
+     
+   let modelertest=  res.data.filter(item=>(
+      item.modelername === loginuser
+     ))
+     if(modelertest.length === 0){
+      setModelerExist(true)
+     }
+     
       setModelAllData(res.data)
     }).catch(error=>{
       console.log(error)
     })
+
+
+    axios.get(getallproducts).then(res=>{
+    setAllProducts(res.data)
+    }).catch(error=>{
+      console.log(error)
+    })
   
+  }else{
+    
+    document.getElementById('warning2').style.display= 'block'
+    setTimeout(()=>{
+      document.getElementById('warning2').style.display= 'none'
+    },[2000])
+   
   }
+
+ 
+
+
 
 
 }
+if(modelerexist){
+  window.alert('Not Assigned')
+}
+
 
 let resmodeler;
 
@@ -1525,7 +1626,7 @@ const setuserdetails=(mid,pid)=>{
    axios.post(allmerchantbymodelerurl, newbody).then(res=>{
     setResUserData(res.data)
 
-    console.log(res.data)
+   
    }).then(error=>{
     console.log(error)
    })
@@ -1585,6 +1686,16 @@ const setuserdetails=(mid,pid)=>{
   }
 
 
+
+
+
+
+
+
+
+
+
+
   return (
     <div>
     <div>
@@ -1599,7 +1710,7 @@ const setuserdetails=(mid,pid)=>{
       </div>
       <img src={Divider} alt="Your SVG" className="divider-svg" />
       <div >
-        <p className="navoperation"  style={{cursor:'pointer'}}><a onClick={modelerUploadHandler} >Upload Models</a></p>
+        <p className="navoperation"  style={{cursor:'pointer'}}><a onClick={userHandler} >Upload Models</a></p>
         <div className="alert-box warning2" id='warning2' >Access Denied !</div>
       </div>
       <img src={Divider} alt="Your SVG" className="divider-svg" />
@@ -1648,14 +1759,14 @@ const setuserdetails=(mid,pid)=>{
 
 
 
-allmerdata && allmerdata.map((item,i)=>(
+allmerchantdata && allmerchantdata.map((item,i)=>(
 
   <div  style={{border:'1px solid green', display:'flex', width:'', margin:'10px', flexDirection:'row'}}>
 
 
     <div style={{flex:'1', border:'1px solid green', alignItems:'center', justifyContent: 'center', width:'90px', margin:'10px'}} >
       <p>Merchant Id</p>
-      <p style={{borderBottom:'1px solid gray', paddingBottom:'10px'}} >{item.user_Id}</p>
+      <p style={{borderBottom:'1px solid gray', paddingBottom:'10px'}} >{item.merchant_Id}</p>
       
   
 
@@ -1692,13 +1803,13 @@ allmerdata && allmerdata.map((item,i)=>(
     <div style={{border:'1px solid red', flex:'1'}} >
       <p>Created date</p>
     {
- regtimeall && regtimeall.map(item=>(
+  productsget && productsget.map(item=>(
   <div style={{border:''}} >
 
     {
 
       item.product_Id === itemnew ?
-      <p>{item.registration_time[0].split(' ').slice(0,4).join(' ')}</p>: <p></p>
+      <p>{item.registration_Time.split(' ').slice(0,4).join(' ')}</p>: <p></p>
     }
     
   </div>
@@ -1715,13 +1826,13 @@ allmerdata && allmerdata.map((item,i)=>(
     <div style={{border:'1px solid red', flex:'1'}} >
       <p>height (inch)</p>
     {
- heightall && heightall.map(item=>(
+ productsget && productsget.map(item=>(
   <div style={{border:''}} >
 
     {
 
       item.product_Id === itemnew ?
-      <p>{item.imageheight[0]}</p>: <p></p>
+      <p>{item.height}</p>: <p></p>
     }
     
   </div>
@@ -1739,13 +1850,13 @@ allmerdata && allmerdata.map((item,i)=>(
     <div style={{border:'1px solid red', flex:'1'}} >
       <p>breadth (inch)</p>
     {
- breadthall && breadthall.map(item=>(
+  productsget && productsget.map(item=>(
   <div style={{border:''}} >
 
     {
 
       item.product_Id === itemnew ?
-      <p>{item.imagebreadth[0]}</p>: <p></p>
+      <p>{item.breadthprod}</p>: <p></p>
     }
     
   </div>
@@ -1763,13 +1874,13 @@ allmerdata && allmerdata.map((item,i)=>(
   <div style={{border:'1px solid red', flex:'1'}} >
     <p>length (inch)</p>
       {
-   lenall && lenall.map(item=>(
+   productsget && productsget.map(item=>(
     <div style={{border:''}} >
 
       {
 
         item.product_Id === itemnew ?
-        <p>{item.imagelength[0]}</p>: <p></p>
+        <p>{item.lengthprod}</p>: <p></p>
       }
       
     </div>
@@ -1786,11 +1897,11 @@ allmerdata && allmerdata.map((item,i)=>(
     <p>Image url</p>
 
   {
-   finalmerdata && finalmerdata.map(item=>(
+   productsget && productsget.map(item=>(
     <div style={{border:''}} >
         {
           item.product_Id === itemnew ? 
-          <p  >{item.imgurl.map(it=>(
+          <p  >{item.imageurl.map(it=>(
             <p  style={{fontSize:'10px'}}><a href={it}>{it}</a></p>
           ))}</p>: <p></p>
         }
@@ -1842,7 +1953,7 @@ allmerdata && allmerdata.map((item,i)=>(
                   <option value='modeler9@arnxt.com' >modeler9</option>
 
                 </select>
-                <button  onClick={()=>assignModeler(item.user_Id, itemnew, i)} style={{marginLeft:'20px'}} >Submit</button>
+                <button  onClick={()=>assignModeler(item.merchant_Id, itemnew,  i)} style={{marginLeft:'20px'}} >Submit</button>
                  <p  style={{color:'green'}} id={`${itemnew}_modstatus_${i}`} >  </p> 
 
                 </div>
@@ -1858,11 +1969,20 @@ allmerdata && allmerdata.map((item,i)=>(
 <option value='rejected'>Rejected</option>
 </select>
 
-<button  onClick={()=>imagequalitymerchant(item.user_Id,itemnew, i)}  style={{marginLeft:'20px'}}>submit</button>
+<button  onClick={()=>imagequalitymerchant(item.merchant_Id,itemnew, i)}  style={{marginLeft:'20px'}}>submit</button>
 
  <p id={`${itemnew}_imgstatus_${i}`} style={{color:'green' }}>  </p> 
 
 </div>
+  <div>{
+    allimagestatus && allimagestatus.map(item =>(
+      item.product_Id === itemnew ?
+      <p>{item.imagestatus}</p> : <p></p>
+      
+    ))
+    
+    }
+  </div>
 
 
     <div>
@@ -1980,6 +2100,8 @@ allmerdata && allmerdata.map((item,i)=>(
 
             <div className='urldiv' >
              <div className='urldiv1' >
+
+
                 <p>merchantid</p>
                 <p>{userid} {merchant && merchant} </p>
 
@@ -1991,24 +2113,15 @@ allmerdata && allmerdata.map((item,i)=>(
                 <div>
                     <p  >productid</p>
                 </div>
-
-            
-
+               
                 {
-                    result &&
-                    result.map((item,i)=>(
-                    
-                     
-                    <div style={{
-                     height:'120px', marginBottom:'40px', margin:'10px'}} 
-                     
-                   id={""} value={""} >{""}
-
-                   <p  style={{marginTop:'30px'}} id={i} value={item.product_Id} >{item.product_Id}</p>
-                    </div>
-
-                    ))
+                  singlemerchant && singlemerchant.map(item=>(
+                    <p>{item.map(it=>(
+                      <p>{it.product_Id}</p>
+                    ))}</p>
+                  ))
                 }
+               
 
           
        
@@ -2019,78 +2132,50 @@ allmerdata && allmerdata.map((item,i)=>(
                     <p>image url</p>
                 </div>
 
-           
-          
-                    <div  >
-
-                      {/*
-                    {newres && newres.map((item,i)=>(
-                      <p ><a className='linkimage' href={item[1]} >{item[1]}</a></p>
-                    ))}
-                    */}
-                    <div  >
-
-                    </div>
-                    <div       >
-
-                    
-             
-                     
-                 
-                    {
-                   
-                  
-                  
-                    imgresnew && imgresnew.map(item=>(
-
-                     
-                        
-                      <div style={{border:'1px solid blue',height:'120px', marginBottom:'40px', margin:'10px', overflowY:'scroll'}}>
-                       
-
-                        
-                       
-                        
-                        {item.map(it=>(
-                    
-
-                        <p style={{fontSize:'10px'}} ><a href={it}>{it}</a></p>
-                    
-                      
-
-                        
+                   {
+                    singlemerchant && singlemerchant.map(item=>(
+                      item.map(it=>(
+                        <div style={{border:'1px solid red',margin:'10px', height:'150px', overflow:'scroll'}} >
+                          {it.imageurl.map(itemnew=>(
+                            <p><a  style={{fontSize:'10px'}} href={itemnew}>{itemnew}</a></p>
+                          ))}
+                        </div>
                       ))
+                    ))
                      
+
+                   
+
                         
+                    
                       
-                      
-                        }
                        
-                    
-                      
-                       </div>
-                    
-                    )
-                    )}
 
-                     
-
-                
-
-                    </div>
-                 
-                    </div>
+                       
+                  
+                   }    
+          
          
             </div>
 
             <div className='urldiv3' >
               <p>images quality</p>
               {
-                    result &&
-                    result.map((item,i)=>(
-                    
+                    singlemerchant &&
+                    singlemerchant.map((item,i)=>(
+                      item.map((it, j)=>(
 
-                    <p id={i} value={item.product_Id} >
+                      
+
+                          <p id={i} value={it.product_Id} >
+                            <div>
+                              {
+                                singleimagestatus && singleimagestatus.map(item=>(
+                                  it.product_Id === item.product_Id ? 
+                                  <p>{item.imagestatus}</p>: <p></p>
+                                ))
+                              }
+                            </div>
 
                         <select onChange={event=>setImageStatus(event.target.value)} >
                   <option></option>
@@ -2098,13 +2183,25 @@ allmerdata && allmerdata.map((item,i)=>(
                 <option value='rejected'>Rejected</option>
                 </select>
               
-                 <button  onClick={()=>imageQualityHandler(item.product_Id)}  style={{marginLeft:'20px'}}>submit</button>
+                 <button  onClick={()=>imageQualityHandler(it.product_Id,j)}  style={{marginLeft:'20px'}}>submit</button>
+                  <p  style={{color:'green'}} id={`${it.product_Id}_imgstatus_${j}`} >  </p> 
 
 
 
                     </p>
 
+                    
+
+                      ))
+                      
+                  
+
+                
+
                     ))
+
+                    
+
                 }
 
             </div>
@@ -2113,10 +2210,11 @@ allmerdata && allmerdata.map((item,i)=>(
                  <div  className='dimdiv'> 
 
                  {
-                  lenres && lenres.map(item=>(
-                     <p>{item}</p>
-                   
-                  ))
+                   singlemerchant && singlemerchant.map(item=>(
+                    item.map(it=>(
+                      <p>{it.lengthprod}</p>
+                    ))
+                   ))
                  }
                 
               
@@ -2134,13 +2232,14 @@ allmerdata && allmerdata.map((item,i)=>(
 
                   <div  className='dimdiv'> 
 
-                 {
-                  breres && breres.map(item=>(
-                      <p>{item}</p>
-  
-                        ))
-                      }
-
+                    {
+                   singlemerchant && singlemerchant.map(item=>(
+                    item.map(it=>(
+                      <p>{it.breadthprod}</p>
+                    ))
+                   ))
+                 }
+                
 
 
 
@@ -2153,13 +2252,14 @@ allmerdata && allmerdata.map((item,i)=>(
                   <p>height (inch)</p>
                   <div  className='dimdiv'> 
 
-                        {
-                        heightres && heightres.map(item=>(
-                        <p>{item}</p>
-  
-                          ))
-                         }
-
+                          {
+                   singlemerchant && singlemerchant.map(item=>(
+                    item.map(it=>(
+                      <p>{it.height}</p>
+                    ))
+                   ))
+                 }
+                
 
 
 
@@ -2169,11 +2269,18 @@ allmerdata && allmerdata.map((item,i)=>(
                        </div>
                 </div>
                 <div className='urldiv7'>
-                  <p>created date</p>
+                  <p>upload Date(P)</p>
                   {
-                    regres && regres.map(item=>(
-                      <p  style={{marginBottom:'50px'}}>{item.split(' ').slice(0,4).join(' ')}</p>
-                    ))
+
+
+
+                      singlemerchant && singlemerchant.map(item=>(
+                        item.map(it=>(
+                          <p  style={{marginBottom:'50px'}}>{it.registration_Time.split(' ').slice(0,4).join(' ')}</p>
+
+                        ))
+                      ))
+                  
                   }
 
                 </div>
@@ -2182,11 +2289,12 @@ allmerdata && allmerdata.map((item,i)=>(
 
 
                 {
-                    result &&
-                    result.map((item,i)=>(
-                    
+                    singlemerchant &&
+                    singlemerchant.map((item,i)=>(
+                      item.map((it,j)=>(
 
-                    <p id={i} value={item.product_Id} >
+                      
+                            <p id={i} value={it.product_Id} >
 
                        <select onChange={event=>setModName(event.target.value)} >
                   <option></option>
@@ -2204,13 +2312,33 @@ allmerdata && allmerdata.map((item,i)=>(
 
 
                 </select>
-                <button  onClick={()=>nameHandler(item.product_Id)} style={{marginLeft:'20px'}} >Submit</button>
+                <button  onClick={()=>nameHandler(it.product_Id, j)} style={{marginLeft:'20px'}} >Submit</button>
+
+                <div>
+                  {
+                    singleproductdetails && singleproductdetails.map(item=>(
+                     item.map(itemnew=>(
+                      itemnew.product_Id === it.product_Id ?
+                      <p>{itemnew.modelername}</p>: <p></p>
+                     ))
+                    ))
+                  }
+                </div>
+                  <p  style={{color:'green'}} id={`${it.product_Id}_modelstatus_${j}`} >  </p> 
 
 
 
                     </p>
 
+
+                      ))
+                    
+
+                
+
                     ))
+
+                    
                 }
 
 
@@ -2219,13 +2347,23 @@ allmerdata && allmerdata.map((item,i)=>(
                 </div>
                 <div className='urldiv8'> 
                 <p>status</p>
+     {              
+                  
+                  singlemerchant && singlemerchant.map(item=>(
+                    item.map(it=>(
 
-                {
-                  modelsdata.map(item=>(
-                    <p>{item.modelername ? item.modelername: assignvalue }</p>
+                     singleproductdetails && singleproductdetails.map(item=>(
+                        item.map(itemnew=>(
+                          it.product_Id === itemnew.product_Id ?
+                          <p>{itemnew.statusmod}</p> : <p></p>
+                        ))
+                      ))
+
+                    ))
                   ))
-                }
-                   
+
+                 
+                  }
               
 
 
@@ -2249,18 +2387,7 @@ allmerdata && allmerdata.map((item,i)=>(
     </div>
     <div className='modmain2' id ='main2' >
 
-    <div className='inputdiv' >
-              
-              <div className='search'>
-                  <button style={{width:'120px', height:'50px', marginTop:'20px'}}
-                  onClick={userHandler}
-                  >Search</button>
-              </div>
-
-           
-            
-
-          </div>
+  
 
 
       <div className='userdatanew'>
@@ -2293,7 +2420,7 @@ allmerdata && allmerdata.map((item,i)=>(
                     <div  style={{display:'flex', alignContent:'center', justifyContent:'center', borderBottom:'1px solid green', paddingBottom:'15px'}}>
                       
                     <p>{item.product_Id}</p>
-                    <button onClick={()=>setuserdetails(item.merchant_Id, item.product_Id)}  style={{marginLeft:'15px'}} >getdetails</button>
+                  
 
 
                     </div>
@@ -2341,10 +2468,10 @@ modelalldata && modelalldata.map(itemnew=>(
                 <p>Length (inch)</p>
 
                 {
-                  resmodeler && resmodeler.map(itemnew=>(
+                  allproducts && allproducts.map(itemnew=>(
                      item.product_Id === itemnew.product_Id
                      ? 
-                     <p>{itemnew.imagelength[0]}</p> : <p></p>
+                     <p>{itemnew.lengthprod}</p> : <p></p>
 
                   ))
                 }
@@ -2353,10 +2480,10 @@ modelalldata && modelalldata.map(itemnew=>(
               <div  style={{flex:'1',border:'1px solid red'}}>
                 <p>Breadth (inch)</p>
               {
-                  resmodelerbreadth && resmodelerbreadth.map(itemnew=>(
+                  allproducts && allproducts.map(itemnew=>(
                      item.product_Id === itemnew.product_Id
                      ? 
-                     <p>{itemnew.imagebreadth[0]}</p> : <p></p>
+                     <p>{itemnew.breadthprod}</p> : <p></p>
 
                   ))
                 }
@@ -2368,10 +2495,10 @@ modelalldata && modelalldata.map(itemnew=>(
 
                 <p>Height (inch)</p>
               {
-                  resmodelerheight && resmodelerheight.map(itemnew=>(
+                  allproducts && allproducts.map(itemnew=>(
                      item.product_Id === itemnew.product_Id
                      ? 
-                     <p>{itemnew.imageheight[0]}</p> : <p></p>
+                     <p>{itemnew.height}</p> : <p></p>
 
                   ))
                 }
@@ -2380,11 +2507,11 @@ modelalldata && modelalldata.map(itemnew=>(
               <div style={{flex:'1', flexWrap:'wrap', border:'1px solid red'}}>
                 <p>Image url</p>
               {
-    resmodelerurl && resmodelerurl.map(itemnew=>(
+    allproducts && allproducts.map(itemnew=>(
     <div style={{border:''}} >
         {
           item.product_Id === itemnew.product_Id ? 
-          <p  >{itemnew.imgurl.map(it=>(
+          <p  >{itemnew.imageurl.map(it=>(
             <p  style={{fontSize:'10px'}}><a href={it}>{it}</a></p>
           ))}</p>: <p></p>
         }
@@ -2397,12 +2524,12 @@ modelalldata && modelalldata.map(itemnew=>(
               </div>
 
               <div style={{border:'1px solid red'}}>
-                <p>Created on</p>
+                <p>Assigned On</p>
               {
-                  resmodelertime && resmodelertime.map(itemnew=>(
+                 modelalldata  && modelalldata.map(itemnew=>(
                      item.product_Id === itemnew.product_Id
                      ? 
-                     <p>{itemnew.registration_time[0].split(' ').slice(0,4).join(' ')}</p> : <p></p>
+                     <p>{itemnew.modelassigndate.split(' ').slice(0,4).join(' ')}</p> : <p></p>
 
                   ))
                 }
@@ -2436,7 +2563,7 @@ modelalldata && modelalldata.map(itemnew=>(
                 <input type='file' id='b2' onChange={onChangeglb} style={{marginBottom:'10px', paddingLeft:'30px'}}  /> 
                 <button  value={item.product_Id} onClick={()=>sendfunctionglb(item.product_Id, item.merchant_Id, i)} >upload model</button>
                 <p>{message &&  <p> {message} </p> }</p>
-                {  <span id={`${item.product_Id}_fbx_${i}`}  className='tickmarkfbx' ><FaCheck/></span>  }
+                {  <span id={`${item.product_Id}_glb_${i}`}  className='tickmarkfbx' ><FaCheck/></span>  }
 
 
                   </div>
@@ -2454,7 +2581,7 @@ modelalldata && modelalldata.map(itemnew=>(
                 <input type='file' id='b3' onChange={onChangegltf} style={{marginBottom:'10px', paddingLeft:'30px'}}  /> 
                 <button  value={item.product_Id} onClick={()=>sendfunctiongltf(item.product_Id, item.merchant_Id, i)} >upload model</button>
                 <p>{message &&  <p> {message} </p> }</p>
-                {  <span id={`${item.product_Id}_fbx_${i}`}  className='tickmarkfbx' ><FaCheck/></span>  }
+                {  <span id={`${item.product_Id}_gltf_${i}`}  className='tickmarkfbx' ><FaCheck/></span>  }
 
 
 
@@ -2857,7 +2984,7 @@ imgresnew && imgresnew.map(item=>(
 
 
 
-allmerdata && allmerdata.map((item,i)=>(
+allmerchantdata && allmerchantdata.map((item,i)=>(
 
 
 
@@ -2866,7 +2993,7 @@ allmerdata && allmerdata.map((item,i)=>(
 
 <div style={{flex:'1', border:'1px solid green', alignItems:'center', justifyContent: 'center', width:'90px', margin:'10px'}} >
 <p>Merchant Id</p>
-<p style={{borderBottom:'1px solid gray', paddingBottom:'10px'}} >{item.user_Id}</p>
+<p style={{borderBottom:'1px solid gray', paddingBottom:'10px'}} >{item.merchant_Id}</p>
 
 
 
@@ -2903,7 +3030,7 @@ removerepeat(item.product_Id).map(itemnew=>(
   <div style={{border:'1px solid red', flex:'1'}}>
   <p>fbx</p>
   {
-    modelalldata && modelalldata.map(item=>(
+    modeluploaddata && modeluploaddata.map(item=>(
      
       item.product_Id === itemnew ? 
       <p style={{fontSize:'6px'}} ><a href={item.fbx}>{item.fbx}</a></p> :<p></p>
@@ -2920,7 +3047,7 @@ removerepeat(item.product_Id).map(itemnew=>(
 <p>glb</p>
 
 {
-    modelalldata && modelalldata.map(item=>(
+    modeluploaddata && modeluploaddata.map(item=>(
      
       item.product_Id === itemnew ? 
       <p style={{fontSize:'6px'}} ><a href={item.glb}>{item.glb}</a></p> :<p></p>
@@ -2936,7 +3063,7 @@ removerepeat(item.product_Id).map(itemnew=>(
 <div style={{border:'1px solid red', flex:'1'}}>
 <p>gltf</p>
 {
-    modelalldata && modelalldata.map(item=>(
+    modeluploaddata && modeluploaddata.map(item=>(
      
       item.product_Id === itemnew ? 
       <p style={{fontSize:'6px'}} ><a href={item.gltf}>{item.gltf}</a></p> :<p></p>
@@ -2951,12 +3078,12 @@ removerepeat(item.product_Id).map(itemnew=>(
 {
 
 <div style={{border:'1px solid red', flex:'1'}}>
-<p>Assigned data</p>
+<p>Upload date (M) </p>
 {
-    modelalldata && modelalldata.map(item=>(
+    modeluploaddata &&  modeluploaddata.map(item=>(
      
       item.product_Id === itemnew ? 
-      <p  >{item.registration_time.split(' ').slice(0,4).join(' ')}</p> :<p></p>
+      <p  >{item.modeluploaddate.split(' ').slice(0,4).join(' ')}</p> :<p></p>
      
 
     ))
@@ -2966,20 +3093,40 @@ removerepeat(item.product_Id).map(itemnew=>(
 
 
 }
+{
+<div style={{border:'1px solid red', flex:'1'}} >
+<p>Assigned date</p>
+{
+
+    modeluploaddata &&  modeluploaddata.map(item=>(
+     
+      item.product_Id === itemnew ? 
+      <p  >{item.modelassigndate.split(' ').slice(0,4).join(' ')}</p> :<p></p>
+     
+
+    ))
+
+}
+
+
+
+</div>
+
+}
 
 
 
 {
 <div style={{border:'1px solid red', flex:'1'}} >
-<p>Created date</p>
+<p>Upload date (P)</p>
 {
-regtimeall && regtimeall.map(item=>(
+  productsget && productsget.map(item=>(
 <div style={{border:''}} >
 
 {
 
 item.product_Id === itemnew ?
-<p>{item.registration_time[0].split(' ').slice(0,4).join(' ')}</p>: <p></p>
+<p>{item.registration_Time.split(' ').slice(0,4).join(' ')}</p>: <p></p>
 }
 
 </div>
@@ -2996,13 +3143,13 @@ item.product_Id === itemnew ?
 <div style={{border:'1px solid red', flex:'1'}} >
 <p>height (inch)</p>
 {
-heightall && heightall.map(item=>(
+productsget && productsget.map(item=>(
 <div style={{border:''}} >
 
 {
 
 item.product_Id === itemnew ?
-<p>{item.imageheight[0]}</p>: <p></p>
+<p>{item.height}</p>: <p></p>
 }
 
 </div>
@@ -3020,13 +3167,13 @@ item.product_Id === itemnew ?
 <div style={{border:'1px solid red', flex:'1'}} >
 <p>breadth (inch)</p>
 {
-breadthall && breadthall.map(item=>(
+productsget && productsget.map(item=>(
 <div style={{border:''}} >
 
 {
 
 item.product_Id === itemnew ?
-<p>{item.imagebreadth[0]}</p>: <p></p>
+<p>{item.breadthprod}</p>: <p></p>
 }
 
 </div>
@@ -3044,13 +3191,13 @@ item.product_Id === itemnew ?
 <div style={{border:'1px solid red', flex:'1'}} >
 <p>length (inch)</p>
 {
-lenall && lenall.map(item=>(
+productsget && productsget.map(item=>(
 <div style={{border:''}} >
 
 {
 
   item.product_Id === itemnew ?
-  <p>{item.imagelength[0]}</p>: <p></p>
+  <p>{item.lengthprod}</p>: <p></p>
 }
 
 </div>
@@ -3067,11 +3214,11 @@ lenall && lenall.map(item=>(
 <p>Image url</p>
 
 {
-finalmerdata && finalmerdata.map(item=>(
+productsget && productsget.map(item=>(
 <div style={{border:''}} >
   {
     item.product_Id === itemnew ? 
-    <p  >{item.imgurl.map(it=>(
+    <p  >{item.imageurl.map(it=>(
       <p  style={{fontSize:'10px'}}><a href={it}>{it}</a></p>
     ))}</p>: <p></p>
   }
@@ -3108,7 +3255,7 @@ finalmerdata && finalmerdata.map(item=>(
   <div style={{borderBottom:'1px solid gray', paddingBottom:'10px'}} >
 
     {
-      modelalldata && modelalldata.map(item=>(
+      modeluploaddata && modeluploaddata.map(item=>(
         item.product_Id === itemnew ?
         <p>{item.modelername}</p> : <p></p>
       ))
@@ -3121,7 +3268,7 @@ finalmerdata && finalmerdata.map(item=>(
    <div style={{borderBottom:'1px solid gray', paddingBottom:'10px'}} >
 
    {
-     modelalldata && modelalldata.map(item=>(
+     modeluploaddata && modeluploaddata.map(item=>(
        item.product_Id === itemnew ?
        <p>{item.verifydate.split(' ').slice(0,4).join(' ')}</p> : <p></p>
      ))
@@ -3142,7 +3289,8 @@ finalmerdata && finalmerdata.map(item=>(
 <option value='rejected'>Rejected</option>
 </select>
 
-<button  onClick={()=>submitStatus(itemnew,item.user_Id, i)}>submit</button>
+
+<button  onClick={()=>submitStatus(itemnew,item.merchant_Id, i)}>submit</button>
 
   <p id={`${itemnew}_modelstatus_${i}`}  style={{color:'green'}} ></p>
 
@@ -3153,8 +3301,8 @@ finalmerdata && finalmerdata.map(item=>(
   <p>Status</p>
 
   {
-    modelalldata &&
-    modelalldata.map(item=>(
+    modeluploaddata &&
+    modeluploaddata.map(item=>(
       item.product_Id === itemnew ?
       <p>{item.statusmod}</p>:<p></p>
     ))
@@ -3270,22 +3418,15 @@ finalmerdata && finalmerdata.map(item=>(
                 </div>
 
             
-                {
-                    result &&
-                    result.map((item,i)=>(
-                    
-                     
-                    <div style={{
-                     height:'120px', marginBottom:'40px', margin:'10px'}} 
-                     
-                   id={""} value={""} >{""}
-
-                   <p  style={{marginTop:'30px'}} id={i} value={item.product_Id} >{item.product_Id}</p>
-                    </div>
-
-                    ))
+                 {
+                  singlemerchant && singlemerchant.map(item=>(
+                    <p>{item.map(it=>(
+                      <p>{it.product_Id}</p>
+                    ))}</p>
+                  ))
                 }
-       
+               
+
 
              </div>
              <div className='urldiv3'>
@@ -3293,65 +3434,29 @@ finalmerdata && finalmerdata.map(item=>(
                     <p>image url</p>
                 </div>
           
-                <div  >
+                  
+                   {
+                    singlemerchant && singlemerchant.map(item=>(
+                      item.map(it=>(
+                        <div style={{border:'1px solid red',margin:'10px', height:'150px', overflow:'scroll'}} >
+                          {it.imageurl.map(itemnew=>(
+                            <p><a  style={{fontSize:'10px'}} href={itemnew}>{itemnew}</a></p>
+                          ))}
+                        </div>
+                      ))
+                    ))
+                     
 
-{/*
-{newres && newres.map((item,i)=>(
-<p ><a className='linkimage' href={item[1]} >{item[1]}</a></p>
-))}
-*/}
-<div  >
+                   
 
-</div>
-<div       >
+                        
+                    
+                      
+                       
 
-
-
-
-
-{
-
-
-
-imgresnew && imgresnew.map(item=>(
-
-
-  
-<div style={{border:'1px solid blue',height:'120px', marginBottom:'40px', margin:'10px', overflowY:'scroll'}}>
- 
-
-  
- 
-  
-  {item.map(it=>(
-
-
-  <p style={{fontSize:'10px'}} ><a href={it}>{it}</a></p>
-
-
-
-  
-))
-
-  
-
-
-  }
- 
-
-
- </div>
-
-)
-)}
-
-
-
-
-
-</div>
-
-</div>
+                       
+                  
+                   } 
                  
                    
          
@@ -3359,12 +3464,12 @@ imgresnew && imgresnew.map(item=>(
             <div className='urldiv4'>
               <p>length (inch)</p>
                  <div  className='dimdiv'> 
-
-                 {
-                  lenres && lenres.map(item=>(
-                     <p>{item}</p>
-                   
-                  ))
+   {
+                   singlemerchant && singlemerchant.map(item=>(
+                    item.map(it=>(
+                      <p>{it.lengthprod}</p>
+                    ))
+                   ))
                  }
                 
               
@@ -3382,13 +3487,14 @@ imgresnew && imgresnew.map(item=>(
 
                   <div  className='dimdiv'> 
 
-                 {
-                  breres && breres.map(item=>(
-                      <p>{item}</p>
-  
-                        ))
-                      }
-
+                  {
+                   singlemerchant && singlemerchant.map(item=>(
+                    item.map(it=>(
+                      <p>{it.breadthprod}</p>
+                    ))
+                   ))
+                 }
+                
 
 
 
@@ -3402,12 +3508,13 @@ imgresnew && imgresnew.map(item=>(
                   <div  className='dimdiv'> 
 
                         {
-                        heightres && heightres.map(item=>(
-                        <p>{item}</p>
-  
-                          ))
-                         }
-
+                   singlemerchant && singlemerchant.map(item=>(
+                    item.map(it=>(
+                      <p>{it.height}</p>
+                    ))
+                   ))
+                 }
+                
 
 
 
@@ -3419,68 +3526,177 @@ imgresnew && imgresnew.map(item=>(
                 <div className='urldiv7' >
                   <p>fbx</p>
 
-                  {
-                    modelsdata && modelsdata.map(item=>(
-                      <p style={{fontSize:'6px', paddingBottom:'40px'}}><a href={item.fbx} >{item.fbx}</a></p>
+               {
+                  singlemerchant && singlemerchant.map(item=>(
+                    item.map(it=>(
+                      <div>
+                        {
+                        singleproductdetails && singleproductdetails.map(item=>(
+                            item.map(itemnew=>(
+                              it.product_Id === itemnew.product_Id ? 
+                              <p style={{fontSize:'6px', paddingBottom:'40px'}}><a href={itemnew.fbx} >{itemnew.fbx}</a></p>: <p></p>
+                            ))
+                          ))
+                        }
+
+                      </div>
                     ))
-                  }
-                  
+                  ))
+                 
+                }
                 </div>
                 <div className='urldiv7' >
                   <p>glb</p>
-                  {
-                    modelsdata && modelsdata.map(item=>(
-                      <p style={{fontSize:'6px', paddingBottom:'40px'}}><a href={item.glb} >{item.glb}</a></p>
+                   {
+                  singlemerchant && singlemerchant.map(item=>(
+                    item.map(it=>(
+                      <div>
+                        {
+                        singleproductdetails && singleproductdetails.map(item=>(
+                            item.map(itemnew=>(
+                              it.product_Id === itemnew.product_Id ? 
+                              <p style={{fontSize:'6px', paddingBottom:'40px'}}><a href={itemnew.glb} >{itemnew.glb}</a></p>: <p></p>
+                            ))
+                          ))
+                        }
+
+                      </div>
                     ))
-                  }
-                  
+                  ))
+                 
+                }
                 </div>
                 <div className='urldiv7' >
                   <p>gltf</p>
-                  {
-                    modelsdata && modelsdata.map(item=>(
-                    
-                        <p style={{fontSize:'6px', paddingBottom:'40px'}} ><a  href={item.gltf} >{item.gltf}</a></p>
-                     
-                      
+
+                   {
+                  singlemerchant && singlemerchant.map(item=>(
+                    item.map(it=>(
+                      <div>
+                        {
+                        singleproductdetails && singleproductdetails.map(item=>(
+                            item.map(itemnew=>(
+                              it.product_Id === itemnew.product_Id ? 
+                              <p style={{fontSize:'6px', paddingBottom:'40px'}}><a href={itemnew.gltf} >{itemnew.gltf}</a></p>: <p></p>
+                            ))
+                          ))
+                        }
+
+                      </div>
                     ))
-                  }
-                  
+                  ))
+                 
+                }
+                
                 </div>
                 <div className='urldiv7'>
-                  <p>created date</p>
-                  {
-                    regres && regres.map(item=>(
-                      <p  style={{marginBottom:'50px'}}>{item.split(' ').slice(0,4).join(' ')}</p>
-                    ))
+                  <p>Upload date(P)</p>
+                    {
+
+
+
+                      singlemerchant && singlemerchant.map(item=>(
+                        item.map(it=>(
+                          <p  style={{marginBottom:'50px'}}>{it.registration_Time.split(' ').slice(0,4).join(' ')}</p>
+
+                        ))
+                      ))
+                  
                   }
 
                 </div>
-                <div className='urldiv8'>
-                  <p>assigned date</p>
-                  { 
-                  regtimedatares &&
-  regtimedatares.map(item=>(
-   <p>{item[0].split(' ').slice(0,4).join(' ')}</p> 
-  ))
-}
+                   <div className='urldiv8'>
+                  <p>Assigned date</p>
+                     {
+                  singlemerchant && singlemerchant.map(item=>(
+                    item.map(it=>(
+                      <div>
+                        {
+                        singleproductdetails && singleproductdetails.map(item=>(
+                            item.map(itemnew=>(
+                              it.product_Id === itemnew.product_Id ? 
+                              <p >{itemnew.modelassigndate.split(' ').slice(0,4).join(' ')}</p>: <p></p>
+                            ))
+                          ))
+                        }
 
+                      </div>
+                    ))
+                  ))
+                 
+                }
+
+  
+                </div>
+                <div className='urldiv8'>
+                  <p>Upload date(M)</p>
+                     {
+                  singlemerchant && singlemerchant.map(item=>(
+                    item.map(it=>(
+                      <div>
+                        {
+                        singleproductdetails && singleproductdetails.map(item=>(
+                            item.map(itemnew=>(
+                              it.product_Id === itemnew.product_Id ? 
+                              <p >{itemnew.modeluploaddate.split(' ').slice(0,4).join(' ')}</p>: <p></p>
+                            ))
+                          ))
+                        }
+
+                      </div>
+                    ))
+                  ))
+                 
+                }
+
+  
                 </div>
                 <div className='urldiv8'> 
                 <p>Modeler</p>
-                {modelernameres && modelernameres[0]}
+
+                      {
+                  singlemerchant && singlemerchant.map(item=>(
+                    item.map(it=>(
+                      <div>
+                        {
+                        singleproductdetails && singleproductdetails.map(item=>(
+                            item.map(itemnew=>(
+                              it.product_Id === itemnew.product_Id ? 
+                              <p >{itemnew.modelername}</p>: <p></p>
+                            ))
+                          ))
+                        }
+
+                      </div>
+                    ))
+                  ))
+                 
+                }
+               
             
 
                 </div>
                 <div className='urldiv8'> 
                 <p>status</p>
 
-                {
-                    result &&
-                    result.map((item,i)=>(
-                    
+                          {
+                    singlemerchant &&
+                    singlemerchant.map((item,i)=>(
+                      item.map((it, j)=>(
 
-                    <p id={i} value={item.product_Id} >
+                      
+
+                          <p id={i} value={it.product_Id} >
+                            <div>
+                              {
+                                singleproductdetails && singleproductdetails.map(item=>(
+                                item.map(itemnew=>(
+                                  it.product_Id === itemnew.product_Id ?
+                                  <p>{itemnew.statusmod}</p>:<p></p>
+                                ))
+                                ))
+                              }
+                            </div>
 
                         <select onChange={event=>setStatusValue(event.target.value)} >
                   <option></option>
@@ -3488,20 +3704,56 @@ imgresnew && imgresnew.map(item=>(
                 <option value='rejected'>Rejected</option>
                 </select>
               
-                 <button  onClick={()=>statussubmitHandler(item.product_Id)}>submit</button>
+                 <button  onClick={()=>statussubmitHandler(it.product_Id,j)}  style={{marginLeft:'20px'}}>submit</button>
+                  <p  style={{color:'green'}} id={`${it.product_Id}_modelacceptstatus_${j}`} >  </p> 
 
 
 
                     </p>
 
+                    
+
+                      ))
+                      
+                  
+
+                
+
                     ))
+
+                    
+
                 }
+
+
+
+
+             
 
               
 
                 </div>
                 <div className='urldiv8'> 
-                <p>Verified data</p>
+                <p>Verified date</p>
+
+                  {
+                  singlemerchant && singlemerchant.map(item=>(
+                    item.map(it=>(
+                      <div>
+                        {
+                        singleproductdetails && singleproductdetails.map(item=>(
+                            item.map(itemnew=>(
+                              it.product_Id === itemnew.product_Id ? 
+                              <p >{itemnew.verifydate.split(' ').slice(0,4).join(' ')}</p>: <p></p>
+                            ))
+                          ))
+                        }
+
+                      </div>
+                    ))
+                  ))
+                 
+                }
 
                 </div>
 
