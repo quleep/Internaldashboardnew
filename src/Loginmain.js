@@ -1900,7 +1900,7 @@ allmerchantdata && allmerchantdata.map((item,i)=>(
     <div style={{border:''}} >
         {
           item.product_Id === itemnew ? 
-          <p  >{item.imageurl.map(it=>(
+          <p  >{ item.imageurl && item.imageurl.map(it=>(
             <p  style={{fontSize:'10px'}}><a href={it}>{it}</a></p>
           ))}</p>: <p></p>
         }
@@ -2135,7 +2135,7 @@ allmerchantdata && allmerchantdata.map((item,i)=>(
                     singlemerchant && singlemerchant.map(item=>(
                       item.map(it=>(
                         <div style={{border:'1px solid red',margin:'10px', height:'150px', overflow:'scroll'}} >
-                          {it.imageurl.map(itemnew=>(
+                          {it.imageurl && it.imageurl.map(itemnew=>(
                             <p><a  style={{fontSize:'10px'}} href={itemnew}>{itemnew}</a></p>
                           ))}
                         </div>
@@ -3217,7 +3217,7 @@ productsget && productsget.map(item=>(
 <div style={{border:''}} >
   {
     item.product_Id === itemnew ? 
-    <p  >{item.imageurl.map(it=>(
+    <p  >{item.imageurl && item.imageurl.map(it=>(
       <p  style={{fontSize:'10px'}}><a href={it}>{it}</a></p>
     ))}</p>: <p></p>
   }
@@ -3428,7 +3428,7 @@ productsget && productsget.map(item=>(
 
 
              </div>
-             <div className='urldiv3'>
+             <div className='urldiv3'style={{overflow:'scroll'}} >
                 <div>
                     <p>image url</p>
                 </div>
@@ -3438,7 +3438,7 @@ productsget && productsget.map(item=>(
                     singlemerchant && singlemerchant.map(item=>(
                       item.map(it=>(
                         <div style={{border:'1px solid red',margin:'10px', height:'150px', overflow:'scroll'}} >
-                          {it.imageurl.map(itemnew=>(
+                          {it.imageurl && it.imageurl.map(itemnew=>(
                             <p><a  style={{fontSize:'10px'}} href={itemnew}>{itemnew}</a></p>
                           ))}
                         </div>
@@ -3588,7 +3588,7 @@ productsget && productsget.map(item=>(
                 }
                 
                 </div>
-                <div className='urldiv7'>
+                <div className='urldiv7' style={{overflow:'scroll'}}>
                   <p>Upload date(P)</p>
                     {
 
