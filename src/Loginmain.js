@@ -466,7 +466,7 @@ const onChangeglb = e => {
      
       }
       else{
-        setMessage('please upload a zip file')
+        setMessage('please upload a zip or rar file')
         setFileNewglb(null)
         setFileGlv(null)
         setTimeout(()=>{
