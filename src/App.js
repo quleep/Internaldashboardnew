@@ -19,6 +19,8 @@ import Loginmain from "./Loginmain";
 import JobPost from "./JobPost";
 import Applicants from "./Applicants";
 
+import CategoryForm from "./CategoryForm";
+
 function App() {
   return (
     <div className="App">
@@ -36,6 +38,8 @@ function App() {
 
           <Route path="/main" component={Headermain} />
           <Route path="/modelpath" component={Loginmain} />
+          <Route path="/form" component={CategoryForm} />
+
         </Switch>
       </Router>
     </div>

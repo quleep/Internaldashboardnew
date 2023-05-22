@@ -31,7 +31,7 @@
 .homepage {
   width: 100%;
   height: 100%;
-  border: 1px solid red;
+ 
 }
 
 .inputdiv {
@@ -52,26 +52,26 @@
   flex-wrap: wrap;
   width: auto;
   height: 700px;
-  border: 1px solid blue;
+ 
 }
 .urldiv1 {
   width: auto;
   flex: 1;
   height: 100%;
-  border: 1px solid red;
+  
 }
 .urldiv2 {
   width: auto;
   flex: 1;
   height: 100%;
-  border: 1px solid red;
+  
 }
 .urldiv3 {
   flex: 1;
   width: auto;
 
   height: 100%;
-  border: 1px solid red;
+ 
 }
 .linkimage {
   font-size: 10px;
@@ -80,7 +80,6 @@
   width: auto;
   flex: 1;
   height: 100%;
-  border: 1px solid red;
 }
 
 .dimdiv {
@@ -94,42 +93,41 @@
   flex: 1 1 auto;
   height: 30px;
   width: auto;
-  border: 1px solid blue;
+ 
 }
 .urldiv5 {
   flex: 1;
   width: auto;
   height: 100%;
-  border: 1px solid red;
+
 }
 .urldiv6 {
   flex: 1;
   width: auto;
   height: 100%;
-  border: 1px solid red;
+ 
 }
 .urldiv7 {
   flex: 1;
   width: auto;
   height: 100%;
-  border: 1px solid red;
 }
 .urldiv8 {
   flex: 1;
   width: auto;
   height: 100%;
-  border: 1px solid red;
+ 
 }
 .urldiv9 {
   flex: 1;
   width: auto;
   height: 100%;
-  border: 1px solid red;
+  
 }
 .urldiv10 {
   flex: 1;
   height: 100%;
-  border: 1px solid red;
+  
 }
 
 .heightdiv {
@@ -142,7 +140,7 @@
 .heightdiv > * {
   flex: 1 1 auto;
   height: 40px;
-  border: 1px solid red;
+ 
 }
 
 .productiddiv {
@@ -155,7 +153,7 @@
 .productiddiv > * {
   flex: 1 1 auto;
   height: 40px;
-  border: 1px solid red;
+  
 }
 
 .prodimageurldiv {
@@ -168,14 +166,14 @@
 .prodimageurldiv > * {
   flex: 1 1 auto;
   height: 40px;
-  border: 1px solid red;
+ 
 }
 
 .logindiv {
   display: flex;
   width: 100%;
   height: 100%;
-  border: 1px solid red;
+
 }
 .logincontainer {
   display: flex;
@@ -465,21 +463,117 @@ body {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  border: 1px solid red;
+  border: 2px solid gray;
   height: auto;
   width: 100%;
   margin: 10px;
+  border-radius: 5px;
+  background-color: rgb(255, 252, 252);
 }
 
+
+.dimensioncontainer{
+  display: flex;
+  
+  flex-direction: column;
+  background-color: rgb(241, 241, 241);
+  border-radius: 10px;
+  margin-right: 20px;
+  padding: 10px;
+
+ 
+}
+
+.merchanthead{
+  font-size: 20px;
+  font-family: Manrope, sans-serif;
+
+}
+
+.merchantmaindiv{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: fit-content;
+  margin: 10px;
+  border: 2px solid  gray;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  background-color: rgb(236, 236, 236);
+
+}
+
+.merchantbodydiv{
+  background-color: rgb(241, 241, 241);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.merchantcell{
+  background-color: #eeec97;
+  z-index: 2;
+}
+
+.imageurlcontainer{
+  display: flex;
+  flex-direction: column;
+ 
+  height: 400px;
+  width: auto;
+  overflow: scroll;
+  padding-left: 20px;
+  padding-right: 20px;
+  background-color: rgb(241, 241, 241);
+  border-radius: 10px;
+  margin-right: 20px;
+
+  
+
+}
+.imageurlcontainer>*{
+  flex: 1 1 auto;
+ 
+}
+
+.imageurlbuttondiv{
+  display: flex;
+ 
+  flex-direction: row;
+}
+.imageurlinsidediv{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  border: 1px solid blue;
+ 
+}
 .userdatanew > * {
   flex: 1 1 auto;
-  border: 1px solid blue;
+
   height: auto;
   margin: 10px;
+  
 }
 
 .allmerchantdata {
   display: none;
+  
+}
+
+
+.merchantmaincontainer{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  height: auto;
+ 
+}
+
+.merchantmaincontainer>*{
+  flex: 1 1 auto;
+  
 }
 
 .allmerchantquality {
@@ -841,3 +935,202 @@ hr {
 .applicant-name.selected {
   font-weight: bold;
 }
+
+.merchantalldata{
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  width: auto;
+  height: 350px;
+  border: 2px solid rgb(212, 211, 211);
+  margin: 10px;
+  border-radius: 10px;
+}
+
+.merchantalldata>*{
+  flex: 1 0 200px;
+ 
+  margin: 10px;
+  height: 250px;
+
+  border-radius: 10px;
+  
+}
+
+.merchantdivinside{
+  background-color: #ddd;
+}
+.merchantdivinsideimage{
+  background-color: #ddd;
+  overflow: scroll;
+}
+
+
+.merchantidcontainer{
+  display: flex;
+  border: 1px soild red;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid rgb(180, 177, 177);
+  
+ 
+}
+.merchantidcontainer h2{
+  font-size: 20px;
+  font-weight: bold;
+  font-family: monospace;
+ 
+}
+
+.merchantmodelerdiv h2{
+  font-size: 20px;
+  font-weight: bold;
+  font-family: monospace;
+ 
+}
+.merchantidcontainer p{
+  font-size: 18px;
+  font-family: monospace;
+  background-color: #9cc204;
+  
+}
+
+.productidcontainer{
+
+  display: flex;
+  border: 1px soild red;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid rgb(180, 177, 177);
+  margin-bottom: -20px;
+ 
+ 
+}
+.productidcontainer h2{
+  font-size: 20px;
+  font-weight: bold;
+  font-family: monospace;
+ 
+}
+.productidcontainer p{
+  font-size: 18px;
+  font-family: monospace;
+  background-color: #9cc204;
+  
+}
+
+.dimcontainer{
+  height: 300px;
+ 
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.catagorysubmit{
+  display: flex;
+  width: auto;
+  height: auto;
+  border: 1px solid blue;
+  flex-direction: row;
+  flex-wrap: wrap;
+ margin: 20px;
+}
+
+.catagorysubmit>*{
+  flex: 1 1 250px;
+  border: 1px solid red;
+  margin: 10px;
+
+ 
+ 
+
+}
+
+.inputcategory input{
+  width: 200px;
+}
+
+
+.addTagBox{
+  width: 250px;
+  height: 150px;
+ 
+  border-radius: 15px;
+
+ 
+  box-sizing: border-box;
+  padding: 1rem;
+  font-family: 'Work Sans', sans-serif;
+  font-weight: 500;
+  
+  display: flex;
+  flex-wrap: wrap;
+  overflow: scroll;
+ 
+ 
+ 
+}
+.addTagBox > h5{
+  margin: 0;
+  color: #282828;
+  font-size: 1rem;
+}
+.addTagInput{
+ 
+  display: flex;
+ 
+  flex-wrap: wrap;
+ 
+}
+.inputTag{
+  border: none;
+  font: inherit;
+  max-width: 6rem;
+}
+.inputTag:focus{
+  outline: none;
+}
+
+
+.tags{
+  background-color: #ECECF8;
+  padding: 5px 10px;
+  border-radius: 50px;
+  display: flex;
+  grid-gap: 5px;
+  align-items: center;
+}
+.crossIcon{
+  background-color: white;
+  display: flex;
+  align-items: center;
+  border-radius: 50%;
+  font-size: 1rem;
+  padding: 2px;
+  cursor: pointer;
+}
+
+
+
+
+@media screen 
+  and (min-device-width: 1200px) 
+  and (max-device-width: 1600px) 
+  and (-webkit-min-device-pixel-ratio: 1) { 
+
+    .userdatanew{
+      width: auto;
+      
+    }
+
+  
+      
+
+
+
+  }

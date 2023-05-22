@@ -1544,7 +1544,7 @@ imgresnew && imgresnew.map(item=>(
 
 
   
-<div style={{border:'1px solid blue',height:'120px', marginBottom:'40px', margin:'10px', overflowY:'scroll'}}>
+<div style={{height:'120px', marginBottom:'40px', margin:'10px', overflowY:'scroll'}}>
  
 
   
