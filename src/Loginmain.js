@@ -48,6 +48,7 @@ const Loginmain = ({history}) => {
     const [merchant, setMerchant]= useState();
     const [modelerdata, setModelerData] = useState();
     const [statusvalue, setStatusValue]= useState();
+    const [dimensionmatch, setDimensionMatch] = useState(false)
     
 
     const [dim, setDim] = useState();
@@ -179,6 +180,10 @@ const imagequalitymerchant= (uid,pid, len)=>{
 
 }
 
+
+
+const img = new Image();
+
 const onChangeimg =(e)=>{
 
 
@@ -190,29 +195,85 @@ const onChangeimg =(e)=>{
      fileToBase64(file, (err, result) => {
        if (result) {
 
+
         let newval= file.name
         let indx = newval.lastIndexOf(".") + 1;
         let filetype = newval.substr(indx, newval.length).toLowerCase();
 
 
-        if( filetype === 'jpeg' || filetype === 'png' || filetype === 'jpg'){
 
+        img.src =  result;
+
+        img.onload = function() {
+
+          let imgstatus = true;
+       const    imgWidth = img.naturalWidth;
+       const  imgHeight = img.naturalHeight;
+
+
+         
+        if( filetype === 'jpeg' || filetype === 'png' || filetype === 'jpg' && imgWidth === 600 && imgHeight === 600 ){
+         
+      
           setImgfile(file)
-       
-        }
-        else{
-          document.querySelector('#imagemessage').innerHTML= '.jpg, .jpeg, .png files accepted'
-        
+         
+          }
+          else{
+            document.querySelector('#imagemessage').innerHTML= '.jpg, .jpeg, .png files accepted'
+          
+            setTimeout(()=>{
+            document.querySelector('#imagemessage').innerHTML= ''
+  
+              
+            },[3000])
+            setImgfile(null)
+            imgstatus = false
+      
+          }
+         
+
+         if (imgWidth !== 600){
+
+          document.querySelector('#imagemessage').innerHTML= 'image width and height should be 600 * 600'
+          setImgfile(null)
+          
           setTimeout(()=>{
           document.querySelector('#imagemessage').innerHTML= ''
 
             
           },[3000])
-          return
-    
+         
+           imgstatus = false
         }
+              
+   
+      if (imgHeight !==  600){
+        document.querySelector('#imagemessage').innerHTML= 'image width and height should be 600 * 600'
+        setImgfile(null)
+      
+        setTimeout(()=>{
+        document.querySelector('#imagemessage').innerHTML= ''
+
+        
+          
+        },[3000])
        
-       setImgfile(file)
+
+      
+        imgstatus = false
+      }
+        if(!imgstatus){
+          return
+        }
+
+        };
+  
+    
+       
+      
+
+  
+      
        
        
  
@@ -370,10 +431,7 @@ const sendImage =(val, merid, len)=>{
        
         if(  filetype === 'zip'){
           document.querySelector('#fbxmessage').innerHTML= ''
-  
-      
-       
-        }
+          }
       else{
         document.querySelector('#fbxmessage').innerHTML= 'upload a zip '
       setTimeout(() => {
@@ -395,6 +453,8 @@ const sendImage =(val, merid, len)=>{
         }
         else{
         document.querySelector('#fbxmessage').innerHTML= 'upload a fbx zip file'
+        setFileName(null)
+
         setTimeout(() => {
 
         document.querySelector('#fbxmessage').innerHTML= ''
@@ -580,16 +640,19 @@ const onChangegltf = e => {
     let newval= file.name
     let indx = newval.lastIndexOf(".") + 1;
     let filetype = newval.substr(indx, newval.length).toLowerCase();
+   
     if (result) {
       
-      if( filetype === 'usdz'){
+      if( filetype === 'usdz' || filetype === 'usdc' || filetype === 'usd'){
 
         setFileNewGltf(result)
         setFileGltf(file)
      
       }
       else{
-       document.querySelector('#usdzmessage').innerHTML= 'upload a usdz file'
+       document.querySelector('#usdzmessage').innerHTML= 'upload a usdz or usd or usdc file'
+       setFileNewGltf(null)
+       setFileGltf(null)
        setTimeout(() => {
        document.querySelector('#usdzmessage').innerHTML= ''
 
@@ -734,11 +797,7 @@ const onChangegltf = e => {
          
 if (fileglb){
 
-
-
-       
-  
-      fetch(urlimagesend,{
+         fetch(urlimagesend,{
         method:'POST',
         body: fileglb.name
       }).then((res)=>res.json()).then((res)=>{
@@ -757,11 +816,6 @@ if (fileglb){
       let resnew= res.url.split('?')
       let imgurl= resnew[0]
       
-          let newres= imgurl.split('.')[4]
-
-          let yt= newres.includes('glb')
-
-          if(yt){
            
 
             const reqbody={
@@ -785,16 +839,6 @@ if (fileglb){
             console.log(error)
            })
 
-          }
-          else{
-            setMessage('please upload .glb file')
-            setTimeout(()=>{
-              setMessage('')
-            },3000)
-          
-          }
-          
-    
       
      })
 
@@ -839,16 +883,7 @@ if (fileglb){
         let resnew= res.url.split('?')
         let imgurl= resnew[0]
         
-            let newres= imgurl.split('.')[4]
-
-            console.log(newres)
-  
-            let yt= newres.includes('gltf')
-
-            if(yt){
-             
-
-              const reqbody={
+             const reqbody={
                 merchantid: merid,
                 productid: val,
                 imgurl: imgurl,
@@ -868,15 +903,6 @@ if (fileglb){
              }).catch(error=>{
               console.log(error)
              })
-
-            }
-            else{
-              setMessage('please upload .gltf file')
-              setTimeout(()=>{
-                setMessage('')
-              },3000)
-            }
-            
       
         
        })
@@ -920,18 +946,9 @@ if (fileglb){
   
         body: filename
        }).then(res=>  {
-  
-  
+             
         let resnew= res.url.split('?')
         let imgurl= resnew[0]
-        
-            let newres= imgurl.split('.')[4]
-  
-            let yt= newres.includes('fbx')
-
-            if(yt){
-             
-
               const reqbody={
                 merchantid: merid,
                 productid: val,
@@ -950,14 +967,8 @@ if (fileglb){
               console.log(error)
              })
 
-            }
-            else{
-              setMessage('please upload .fbx file')
-              setTimeout(()=>{
-                setMessage('')
-              },3000)
             
-            }
+         
             
       
         
@@ -1435,7 +1446,7 @@ if(lenall){
   })
 }
 
-
+console.log(allproducts)
 const assignModeler=(uid, pid, len) =>{
 
   const newbody={
@@ -1529,6 +1540,7 @@ let assginvaluenot = ""
 
 
 const testarr= [];
+console.log(newuserdata)
 
 const userHandler=()=>{
 
@@ -1889,8 +1901,9 @@ const setuserdetails=(mid,pid)=>{
           item.product_Id === itemnew ? 
           item.imageurl && item.imageurl.map((it,l)=>(
 
-            <div  style={{marginBottom:'20px'}}  >
-               <button ><a href={it}>Image {l+1}</a></button>
+            <div  className='previewimage' >
+              <img src ={it}/>
+               <button ><a href={it}>download</a></button>
 
             </div>
            
@@ -2296,292 +2309,292 @@ const setuserdetails=(mid,pid)=>{
     </div>
     <div className='modmain2' id ='main2' >
 
-  
-
-
-      <div className='userdatanew'>
+    <div className=''>
 
         
       
         
-            {
-              newuserdata && newuserdata.map((item, i)=>(
-            <div>
-               
-              
-              <div  style={{display:'flex', flexDirection:'row', flexWrap:'wrap', margin:'10px'}}>
-                <div style={{flex:'1', marginRight:'20px'}} className='merchantbodydiv' >
-                  <p className='merchanthead' > Merchant Id</p>
+{
+  newuserdata && newuserdata.map((item, i)=>(
+<div className='userdatanew'>
+   
+  
+  <div  style={{display:'flex', flexDirection:'row', flexWrap:'wrap', margin:'10px'}}>
+    <div style={{flex:'1', marginRight:'20px'}} className='merchantbodydiv' >
+      <p className='merchanthead' > Merchant Id</p>
 
-                  <p className='merchantcell'> {item.merchant_Id}</p>
-                  
-                </div>
-               
+      <p className='merchantcell'> {item.merchant_Id}</p>
+      
+    </div>
+   
 
-              
-                
-             
+  
+    
+ 
 
-              <div  style={{flex:'1', paddingRight:'20px', marginRight:'20px'}}  className='merchantbodydiv'>
-                
-                  <div style={{flex:'1'}}>
-                  <p className='merchanthead'>Product Id</p>
-                    <div  style={{display:'flex', alignContent:'center', justifyContent:'center', borderBottom:'1px solid green', paddingBottom:'15px'}}>
-                      
-                    <p className='merchantcell'> {item.product_Id}</p>
-                  
-
-
-                    </div>
-
-                    <div style={{borderBottom:'1px solid green', paddingBottom:'15px'}}>
-                    <p  className='merchanthead' >Status</p>
-
-                      {
-
-                        modelalldata && modelalldata.map(itemnew=>(
-                           itemnew.product_Id === item.product_Id ?
-                           <p className='merchantcell'>{itemnew.statusmod ? itemnew.statusmod : 'pending'}</p>:<p></p>
+  <div  style={{flex:'1', paddingRight:'20px', marginRight:'20px'}}  className='merchantbodydiv'>
+    
+      <div style={{flex:'1'}}>
+      <p className='merchanthead'>Product Id</p>
+        <div  style={{display:'flex', alignContent:'center', justifyContent:'center', borderBottom:'1px solid green', paddingBottom:'15px'}}>
+          
+        <p className='merchantcell'> {item.product_Id}</p>
+      
 
 
-                        
+        </div>
 
-                        ))
-                     
-                            }
-                    </div>
-                    <div style={{borderBottom:'1px solid green', paddingBottom:'15px'}} >
-                      <p  className='merchanthead'>verified date</p>
-                      {
+        <div style={{borderBottom:'1px solid green', paddingBottom:'15px'}}>
+        <p  className='merchanthead' >Status</p>
+
+          {
+
+            modelalldata && modelalldata.map(itemnew=>(
+               itemnew.product_Id === item.product_Id ?
+               <p className='merchantcell'>{itemnew.statusmod ? itemnew.statusmod : 'pending'}</p>:<p></p>
+
+
+            
+
+            ))
+         
+                }
+        </div>
+        <div style={{borderBottom:'1px solid green', paddingBottom:'15px'}} >
+          <p  className='merchanthead'>verified date</p>
+          {
 
 modelalldata && modelalldata.map(itemnew=>(
-   itemnew.product_Id === item.product_Id ?
-   <p className='merchantcell'>{itemnew.verifydate.split(' ').slice(0,4).join(' ')}</p>:<p></p>
+itemnew.product_Id === item.product_Id ?
+<p className='merchantcell'>{itemnew.verifydate.split(' ').slice(0,4).join(' ')}</p>:<p></p>
 
 
 
 
 ))
 
+}
+
+
+        </div>
+       
+
+      </div>
+     
+    
+  </div>
+
+  <div className='dimensioncontainer'  >
+
+  <div >
+    <p className='merchanthead'>Length (inch)</p>
+
+    {
+      allproducts && allproducts.map(itemnew=>(
+         item.product_Id === itemnew.product_Id
+         ? 
+         <p className='merchantcell'>{itemnew.lengthprod}</p> : <p></p>
+
+      ))
+    }
+  </div>
+
+  <div  >
+    <p className='merchanthead'>Breadth (inch)</p>
+  {
+      allproducts && allproducts.map(itemnew=>(
+         item.product_Id === itemnew.product_Id
+         ? 
+         <p className='merchantcell'>{itemnew.breadthprod}</p> : <p></p>
+
+      ))
     }
 
+      
 
-                    </div>
-                   
+  </div>
+  <div  >
 
-                  </div>
-                 
-                
-              </div>
+    <p className='merchanthead'>Height (inch)</p>
+  {
+      allproducts && allproducts.map(itemnew=>(
+         item.product_Id === itemnew.product_Id
+         ? 
+         <p className='merchantcell'>{itemnew.height}</p> : <p></p>
 
-              <div className='dimensioncontainer'  >
-
-              <div >
-                <p className='merchanthead'>Length (inch)</p>
-
-                {
-                  allproducts && allproducts.map(itemnew=>(
-                     item.product_Id === itemnew.product_Id
-                     ? 
-                     <p className='merchantcell'>{itemnew.lengthprod}</p> : <p></p>
-
-                  ))
-                }
-              </div>
-
-              <div  >
-                <p className='merchanthead'>Breadth (inch)</p>
-              {
-                  allproducts && allproducts.map(itemnew=>(
-                     item.product_Id === itemnew.product_Id
-                     ? 
-                     <p className='merchantcell'>{itemnew.breadthprod}</p> : <p></p>
-
-                  ))
-                }
-
-                  
-
-              </div>
-              <div  >
-
-                <p className='merchanthead'>Height (inch)</p>
-              {
-                  allproducts && allproducts.map(itemnew=>(
-                     item.product_Id === itemnew.product_Id
-                     ? 
-                     <p className='merchantcell'>{itemnew.height}</p> : <p></p>
-
-                  ))
-                }
-              </div>
+      ))
+    }
+  </div>
 
 
 
 
-              </div>
-            
-            
-
-                  <div className='imageurlcontainer' >
-
-                  <p className='merchanthead'>Image url</p>
-
-                 { allproducts && allproducts.map((itemnew )=> (
-                   item.product_Id === itemnew.product_Id ?
-                   
-
-                    itemnew.imageurl.map((it,k)=>(
-
-                      <div>
-                   
-
-                    
-                      <button><a href={it}> Image {k+1}  </a></button>
-                      
-                      </div>
-
-                    )): <div></div>
-
-                  
- 
-
-                    
-                 
-
-                 )) 
-                 
-              
-                 }
-
-
-                   </div>
-            
-
-          {
-            /*
-
-                         {
-    allproducts && allproducts.map((itemnew,k)=>(
-    <div  className='imageurlbuttondiv' >
-        {
-          item.product_Id === itemnew.product_Id ? 
-          <div  style={{border:'1px solid blue'}} >{itemnew.imageurl.map(it=>(
-            <button><a href={it}> Image {k+1}  </a>  </button>
-          ))}</div>: <div></div>
-        }
-    </div>
-   ))
-  }
-
-
-            */
-          }      
- 
+  </div>
 
 
 
-            
+      <div className='imageurlcontainer' >
 
-              <div className='merchantbodydiv'  style={{marginRight:'20px'}}>
-                <p className='merchanthead'>Assigned On</p>
-              {
-                 modelalldata  && modelalldata.map(itemnew=>(
-                     item.product_Id === itemnew.product_Id
-                     ? 
-                     <p className='merchantcell'>{itemnew.modelassigndate.split(' ').slice(0,4).join(' ')}</p> : <p></p>
+      <p className='merchanthead'>Image url</p>
 
-                  ))
-                }
+     { allproducts && allproducts.map((itemnew )=> (
+       item.product_Id === itemnew.product_Id ?
+       
 
+        itemnew.imageurl.map((it,k)=>(
 
-
-              </div>
-
-              
-              <div  style={{flex:'1', marginRight:"20px"}}  className='merchantbodydiv'>
-                <div  style={{display:'flex', alignItems:'center', justifyContent:'center', flexDirection:'column'}}>
-                <p className='merchanthead'>fbx zip file</p>
-                <input type='file' id='b1'  onChange={onChangefbx}  style={{marginBottom:'10px', paddingLeft:'30px'}} />
-                <button  value={item.product_Id}  onClick={()=>sendfunctionfbx(item.product_Id, item.merchant_Id, i)}>upload model</button>
-                <p id='fbxmessage' style={{color:'red'}} ></p>
-
-                <p style={{color:'green', fontFamily:'Manrope, sanserif'}}  >{filename && filename.name}</p>
-
-              
-
-                {  <span id={`${item.product_Id}_fbx_${i}`}  className='tickmarkfbx' ><FaCheck/></span>  }
-
-
-                </div>
-               
-              
          
-
-
+       
+             <div className='previewimage'>
+             <img  src= {it}/>
+          <button><a href={it}> download  </a></button>
               </div>
-              <div  style={{flex:'1',marginRight:"20px"}}  className='merchantbodydiv'>
 
-                <div style={{display:'flex', alignItems:'center', justifyContent:'center', flexDirection:'column'}} >
-                <p className='merchanthead'>glb file</p>
-                <input type='file' id='b2' onChange={onChangeglb} style={{marginBottom:'10px', paddingLeft:'30px'}}  /> 
-                <button  value={item.product_Id} onClick={()=>sendfunctionglb(item.product_Id, item.merchant_Id, i)} >upload model</button>
-                <p id= 'glbmessage' style={{color:'red'}} ></p>
+        
+          
+        
 
-                <p style={{color:'green', fontFamily:'Manrope, sanserif'}} >{fileglb && fileglb.name}</p>
-
-                {  <span id={`${item.product_Id}_glb_${i}`}  className='tickmarkfbx' ><FaCheck/></span>  }
-
-
-                  </div>
-               
-
-
-
-
-
-                    </div>
-                  <div  style={{flex:'1',marginRight:"20px"}}  className='merchantbodydiv'>
-
-                   <div style={{display:'flex', alignItems:'center', justifyContent:'center', flexDirection:'column'}} >
-                   <p className='merchanthead'>usdz file</p>
-                <input type='file' id='b3' onChange={onChangegltf} style={{marginBottom:'10px', paddingLeft:'30px'}}  /> 
-                <button  value={item.product_Id} onClick={()=>sendfunctiongltf(item.product_Id, item.merchant_Id, i)} >upload model</button>
-                <p id= 'usdzmessage' style={{color:'red'}} ></p>
-
-                <p style={{color:'green', fontFamily:'Manrope, sanserif'}} >{filegltf && filegltf.name}</p>
-
-                {  <span id={`${item.product_Id}_gltf_${i}`}  className='tickmarkfbx' ><FaCheck/></span>  }
-
-
-
-                    </div>
-                    
+        )): <div></div>
 
       
 
 
+        
+     
 
-                  </div>
-                  <div  style={{flex:'1',marginRight:"20px"}}  className='merchantbodydiv'>
+     )) 
+     
+  
+     }
 
 
-                <p className='merchanthead'>image upload</p>
+       </div>
 
-                 <input type='file' id='imgfile' onChange={onChangeimg}/>
 
+{
+/*
+
+             {
+allproducts && allproducts.map((itemnew,k)=>(
+<div  className='imageurlbuttondiv' >
+{
+item.product_Id === itemnew.product_Id ? 
+<div  style={{border:'1px solid blue'}} >{itemnew.imageurl.map(it=>(
+<button><a href={it}> Image {k+1}  </a>  </button>
+))}</div>: <div></div>
+}
+</div>
+))
+}
+
+
+*/
+}      
+
+
+
+
+
+
+  <div className='merchantbodydiv'  style={{marginRight:'20px'}}>
+    <p className='merchanthead'>Assigned On</p>
+  {
+     modelalldata  && modelalldata.map(itemnew=>(
+         item.product_Id === itemnew.product_Id
+         ? 
+         <p className='merchantcell'>{itemnew.modelassigndate.split(' ').slice(0,4).join(' ')}</p> : <p></p>
+
+      ))
+    }
+
+
+
+  </div>
 
   
+  <div  style={{flex:'1', marginRight:"20px"}}  className='merchantbodydiv'>
+    <div  style={{display:'flex', alignItems:'center', justifyContent:'center', flexDirection:'column'}}>
+    <p className='merchanthead'>fbx zip file</p>
+    <input type='file' id='b1'  onChange={onChangefbx}  style={{marginBottom:'10px', paddingLeft:'30px'}} />
+    <button  value={item.product_Id}  onClick={()=>sendfunctionfbx(item.product_Id, item.merchant_Id, i)}>upload model</button>
+    <p id='fbxmessage' style={{color:'red'}} ></p>
+
+    <p style={{color:'green', fontFamily:'Manrope, sanserif'}}  >{filename && filename.name}</p>
+
   
-                  <p>    <button    className='' id={i} value={item.product_Id}  onClick={()=>sendImage(item.product_Id, item.merchant_Id, i)} >upload image </button>
+
+    {  <span id={`${item.product_Id}_fbx_${i}`}  className='tickmarkfbx' ><FaCheck/></span>  }
 
 
-                 </p> 
+    </div>
+   
+  
 
-                 <p id='imagemessage' style={{color:'red'}} ></p>
-                 <p style={{color:'green', fontFamily:'Manrope, sanserif'}} >{imgfile && imgfile.name}</p>
 
-                 {  <span id={`${item.product_Id}_img_${i}`}  className='tickmarkfbx' ><FaCheck/></span>  }
+
+  </div>
+  <div  style={{flex:'1',marginRight:"20px"}}  className='merchantbodydiv'>
+
+    <div style={{display:'flex', alignItems:'center', justifyContent:'center', flexDirection:'column'}} >
+    <p className='merchanthead'>glb file</p>
+    <input type='file' id='b2' onChange={onChangeglb} style={{marginBottom:'10px', paddingLeft:'30px'}}  /> 
+    <button  value={item.product_Id} onClick={()=>sendfunctionglb(item.product_Id, item.merchant_Id, i)} >upload model</button>
+    <p id= 'glbmessage' style={{color:'red'}} ></p>
+
+    <p style={{color:'green', fontFamily:'Manrope, sanserif'}} >{fileglb && fileglb.name}</p>
+
+    {  <span id={`${item.product_Id}_glb_${i}`}  className='tickmarkfbx' ><FaCheck/></span>  }
+
+
+      </div>
+   
+
+
+
+
+
+        </div>
+      <div  style={{flex:'1',marginRight:"20px"}}  className='merchantbodydiv'>
+
+       <div style={{display:'flex', alignItems:'center', justifyContent:'center', flexDirection:'column'}} >
+       <p className='merchanthead'>usdz file</p>
+    <input type='file' id='b3' onChange={onChangegltf} style={{marginBottom:'10px', paddingLeft:'30px'}}  /> 
+    <button  value={item.product_Id} onClick={()=>sendfunctiongltf(item.product_Id, item.merchant_Id, i)} >upload model</button>
+    <p id= 'usdzmessage' style={{color:'red'}} ></p>
+
+    <p style={{color:'green', fontFamily:'Manrope, sanserif'}} >{filegltf && filegltf.name}</p>
+
+    {  <span id={`${item.product_Id}_gltf_${i}`}  className='tickmarkfbx' ><FaCheck/></span>  }
+
+
+
+        </div>
+        
+
+
+
+
+
+      </div>
+      <div  style={{flex:'1',marginRight:"20px"}}  className='merchantbodydiv'>
+
+
+    <p className='merchanthead'>image upload</p>
+
+     <input type='file' id='imgfile' onChange={onChangeimg}/>
+
+
+
+
+      <p>    <button    className='' id={i} value={item.product_Id}  onClick={()=>sendImage(item.product_Id, item.merchant_Id, i)} >upload image </button>
+
+
+     </p> 
+
+     <p id='imagemessage' style={{color:'red'}} ></p>
+     <p style={{color:'green', fontFamily:'Manrope, sanserif'}} >{imgfile && imgfile.name}</p>
+
+     {  <span id={`${item.product_Id}_img_${i}`}  className='tickmarkfbx' ><FaCheck/></span>  }
 
 
 
@@ -2594,24 +2607,26 @@ modelalldata && modelalldata.map(itemnew=>(
 </div>
 
 
-           
 
 
 
-              </div>
-             
 
-            
-            
-            </div>
-          ))
-              }
-          
-        
-      
+  </div>
+ 
 
 
-      </div>
+
+</div>
+))
+  }
+
+
+
+
+
+</div>
+
+   
         <div className='homepage' style={{display:'none'}} >
 
             <div className='inputdiv' >
@@ -2962,16 +2977,16 @@ allmerchantdata && allmerchantdata.map((item,i)=>(
 
 
 
-<div  style={{ display:'flex', margin:'10px', flexDirection:'row' }}>
+<div style={{paddingRight:'300px'}} >
 
 
 
 
-<div style={{display:'flex', width:'100%',border:'2px solid gray', borderRadius:'10px', alignItems:'center', justifyContent:'center', backgroundColor:'rgb(236, 236, 236)'}} >
+<div style={{}} >
 
-<div style={{display:'flex', marginBottom:'10px', flexDirection:'row',  width:'auto'}} >
+<div style={{}} >
 
-<div style={{display:'flex', width:'auto', paddingLeft:'',alignItems:'flex-start', justifyContent:'flex-start', margin:'10px'}} >
+<div style={{}} >
 
  
 
@@ -3034,6 +3049,30 @@ removerepeat(item.product_Id).map(itemnew=>(
    
     item.product_Id === itemnew ? 
     <button ><a href={item.gltf}>url usdz</a></button> :<p></p>
+   
+
+  ))
+}
+
+</div>
+}
+
+{
+
+<div style={{ flex:'1', paddingLeft:'30px'}}>
+<p className='merchanthead'>Preview image</p>
+{
+  modeluploaddata && modeluploaddata.map(item=>(
+   
+    item.product_Id === itemnew ? 
+
+    <div className='previewimage'>
+      <img  src= {item.imgfile}/>
+       <button ><a href={item.gltf}>download</a></button>
+      
+      </div>
+  
+    :<p></p>
    
 
   ))
@@ -3198,7 +3237,7 @@ productsget && productsget.map(item=>(
 
 
 {
-<div  style={{width:'200px', marginRight:'20px'}}  className='merchantbodydiv'>
+<div  style={{width:'200px', marginRight:'20px', height:'600px', overflow:'scroll' }}  className='merchantbodydiv'>
 <p className='merchanthead'>Image url</p>
 
 {
@@ -3208,8 +3247,9 @@ productsget && productsget.map(item=>(
     item.product_Id === itemnew ? 
     item.imageurl && item.imageurl.map((it,p)=>(
 
-      <div style={{height:'60px'}} >
-      <button ><a href={it}>Image {p+1} </a></button>
+      <div className='previewimage'  >
+        <img src= {it}/>
+      <button ><a href={it}>download </a></button>
 
       </div>
    

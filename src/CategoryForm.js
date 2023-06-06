@@ -4,7 +4,7 @@ import { RxCross2 } from 'react-icons/rx';
 import axios from 'axios';
 const categoryuploadurl = 'https://eh16rizdbi.execute-api.ap-south-1.amazonaws.com/production/addcategoryandsubcategory'
 const updatesubcaturl= 'https://eh16rizdbi.execute-api.ap-south-1.amazonaws.com/production/updatesubcategory'
-const designstyleurl= 'https://eh16rizdbi.execute-api.ap-south-1.amazonaws.com/production/adddesignstyle'
+const designstyleurl= 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/adddesigndata'
 const addtagsurl= 'https://eh16rizdbi.execute-api.ap-south-1.amazonaws.com/production/addtags'
 const addcolorurl= 'https://eh16rizdbi.execute-api.ap-south-1.amazonaws.com/production/addcolor'
 const addcollectionurl= 'https://eh16rizdbi.execute-api.ap-south-1.amazonaws.com/production/addcollection'
