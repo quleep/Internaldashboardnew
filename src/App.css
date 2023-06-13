@@ -983,7 +983,7 @@ hr {
   flex-direction: column;
   flex-wrap: wrap;
   width: auto;
-  height: 350px;
+  height:  450px;
   border: 2px solid rgb(212, 211, 211);
   margin: 10px;
   border-radius: 10px;
@@ -1001,6 +1001,7 @@ hr {
 
 .merchantdivinside{
   background-color: #ddd;
+ 
 }
 .merchantdivinsideimage{
   background-color: #ddd;

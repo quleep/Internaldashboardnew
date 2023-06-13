@@ -38,6 +38,7 @@ const Loginmain = ({history}) => {
     const [admin, setAdmin] = useState(false);
 
     const [urldata, setUrlData]= useState();
+    const [modelrequired, setModelRequired] = useState('')
 
     const [usermodel, setUserModel] = useState();
     const [dimension, setDimension] = useState(false);
@@ -430,6 +431,7 @@ const sendImage =(val, merid, len)=>{
         let filetype = newval.substr(indx, newval.length).toLowerCase();
        
         if(  filetype === 'zip'){
+          setFileName(file)
           document.querySelector('#fbxmessage').innerHTML= ''
           }
       else{
@@ -442,29 +444,6 @@ const sendImage =(val, merid, len)=>{
         return
         }
   
-        if( newval.split('.')[0].includes('fbx')){
-
-            setFileName(file)
-
-        
-          document.querySelector('#fbxmessage').innerHTML= ''
-  
-  
-        }
-        else{
-        document.querySelector('#fbxmessage').innerHTML= 'upload a fbx zip file'
-        setFileName(null)
-
-        setTimeout(() => {
-
-        document.querySelector('#fbxmessage').innerHTML= ''
-
-          
-        }, [3000]);
-             return
-  
-        }
-      
        
       
       
@@ -1446,13 +1425,18 @@ if(lenall){
   })
 }
 
-console.log(allproducts)
+if(modelrequired === ''){
+  setModelRequired('false')
+}
+
+
 const assignModeler=(uid, pid, len) =>{
 
   const newbody={
     merchant_Id: Number(uid),
         product_Id: pid,
         modelername: modname,
+        modelrequired: modelrequired,
         modelstatus: ''
 
   }
@@ -1488,6 +1472,7 @@ const merchantallHandler=()=>{
   })
 
   axios.get(getallproducts).then(res=>{
+   
     setProductsGet(res.data)
   }).catch(error=>{
     console.log(error)
@@ -1695,7 +1680,7 @@ const setuserdetails=(mid,pid)=>{
 
 
 
-
+console.log(modelrequired)
 
 
 
@@ -1802,6 +1787,44 @@ const setuserdetails=(mid,pid)=>{
               
                 </div>
                 <div  className='merchantdivinside'>
+                <div className='merchantidcontainer' >
+                <h2>Model Type(Is 3D model Required)</h2>
+               
+               
+                 
+                  <div> 
+                   
+                    {
+                      productsget && productsget.map(item=>(
+                        item.product_Id === itemnew ?
+                        <select onChange={event=>setModelRequired(event.target.value)} >
+                      
+                         
+                        <option value={item.modelrequired} >{item.modelrequired}</option>
+                        
+     
+                    
+                      <option value='true' >True</option>
+                    
+     
+     
+                   </select>: <p></p>
+
+                      ))
+                    }
+               
+                 
+                   
+     
+                   </div>
+
+               
+           
+
+               
+              
+              
+                  </div>
 
                 <div className='merchantidcontainer' >
                 <h2>Assign Modeler</h2>
