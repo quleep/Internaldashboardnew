@@ -595,6 +595,7 @@ body {
   height: 100px;
   border: 1px solid rgb(190, 187, 187);
   margin : 20px;
+  
 
 }
 .previewimage button{
@@ -951,6 +952,178 @@ input[type="file"] {
  
 
 }
+.merchantdatacontainer{
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: auto;
+  
+}
+.merchantdatacontainerinside{
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+ 
+  height:  auto;
+  width: 1200px;
+  border: 5px dashed rgb(115, 115, 173);
+  margin: 10px;
+  border-radius: 10px;
+}
+.merchantdatacontainerinside>*{
+  flex: 1 1 auto;
+  margin: 20px;
+ 
+  flex-direction: row;
+  flex-wrap: wrap;
+  height: fit-content;
+  padding: 0px;
+}
+.merchantdatadetail{
+   display: flex;
+  margin: 10px;
+  flex-direction: row;
+  flex-wrap: wrap;
+ 
+ width: 95%;
+ height: auto;
+}
+.merchantdatadetail>*{
+  flex: 1 1 300px;
+  
+}
+.merchantdatadetail label{
+  font-size: 20px;
+  font-family: monospace;
+}
+.merchantdatadetail p{
+  font-size: 15px;
+  font-family: monospace;
+  border-bottom: 1px dotted gray;
+  background-color: #a5cfc5;
+}
+.imagesdivmerchant{
+  display: flex;
+  width: 95%;
+ height:  200px;
+flex-wrap: wrap;
+ flex-direction:  column;
+ margin: 10px;
+ 
+  overflow-y: scroll;
+ 
+  
+}
+.imagesdivmerchant>*{
+  flex: 1 1 40px;
+  
+  
+  width:  120px;
+  height: 120px;
+  flex-wrap: wrap;
+  padding: 20px;
+  margin: 20px;
+   margin-bottom: 10px;
+}
+.imagesdivmerchant img{
+  max-width: 100%;
+  height: 100%;
+  object-fit: contain;
+  margin-bottom: 20px;
+  padding-left: 70px;
+}
+.imagesdivmerchant a{
+  padding-left: 70px;
+}
+.statustabthree{
+  display: flex;
+  width:  300px;
+ 
+height: 200px;
+  flex-direction: column;
+ 
+  margin-bottom: 10px;
+ 
+}
+.statusinside{
+  display: flex;
+ 
+ 
+}
+.updatedatacontainer{
+ 
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  height: auto;
+  padding: 10px;
+}
+.statustab2 input{
+  margin-left: 35px;
+}
+
+
+.statustab1{
+  flex: 1;
+ 
+ 
+  
+}
+.statustab2{
+  flex: 1;
+  
+}
+
+.statustab3{
+  flex: 1;
+  
+  
+}
+.statustabthreee label{
+  
+   
+  font-family: monospace;
+  font-size: 20px;
+  border: 1px solid green;
+  
+}
+.statustabthree select{
+ 
+   width: 150px;
+   margin-left: 40px;
+ 
+}
+
+.statustab{
+  display: flex;
+  width: 100%;
+ 
+
+  flex-direction: row;
+  flex-wrap: wrap;
+  
+  margin-bottom: 10px;
+}
+.statustab label{
+ 
+  font-family: monospace;
+  font-size: 20px;
+  width: 130px;
+  height: 40px;
+   padding-top: 8px;
+  border: 1px solid green;
+  border-radius: 10px;
+}
+.statustab p{
+  flex: 1;
+  font-family: monospace;
+  font-size: 15px;
+ 
+  border: 1px solid green;
+}
 
 
 input[type="text"]:focus {
@@ -1000,6 +1173,7 @@ hr {
 }
 
 .merchantdivinside{
+ 
   background-color: #ddd;
  
 }
@@ -1011,12 +1185,13 @@ hr {
 
 .merchantidcontainer{
   display: flex;
-  border: 1px soild red;
+ 
   flex-direction: column;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   border-bottom: 1px solid rgb(180, 177, 177);
+ 
   
  
 }
@@ -1039,24 +1214,85 @@ hr {
   background-color: #9cc204;
   
 }
+.viewproductcontainer button{
+  width: 180px;
+  height: 40px;
+  border: none;
+  background-color: rgb(173, 173, 98);
+  color: black;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.viewproductsdata{
+  display: none;
+  position: relative;
+  width: 400px;
+  left: 300px;
+  top: -250px;
+  height: 400px;
+ border: 1px solid gray;
+ border-radius: 10px;
+  background-color: rgb(194, 190, 190);
+  
+
+}
+.closeproductview{
+  float: right;
+  padding: 10px;
+}
+.productdetailsinside{
+  display: flex;
+  width: 95%;
+  height: 350px;
+ 
+  flex-wrap: wrap;
+  flex-direction: row;
+  overflow: scroll;
+  padding-left: 10px;
+  
+}
+.productdetailsinside>*{
+  flex: 1 1 250px;
+ 
+  height: auto;
+  
+}
+.productdetailsinside label{
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  font-size: 20px;
+  font-family: monospace;
+}
+.productdetailsinside p{
+  font-family: monospace;
+  font-size: 17px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid rgb(70, 68, 68);
+}
 
 .productidcontainer{
 
   display: flex;
-  border: 1px soild red;
+ 
   flex-direction: column;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   border-bottom: 1px solid rgb(180, 177, 177);
-  margin-bottom: -20px;
+ 
+ 
  
  
 }
-.productidcontainer h2{
-  font-size: 20px;
+.productidcontainer label{
+  font-size: 15px;
   font-weight: bold;
   font-family: monospace;
+  margin-right: 10px;
  
 }
 .productidcontainer p{
@@ -1065,10 +1301,23 @@ hr {
   background-color: #9cc204;
   
 }
+.productidcontainer button{
+  margin-right: 10px;
+ 
+}
+.productidcontainer input{
+  width: 300px;
+}
+.productidcontainer select{
+  margin-right: 10px;
+ 
+
+  
+}
 
 .dimcontainer{
   height: 300px;
- 
+
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;

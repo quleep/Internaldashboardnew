@@ -1,6 +1,283 @@
 <div className='userdatanew'>
 
+ {
+  /*
+
+           {
+
+           allmerchantdata && allmerchantdata.map((item,i)=>(
+
+            removerepeat(item.product_Id).map(itemnew=>(
+
+              <div className='merchantalldata'> 
         
+               <div className='merchantdivinside' >
+
+                <div className='merchantidcontainer' >
+                <h2>Merchant Id</h2>
+                <p>{item.merchant_Id}</p>
+                  </div>
+
+                  <div className='productidcontainer' >
+                <h2>Product Id</h2>
+                <p>{itemnew}</p>
+                  </div>
+
+                  <div className='merchantmodelerdiv' >
+                <h2>Created Date</h2>
+                {
+  productsget && productsget.map(item=>(
+ 
+
+    
+
+      item.product_Id === itemnew ?
+
+      <div className='productidcontainer'>
+         <p className=''>{item.registration_Time.split(' ').slice(0,4).join(' ')}</p>
+
+
+        </div>: ''
+     
+    
+    
+ 
+ ))
+}
+                  </div>
+              
+                </div>
+                <div  className='merchantdivinside'>
+                <div className='merchantidcontainer' >
+                <h2>Model Type(Is 3D model Required)</h2>
+               
+               
+                 
+                  <div> 
+                   
+                    {
+                      productsget && productsget.map(item=>(
+                        item.product_Id === itemnew ?
+                        <select onChange={event=>setModelRequired(event.target.value)} >
+                      
+                         
+                        <option value={item.modelrequired} >{item.modelrequired}</option>
+                        
+     
+                    
+                      <option value='true' >True</option>
+                    
+     
+     
+                   </select>: ''
+
+                      ))
+                    }
+               
+                 
+                   
+     
+                   </div>
+
+               
+           
+
+               
+              
+              
+                  </div>
+
+
+                  <div className='productidcontainer' >
+                <label>Image Quality</label>
+
+               
+               
+
+<select onChange={event=>setImageStatus(event.target.value)} >
+<option></option>
+<option value='Model in progress' >Accepted</option>
+<option value='Image rejected'>Rejected</option>
+</select>
+
+
+ <p id={`${itemnew}_imgstatus_${i}`} style={{color:'green' }}>  </p> 
+
+
+  <div>{
+    allimagestatus && allimagestatus.map(item =>(
+      item.product_Id === itemnew ?
+      <p className='merchantcell'>{item.imagestatus}</p> : ''
+      
+    ))
+    
+    }
+  </div>
+     <div className='imagerejectdiv'>
+      <input type='text' onChange={(e)=>setImageRejectReason(e.target.value)} placeholder='reason if rejected' />
+
+      
+     </div>
+<button  onClick={()=>imagequalitymerchant(itemnew, i)}  style={{marginLeft:'20px'}}>submit</button>
+
+               
+                  </div>
+                  
+                <div className='merchantidcontainer' >
+                <h2>Assign Modeler</h2>
+
+                <div  > 
+              
+
+              <select onChange={event=>setModName(event.target.value)} >
+                <option></option>
+                <option value='modeler1@arnxt.com' >modeler1</option>
+                <option value='modeler2@arnxt.com' >modeler2</option>
+
+                <option value='modeler3@arnxt.com' >modeler3</option>
+
+                <option value='modeler4@arnxt.com' >modeler4</option>
+                <option value='modeler5@arnxt.com' >modeler5</option>
+                <option value='modeler6@arnxt.com' >modeler6</option>
+                <option value='modeler7@arnxt.com' >modeler7</option>
+                <option value='modeler8@arnxt.com' >modeler8</option>
+                <option value='modeler9@arnxt.com' >modeler9</option>
+
+              </select>
+              <button  onClick={()=>assignModeler(item.merchant_Id, itemnew, itemnew.statusvalue,  i)} style={{marginLeft:'20px'}} >Submit</button>
+               <p  style={{color:'green'}} id={`${itemnew}_modstatus_${i}`} > </p> 
+
+              </div>
+              
+                  </div>
+                  <div className='merchantmodelerdiv' >
+                <h2>Modeler Name</h2>
+
+
+                {
+                       modelalldata && modelalldata.map(item=>(
+                        item.product_Id === itemnew ?
+
+                        <div className='productidcontainer'>
+
+                   <p id="" className='' >{item.modelername ? item.modelername : assignvalue  }  </p>
+                          </div>
+                       :
+                        
+                      ''
+
+                      ))
+                    }
+
+
+           
+                
+               
+                  </div>
+
+
+
+
+                </div>
+
+
+                <div  className='merchantdivinsideimage'>
+                    <div className='productidcontainer' >
+                      <h2>Images</h2>
+
+                      {
+   productsget && productsget.map(item=>(
+   
+        
+          item.product_Id === itemnew ? 
+          item.imageurl && item.imageurl.map((it,l)=>(
+
+            <div  className='previewimage' >
+              <img src ={it}/>
+               <button ><a href={it}>download</a></button>
+
+            </div>
+           
+          )): ''
+        
+   
+   ))
+  }
+
+
+
+                      </div>
+
+
+                    </div>
+
+
+                <div className='merchantdivinside'>
+                 
+
+                    {
+ productsget && productsget.map(item=>(
+
+
+    (
+
+      item.product_Id === itemnew ?
+
+      <div className='dimcontainer' >
+
+        <div  className='productidcontainer'>
+          <h2>Length</h2>
+          <p className=''>{item.lengthprod}</p>
+          </div>
+          <div  className='productidcontainer'>
+          <h2>Breadth</h2>
+          <p className=''>{item.breadthprod}</p>
+          </div>
+          <div  className='productidcontainer'>
+          <h2>Height</h2>
+          <p className=''>{item.height}</p>
+          </div>
+       
+    
+
+
+        </div>
+    
+      : ''
+    )
+    
+ 
+ ))
+}
+
+                    
+                
+                
+
+
+                </div>
+
+          
+          
+
+
+              </div>
+
+             
+                
+
+
+            ))
+
+        
+
+           )) 
+
+           
+}
+
+  */
+ }       
       
         
 {
@@ -303,7 +580,12 @@ item.product_Id === itemnew.product_Id ?
 
 
 </div>
+
+
 ))
+
+
+
   }
 
 

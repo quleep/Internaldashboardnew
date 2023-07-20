@@ -20,6 +20,8 @@ import JobPost from "./JobPost";
 import Applicants from "./Applicants";
 
 import CategoryForm from "./CategoryForm";
+import Success from "./Success";
+
 
 function App() {
   return (
@@ -39,6 +41,11 @@ function App() {
           <Route path="/main" component={Headermain} />
           <Route path="/modelpath" component={Loginmain} />
           <Route path="/form" component={CategoryForm} />
+          <Route path="/paymentinfo" component={Success} />
+
+
+        
+
 
         </Switch>
       </Router>
