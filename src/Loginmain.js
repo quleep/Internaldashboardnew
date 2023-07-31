@@ -1733,7 +1733,7 @@ console.log(modelrequired)
                       {
                         modeldetails && modeldetails.map(itemnew=>(
                          itemnew.product_Id === item.product_Id ?
-                         <p>{itemnew.modeluploaddate.split(' ').slice(0,4).join(' ')}</p>: ''
+                         <p>{itemnew. modeluploaddate  && itemnew.modeluploaddate.split(' ').slice(0,4).join(' ')}</p>: ''
                         ))
                       }
 
@@ -3022,7 +3022,7 @@ imgresnew && imgresnew.map(item=>(
                       {
                         modeldetails && modeldetails.map(itemnew=>(
                          itemnew.product_Id === item.product_Id ?
-                         <p>{itemnew.modeluploaddate.split(' ').slice(0,4).join(' ')}</p>: ''
+                         <p>{itemnew.modeluploaddate && itemnew.modeluploaddate.split(' ').slice(0,4).join(' ')}</p>: ''
                         ))
                       }
 
@@ -3551,7 +3551,7 @@ imgresnew && imgresnew.map(item=>(
                         singleproductdetails && singleproductdetails.map(item=>(
                             item.map(itemnew=>(
                               it.product_Id === itemnew.product_Id ? 
-                              <p >{itemnew.modeluploaddate.split(' ').slice(0,4).join(' ')}</p>: <p></p>
+                              <p >{itemnew.modeluploaddate && itemnew.modeluploaddate.split(' ').slice(0,4).join(' ')}</p>: <p></p>
                             ))
                           ))
                         }

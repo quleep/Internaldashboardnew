@@ -232,13 +232,19 @@
   border-radius: 5px;
   border: transparent;
 }
+.loginbackground{
+  width: 100%;
+  height: 100vh;
+
+}
 
 .login {
   margin: 20px auto;
   padding: 40px 50px;
-  max-width: 300px;
+width:  500px;
+height: 500px;
   border-radius: 5px;
-  background: yellow;
+  background: rgb(192, 193, 196);
   box-shadow: 1px 1px 1px #666;
 }
 .login input {
@@ -251,11 +257,15 @@
   border-radius: 2px;
   font-family: Raleway, sans-serif;
 }
+.login input:focus{
+  outline: none;
+}
 
 .login input[type="text"],
 .login input[type="password"] {
   border: 1px solid #c0c0c0;
   transition: 0.2s;
+
 }
 
 .login input[type="text"]:hover {
@@ -967,7 +977,7 @@ input[type="file"] {
   flex-wrap: wrap;
   flex-direction: row;
  
-  height:  auto;
+  height:  500px;
   width: 1200px;
   border: 5px dashed rgb(115, 115, 173);
   margin: 10px;
@@ -1012,7 +1022,7 @@ input[type="file"] {
 flex-wrap: wrap;
  flex-direction:  column;
  margin: 10px;
- 
+  
   overflow-y: scroll;
  
   
@@ -1021,22 +1031,22 @@ flex-wrap: wrap;
   flex: 1 1 40px;
   
   
-  width:  120px;
-  height: 120px;
+  width:  150px;
+  height: 150px;
   flex-wrap: wrap;
   padding: 20px;
   margin: 20px;
    margin-bottom: 10px;
+  
 }
 .imagesdivmerchant img{
   max-width: 100%;
   height: 100%;
   object-fit: contain;
-  margin-bottom: 20px;
-  padding-left: 70px;
+ 
 }
 .imagesdivmerchant a{
-  padding-left: 70px;
+ 
 }
 .statustabthree{
   display: flex;
@@ -1058,8 +1068,9 @@ height: 200px;
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
-  height: auto;
+  height: fit-content;
   padding: 10px;
+ 
 }
 .statustab2 input{
   margin-left: 35px;
@@ -1067,17 +1078,19 @@ height: 200px;
 
 
 .statustab1{
-  flex: 1;
+ display: flex;
+ flex-wrap: wrap;
  
  
   
 }
 .statustab2{
-  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
   
 }
 
-.statustab3{
+.statustab3{ 
   flex: 1;
   
   
@@ -1406,6 +1419,176 @@ hr {
   padding: 2px;
   cursor: pointer;
 }
+
+.formdiv{
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  height: 600px;
+  flex-wrap: wrap;
+ 
+
+}
+.formdiv>*{
+  flex: 1 1 auto;
+  width: 100%;
+  height: 80px;
+
+  margin: 10px;
+  
+}
+
+.forminputdiv{
+  display: flex;
+  align-items: row;
+  flex-wrap: wrap;
+  width: 500px;
+  height: 600px;
+
+}
+.forminputdiv input{
+  width: 200px;
+  border: 1px solid gray;
+  box-shadow: 5px 5px 5px gray;
+  border-radius: 10px;
+  height: 40px;
+  margin-right: 20px;
+
+}
+.forminputdiv button{
+  width: 120px;
+  height: 40px;
+}
+.forminputdiv label{
+  font-family: Manrope, sans-serif;
+  font-size: 18px;
+  font-weight: bold;
+  margin-right: 20px;
+}
+.suggestdiv{
+  display: flex;
+  width: 400px;
+ 
+}
+.displayheading{
+  font-size: 18px;
+  font-weight: bold;
+}
+.displaycell{
+  font-size: 15px;
+  background-color: rgb(162, 212, 196);
+
+}
+
+.displayuploaded{
+ display: none;
+ flex-direction: row;
+ flex-wrap: wrap;
+    width: 100%;
+    height: auto;
+    border: 2px solid gray;
+    margin-top: 80px;
+}
+.displayuploaded>*{
+  flex: 1 1 auto;
+  border-right: 1px solid rgb(59, 58, 58);
+  padding: 10px;
+  
+}
+
+.alldatacontainer{
+  margin-top: 60px;
+}
+
+.alldatacontainer a{
+  text-decoration: none;
+}
+.alldatacontainer button{
+  width: 120px;
+  height: 30px;
+}
+
+.keyvalueinput{
+  display: flex;
+}
+
+.keyvalueinput input{
+  width: 160px;
+  height: 40px;
+  border: 1px solid gray;
+  border-radius: 10px;
+  box-shadow: 5px 5px 5px gray; ;
+}
+.inputfirst{
+  margin-right: 10px;
+  margin-bottom: 30px;
+}
+
+.inputsecond{
+  margin-right: 10px;
+  width: 120px;
+  height: 50px;
+  border-radius: 10px;
+}
+.inputformcontainer{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 250px;
+
+  margin-top: -80px;
+  overflow: scroll;
+ 
+  padding-left: 40px;
+}
+
+.add-btn{
+  margin-right: 10px;
+}
+.carouseldiv{
+  display: flex;
+  width: 400px;
+  height:  600px;
+  flex-wrap: wrap;
+  border: 1px solid red;
+  flex-direction: column;
+  overflow: scroll;
+}
+.carouseldiv img{
+  padding: 10px;
+  width:  250px;
+  height: 250px;
+  object-fit: contain;
+}
+
+.inputformcontainer label{
+  font-family: Manrope, sans-serif;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  margin-left: -350px;
+
+}
+
+.submitbutton{
+  display: flex;
+  width: 120px;
+  height: 50px;
+  margin-left: 150px;
+  margin-top: 120px;
+ 
+
+  
+}
+.submitbutton button{
+  width: 120px;
+  height: 50px;
+  border: 1px solid green;
+  border-radius: 10px;
+  color: black;
+  cursor: pointer;
+}
+
 
 
 

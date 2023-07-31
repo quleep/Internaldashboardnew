@@ -34,7 +34,7 @@ const Success = () => {
 
    useEffect(()=>{
      const body={
-        merchantid: id
+        merchantid: Number(id)
      }
      axios.post(merchantprofileurl, body).then(res=>{
         setMerchantData(res.data)

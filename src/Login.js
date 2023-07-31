@@ -52,7 +52,7 @@ const Login = ({history}) => {
 
 
   return (
-    <div>
+    <div  className='loginbackground'>
 
 <form class="login"  onSubmit={loginHandler}>
   <h2>ARnxt, Users!</h2>
