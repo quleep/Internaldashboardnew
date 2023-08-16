@@ -110,6 +110,7 @@ const Loginmain = ({history}) => {
     const [singleimagestatus, setSingleImageStatus] = useState();
     const [productinput, setProductInput] = useState();
     const [merchantinput, setMerchantInput] = useState()
+    const [qrcodeid, setQRcodeId] = useState()
   
 
     const modelerHandler=(e)=>{
@@ -1650,7 +1651,9 @@ const searchHandlerQualityMerchant=()=>{
    console.log(error)
  })
 }
- const handleqrcodeopen =()=>{
+ const handleqrcodeopen =(val)=>{
+ 
+  setQRcodeId(val)
   document.querySelector('.modalscan').style.display= 'block'
  }
  const handleqrclose = ()=>{
@@ -2785,6 +2788,21 @@ imgresnew && imgresnew.map(item=>(
                 <div >
                   <div className='merchantdatadetail' >
                    <div>
+                   <div class="modalscan">		
+	      	<div class="modal-wrapscan">
+                <span className='closemodalscan' onClick={handleqrclose}  >
+                     <FaTimes style={{color:'red', fontSize:'20px'}}/>
+                    </span>	
+			   <span>
+               <div>
+
+            </div>
+         <QRCode value= {`admin.arnxt.com/viewar?id=${qrcodeid}`}/>
+
+                </span>	
+	      		<h4 className='dataupload'> Scan the QR code with your mobile device to view the product in your space. </h4>	          		
+	      	</div>			          		
+      	</div>
                       <label>MerchantId</label>
                       <p>{item.merchant_Id}</p>
                       <label>product_Id</label>
@@ -2826,22 +2844,8 @@ imgresnew && imgresnew.map(item=>(
                     <button type='submit' onClick={()=>viewproductall(i)} >View Product Details</button>
                     </div>
                     <div className= {item.modelrequired === 'true' ? 'viewproductcontainer' : 'productviewnone'} >
-                    <button type='submit' onClick={handleqrcodeopen} >AR view</button>
-                    <div class="modalscan">		
-	      	<div class="modal-wrapscan">
-                <span className='closemodalscan' onClick={handleqrclose}  >
-                     <FaTimes style={{color:'red', fontSize:'20px'}}/>
-                    </span>	
-			   <span>
-               <div>
-
-            </div>
-         <QRCode value= {`admin.arnxt.com/viewar?id=${item.product_Id}`}/>
-
-                </span>	
-	      		<h4 className='dataupload'> Scan the QR code with your mobile device to view the product in your space.</h4>	          		
-	      	</div>			          		
-      	</div>
+                    <button type='submit' onClick={()=>handleqrcodeopen(item.product_Id)} >AR view</button>
+      
 
                     </div>
 
