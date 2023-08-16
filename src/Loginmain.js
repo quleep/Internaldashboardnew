@@ -5,6 +5,8 @@ import React, { useEffect, useState } from 'react'
 
 import axios from 'axios'
 import { FaCheck, FaTimes } from 'react-icons/fa';
+import QRCode from "react-qr-code";
+
 const searchurl= 'https://eh16rizdbi.execute-api.ap-south-1.amazonaws.com/production/fetchurl';
 const getdimensionurl= 'https://eh16rizdbi.execute-api.ap-south-1.amazonaws.com/production/fetchdimension';
 const uplodanameurl= 'https://eh16rizdbi.execute-api.ap-south-1.amazonaws.com/production/modelername';
@@ -28,6 +30,9 @@ const getsingleimagestatus= 'https://eh16rizdbi.execute-api.ap-south-1.amazonaws
 const getproducts= 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/getproducttable'
 const getmodels = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/modeltabledata'
 const updatemodelstatus= 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/updatemodelstatus'
+const statusdataurl= 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/getstatusproducts'
+const itemdetails= 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/getsingleitemdetails'
+const merchantdataurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/merchantallproduct'
 
 const Loginmain = ({history}) => {
 
@@ -103,6 +108,9 @@ const Loginmain = ({history}) => {
     const [singleproductdetails, setSingleProductDetails] = useState();
 
     const [singleimagestatus, setSingleImageStatus] = useState();
+    const [productinput, setProductInput] = useState();
+    const [merchantinput, setMerchantInput] = useState()
+  
 
     const modelerHandler=(e)=>{
         e.preventDefault();
@@ -279,24 +287,9 @@ const onChangeimg =(e)=>{
 
         };
   
-    
-       
-      
-
-  
-      
-       
-       
- 
-        
-      
       }
      })
     
-   
-  
-  
-     
    
      const reader = new FileReader();
  
@@ -320,26 +313,6 @@ const onChangeimg =(e)=>{
  })
  
  
- 
-
- 
- 
- 
- 
- 
- 
- 
-      
- 
-   
-   
-
-    
-
-
-
-  
-
 }
 
 
@@ -350,10 +323,6 @@ const sendImage =(val, merid, len)=>{
   if(imgfile){
 
      
-
-       
-       
-  
     fetch(urlimagesend,{
       method:'POST',
       body: imgfile.name
@@ -542,20 +511,6 @@ const onChangeglb = e => {
 })
 
 
-
-
-
-
-
-
-
-
-
-   
-
-
- 
- 
  
 }
 
@@ -563,13 +518,7 @@ const onChangeglb = e => {
   
 const onChangegltf = e => {
 
-
-
-
   
-  
-
-     
  let files = Array.from(e.target.files) 
  files.forEach(file => {
   fileToBase64(file, (err, result) => {
@@ -602,20 +551,9 @@ const onChangegltf = e => {
       }
     
      
-     
-    
-    
-
-     
-   
    }
   })
  
-
-
-
-  
-
   const reader = new FileReader();
 
   reader.onload = () => {
@@ -638,27 +576,7 @@ const onChangegltf = e => {
 })
 
 
-
-
-
-
-
-
-
-
-
-   
-
-
- 
- 
- 
 }
-
-
-
-
-
 
 
     const searchHandler=(e)=>{
@@ -709,24 +627,11 @@ const onChangegltf = e => {
           document.querySelector('.merquality').style.display= 'block'
           document.querySelector('.allmerchantquality').style.display = 'none'
 
-        
-
-
-         
-          
-          
-        
-         
-
         }
        
 
         
 }
-
-
-
-
 
     const sendfunctionglb=(val,merid,len)=>{
     
@@ -919,19 +824,6 @@ if (fileglb){
 const nameHandler=(val, len)=>{
 
 
-
-
-
-  
-  
-
-
-
-
-  
-
- 
-  
       const body={
         merchant_Id: Number(userid),
         product_Id: Number(val),
@@ -1431,7 +1323,7 @@ const assignModeler=(uid, pid, len) =>{
 const merchantallHandler=()=>{
 
 
-  document.querySelector('.defaultmerchant').style.display= 'none'
+
   document.querySelector('.allmerchantdata').style.display= 'block'
 
   
@@ -1505,10 +1397,6 @@ const userHandler=()=>{
 
   if(roleuse === 'user' || roleuse === 'admin' ){
 
-
-  
-
-  
 
     const emailbody={
       email: loginuser
@@ -1651,12 +1539,124 @@ const setuserdetails=(mid,pid)=>{
 
 
 
-console.log(modelrequired)
 
 
 
+const handleStatusValue =(val)=>{
 
+  document.querySelector('.merquality').style.display= 'none'
+  document.querySelector('.allmerchantdata').style.display = 'block'
+  const body={
+    statusval : val
+  }
+  axios.post(statusdataurl, body).then(res=>{
+  setAllProductData(res.data)
+ 
+  }).catch(error=>{
+    console.log(error)
+  })
 
+  axios.get(getmodels).then(res=>{
+    setModelDetails(res.data)
+ }).catch(error=>{
+   console.log(error)
+ })
+}
+const handleStatusAll =(val)=>{
+
+  document.querySelector('.merquality').style.display= 'none'
+  document.querySelector('.allmerchantquality').style.display = 'block'
+  const body={
+    statusval : val
+  }
+  axios.post(statusdataurl, body).then(res=>{
+  setAllProductData(res.data)
+ 
+  }).catch(error=>{
+    console.log(error)
+  })
+
+  axios.get(getmodels).then(res=>{
+    setModelDetails(res.data)
+ }).catch(error=>{
+   console.log(error)
+ })
+}
+
+const searchHandlerProduct=()=>{
+  axios.post(itemdetails, Number(merchantinput)).then(res=>{
+    console.log(res.data)
+  document.querySelector('.allmerchantdata').style.display = 'block'
+
+    setAllProductData(res.data.productdetails)
+    setModelsData(res.data.modeldetails)
+
+  }).catch(error=>{
+    console.log(error)
+  })
+
+}
+const searchHandlerMerchant=()=>{
+  const body={
+    merchantid: Number(merchantinput)
+  }
+  axios.post(merchantdataurl, body).then(res=>{
+   
+  document.querySelector('.allmerchantdata').style.display = 'block'
+
+    setAllProductData(res.data)
+  
+
+  }).catch(error=>{
+    console.log(error)
+  })
+  axios.get(getmodels).then(res=>{
+    setModelDetails(res.data)
+ }).catch(error=>{
+   console.log(error)
+ })
+}
+
+const searchHandlerQualityProduct=()=>{
+  axios.post(itemdetails, Number(merchantinput)).then(res=>{
+    console.log(res.data)
+  document.querySelector('.allmerchantquality').style.display = 'block'
+
+    setAllProductData(res.data.productdetails)
+    setModelsData(res.data.modeldetails)
+
+  }).catch(error=>{
+    console.log(error)
+  })
+
+}
+const searchHandlerQualityMerchant=()=>{
+  const body={
+    merchantid: Number(merchantinput)
+  }
+  axios.post(merchantdataurl, body).then(res=>{
+   
+  document.querySelector('.allmerchantquality').style.display = 'block'
+
+    setAllProductData(res.data)
+  
+
+  }).catch(error=>{
+    console.log(error)
+  })
+  axios.get(getmodels).then(res=>{
+    setModelDetails(res.data)
+ }).catch(error=>{
+   console.log(error)
+ })
+}
+ const handleqrcodeopen =()=>{
+  document.querySelector('.modalscan').style.display= 'block'
+ }
+ const handleqrclose = ()=>{
+  document.querySelector('.modalscan').style.display= 'none'
+
+ }
 
   return (
     <div>
@@ -1686,14 +1686,86 @@ console.log(modelrequired)
       
     </div>
     <div className='modmain1' id ='main1' >
+    <div className='defaultmerchant' >
+        <div className='homepage'  >
+
+            <div className='inputdiv' >
+                <div className='inputdiv' >
+                <input  type='number'  onChange={event=> setMerchantInput(event.target.value)} />
+
+
+                </div>
+                <div className='search'>
+                    <button 
+                    onClick={searchHandlerProduct}
+                    >Search with Product Id</button>
+                </div>
+                <div className='search'>
+                    <button 
+                    onClick={searchHandlerMerchant}
+                    >Search with Merchant Id</button>
+                </div>
+                <div className='search'>
+                    <button 
+                    onClick={allMerchantHandler}
+                    >All merchants</button>
+                </div>
+                <div className='search'>
+                    <button 
+                    onClick={()=>handleStatusValue("Image uploaded")}
+                    >Status Image Uploaded</button>
+                </div>
+                <div className='search'>
+                    <button 
+                    onClick={()=>handleStatusValue("Image rejected")}
+                    >Status Image rejected</button>
+                </div>
+                <div className='search'>
+                    <button 
+                  onClick={()=>handleStatusValue("Model uploaded")}
+                    >Status Model Uploaded</button>
+                </div>
+                <div className='search'>
+                    <button 
+                  onClick={()=>handleStatusValue("Model in progress")}
+                    >Status Model Inprogress</button>
+                </div>
+                <div className='search'>
+                    <button
+                 onClick={()=>handleStatusValue("Model rejected")}
+                    >Status Model rejected</button>
+                </div>
+                <div className='search'>
+                    <button 
+                onClick={()=>handleStatusValue("Models completed")}
+                    >Status Models complete</button>
+                </div>
+                <div className='search'>
+                    <button 
+                onClick={()=>handleStatusValue("Product live")}
+                    >Status Product live</button>
+                </div>
+             
+
+            </div>
+
+            <div>
+                           
+            </div>
+
+        
+
+        </div>
+        </div>
 
       <div  className='allmerchantdata'>
+  
 
       <div>
 
     
 
-      <div className='inputdiv' >
+      <div className='inputdiv'  style={{display:'none'}} >
                 <div className='inputdiv' >
                 <input  type='number'  onChange={event=> setUserId(event.target.value)} />
 
@@ -1705,10 +1777,11 @@ console.log(modelrequired)
                     >Search</button>
                 </div>
                 <div className='search'>
-                    <button style={{width:'120px', height:'50px', marginTop:'20px', marginLeft:'40px'}}
+                    <button 
                     onClick={allMerchantHandler}
                     >All merchants</button>
                 </div>
+             
              
 
             </div>
@@ -2030,316 +2103,7 @@ console.log(modelrequired)
 
       </div>
 
-      <div className='defaultmerchant' >
-        <div className='homepage' >
-
-            <div className='inputdiv' >
-                <div className='inputdiv' >
-                <input  type='number'  onChange={event=> setUserId(event.target.value)} />
-
-
-                </div>
-                <div className='search'>
-                    <button style={{width:'120px', height:'50px', marginTop:'20px'}}
-                    onClick={searchHandler}
-                    >Search</button>
-                </div>
-                <div className='search'>
-                    <button style={{width:'120px', height:'50px', marginTop:'20px', marginLeft:'40px'}}
-                    onClick={merchantallHandler}
-                    >All merchants</button>
-                </div>
-             
-
-            </div>
-
-            <div>
-                           
-            </div>
-
-            <div className='urldiv' >
-             <div className='urldiv1' >
-
-
-                <p>merchantid</p>
-                <p>{userid} {merchant && merchant} </p>
-
-            
-                
-
-             </div>
-             <div className='urldiv2'>
-                <div>
-                    <p  >productid</p>
-                </div>
-               
-                {
-                  singlemerchant && singlemerchant.map(item=>(
-                    <p>{item.map(it=>(
-                      <p>{it.product_Id}</p>
-                    ))}</p>
-                  ))
-                }
-               
-
-          
-       
-
-             </div>
-             <div className='urldiv3'>
-                <div>
-                    <p>image url</p>
-                </div>
-
-                   {
-                    singlemerchant && singlemerchant.map(item=>(
-                      item.map(it=>(
-                        <div style={{margin:'10px', height:'150px', overflow:'scroll'}} >
-                          {it.imageurl && it.imageurl.map(itemnew=>(
-                            <p><a  style={{fontSize:'10px'}} href={itemnew}>{itemnew}</a></p>
-                          ))}
-                        </div>
-                      ))
-                    ))
-                     
-
-                   
-
-                        
-                    
-                      
-                       
-
-                       
-                  
-                   }    
-          
-         
-            </div>
-
-            <div className='urldiv3' >
-              <p>images quality</p>
-              {
-                    singlemerchant &&
-                    singlemerchant.map((item,i)=>(
-                      item.map((it, j)=>(
-
-                      
-
-                          <p id={i} value={it.product_Id} >
-                            <div>
-                              {
-                                singleimagestatus && singleimagestatus.map(item=>(
-                                  it.product_Id === item.product_Id ? 
-                                  <p>{item.imagestatus}</p>: <p></p>
-                                ))
-                              }
-                            </div>
-
-                        <select onChange={event=>setImageStatus(event.target.value)} >
-                  <option></option>
-                <option value='accepted' >Accepted</option>
-                <option value='rejected'>Rejected</option>
-                </select>
-              
-                 <button  onClick={()=>imageQualityHandler(it.product_Id,j)}  style={{marginLeft:'20px'}}>submit</button>
-                  <p  style={{color:'green'}} id={`${it.product_Id}_imgstatus_${j}`} >  </p> 
-
-
-
-                    </p>
-
-                    
-
-                      ))
-                      
-                  
-
-                
-
-                    ))
-
-                    
-
-                }
-
-            </div>
-            <div className='urldiv4'>
-              <p>length (inch)</p>
-                 <div  className='dimdiv'> 
-
-                 {
-                   singlemerchant && singlemerchant.map(item=>(
-                    item.map(it=>(
-                      <p>{it.lengthprod}</p>
-                    ))
-                   ))
-                 }
-                
-              
-
-               
-
-                
-
-                 </div>
-                
-
-                </div>
-                <div className='urldiv5'>
-                  <p>breadth (inch)</p>
-
-                  <div  className='dimdiv'> 
-
-                    {
-                   singlemerchant && singlemerchant.map(item=>(
-                    item.map(it=>(
-                      <p>{it.breadthprod}</p>
-                    ))
-                   ))
-                 }
-                
-
-
-
-
-
-
-</div>
-                </div>
-                <div className='urldiv6'>
-                  <p>height (inch)</p>
-                  <div  className='dimdiv'> 
-
-                          {
-                   singlemerchant && singlemerchant.map(item=>(
-                    item.map(it=>(
-                      <p>{it.height}</p>
-                    ))
-                   ))
-                 }
-                
-
-
-
-
-
-
-                       </div>
-                </div>
-                <div className='urldiv7'>
-                  <p>upload Date(P)</p>
-                  {
-
-
-
-                      singlemerchant && singlemerchant.map(item=>(
-                        item.map(it=>(
-                          <p  style={{marginBottom:'50px'}}>{it.registration_Time.split(' ').slice(0,4).join(' ')}</p>
-
-                        ))
-                      ))
-                  
-                  }
-
-                </div>
-                <div className='urldiv8'> 
-                <p>Modeler</p>
-
-
-                {
-                    singlemerchant &&
-                    singlemerchant.map((item,i)=>(
-                      item.map((it,j)=>(
-
-                      
-                            <p id={i} value={it.product_Id} >
-
-                       <select onChange={event=>setModName(event.target.value)} >
-                  <option></option>
-                  <option value='modeler1@arnxt.com' >modeler1</option>
-                  <option value='modeler2@arnxt.com' >modeler2</option>
-
-                  <option value='modeler3@arnxt.com' >modeler3</option>
-
-                  <option value='modeler4@arnxt.com' >modeler4</option>
-                  <option value='modeler5@arnxt.com' >modeler5</option>
-                  <option value='modeler6@arnxt.com' >modeler6</option>
-                  <option value='modeler7@arnxt.com' >modeler7</option>
-                  <option value='modeler8@arnxt.com' >modeler8</option>
-                  <option value='modeler9@arnxt.com' >modeler9</option>
-
-
-                </select>
-                <button  onClick={()=>nameHandler(it.product_Id, j)} style={{marginLeft:'20px'}} >Submit</button>
-
-                <div>
-                  {
-                    singleproductdetails && singleproductdetails.map(item=>(
-                     item.map(itemnew=>(
-                      itemnew.product_Id === it.product_Id ?
-                      <p>{itemnew.modelername}</p>: <p></p>
-                     ))
-                    ))
-                  }
-                </div>
-                  <p  style={{color:'green'}} id={`${it.product_Id}_modelstatus_${j}`} >  </p> 
-
-
-
-                    </p>
-
-
-                      ))
-                    
-
-                
-
-                    ))
-
-                    
-                }
-
-
-
-
-                </div>
-                <div className='urldiv8'> 
-                <p>status</p>
-     {              
-                  
-                  singlemerchant && singlemerchant.map(item=>(
-                    item.map(it=>(
-
-                     singleproductdetails && singleproductdetails.map(item=>(
-                        item.map(itemnew=>(
-                          it.product_Id === itemnew.product_Id ?
-                          <p>{itemnew.statusmod}</p> : <p></p>
-                        ))
-                      ))
-
-                    ))
-                  ))
-
-                 
-                  }
-              
-
-
-                </div>
-             
-
-          
-          
-            
-
-            
-
-
-            </div>
-
-        </div>
-        </div>
+    
 
 
       
@@ -2745,22 +2509,13 @@ imgresnew && imgresnew.map(item=>(
   
 <div style={{height:'120px', marginBottom:'40px', margin:'10px', overflowY:'scroll'}}>
  
-
-  
- 
   
   {item.map(it=>(
 
 
   <p style={{fontSize:'10px'}} ><a href={it}>{it}</a></p>
-
-
-
-  
+ 
 ))
-
-  
-
 
   }
  
@@ -2770,9 +2525,6 @@ imgresnew && imgresnew.map(item=>(
 
 )
 )}
-
-
-
 
 
 </div>
@@ -2792,12 +2544,6 @@ imgresnew && imgresnew.map(item=>(
                   ))
                  }
                 
-              
-
-               
-
-                
-
                  </div>
                 
 
@@ -2814,12 +2560,6 @@ imgresnew && imgresnew.map(item=>(
                         ))
                       }
 
-
-
-
-
-
-
 </div>
                 </div>
                 <div className='urldiv6'>
@@ -2832,12 +2572,6 @@ imgresnew && imgresnew.map(item=>(
   
                           ))
                          }
-
-
-
-
-
-
 
                        </div>
                 </div>
@@ -2959,13 +2693,6 @@ imgresnew && imgresnew.map(item=>(
 
                 </div>
 
-          
-          
-            
-
-            
-
-
             </div>
 
         </div>
@@ -2975,27 +2702,81 @@ imgresnew && imgresnew.map(item=>(
     </div>
     <div className='modmain3' id='main3' >
 
-    <div  className='allmerchantquality'>
       
-    <div className='inputdiv' >
+    <div className='defaultmerchant' >
+        <div className='homepage'  >
+
+            <div className='inputdiv' >
                 <div className='inputdiv' >
-                <input  type='number'  onChange={event=> setUserId(event.target.value)} />
+                <input  type='number'  onChange={event=> setMerchantInput(event.target.value)} />
 
 
                 </div>
                 <div className='search'>
-                    <button style={{width:'120px', height:'50px', marginTop:'20px'}}
-                    onClick={searchHandler}
-                    >Search</button>
+                    <button 
+                    onClick={searchHandlerQualityProduct}
+                    >Search with Product Id</button>
                 </div>
                 <div className='search'>
-                    <button style={{width:'120px', height:'50px', marginTop:'20px', marginLeft:'40px'}}
+                    <button 
+                    onClick={searchHandlerQualityMerchant}
+                    >Search with Merchant Id</button>
+                </div>
+                <div className='search'>
+                    <button 
                     onClick={allMerchantHandler}
-                    >All Merchant</button>
+                    >All merchants</button>
                 </div>
-              
+                <div className='search'>
+                    <button 
+                    onClick={()=>handleStatusAll("Image uploaded")}
+                    >Status Image Uploaded</button>
+                </div>
+                <div className='search'>
+                    <button 
+                    onClick={()=>handleStatusAll("Image rejected")}
+                    >Status Image rejected</button>
+                </div>
+                <div className='search'>
+                    <button 
+                  onClick={()=>handleStatusAll("Model uploaded")}
+                    >Status Model Uploaded</button>
+                </div>
+                <div className='search'>
+                    <button 
+                  onClick={()=>handleStatusValue("Model in progress")}
+                    >Status Model Inprogress</button>
+                </div>
+                <div className='search'>
+                    <button
+                 onClick={()=>handleStatusAll("Models rejected")}
+                    >Status Model rejected</button>
+                </div>
+                <div className='search'>
+                    <button 
+                onClick={()=>handleStatusAll("Models completed")}
+                    >Status Models complete</button>
+                </div>
+                <div className='search'>
+                    <button 
+                onClick={()=>handleStatusAll("Product live")}
+                    >Status Product live</button>
+                </div>
+             
 
             </div>
+
+            <div>
+                           
+            </div>
+
+        
+
+        </div>
+        </div>
+
+    <div  className='allmerchantquality'>
+        
              <div className='merchantdatacontainer'>
             {
               allproductdata && allproductdata .map((item,i)=>(
@@ -3044,6 +2825,26 @@ imgresnew && imgresnew.map(item=>(
                    <div className='viewproductcontainer'>
                     <button type='submit' onClick={()=>viewproductall(i)} >View Product Details</button>
                     </div>
+                    <div className= {item.modelrequired === 'true' ? 'viewproductcontainer' : 'productviewnone'} >
+                    <button type='submit' onClick={handleqrcodeopen} >AR view</button>
+                    <div class="modalscan">		
+	      	<div class="modal-wrapscan">
+                <span className='closemodalscan' onClick={handleqrclose}  >
+                     <FaTimes style={{color:'red', fontSize:'20px'}}/>
+                    </span>	
+			   <span>
+               <div>
+
+            </div>
+         <QRCode value= {`brand.arnxt.com/view?id=${item.product_Id}`}/>
+
+                </span>	
+	      		<h4 className='dataupload'> Scan the QR code with your mobile device to view the product in your space.</h4>	          		
+	      	</div>			          		
+      	</div>
+
+                    </div>
+
                     <div  id={`viewproductall_${i}`} className='viewproductsdata'>
                       <div className='closeproductview'  onClick={()=>closeproductviewall(i)}>
                         <FaTimes style={{color:"red", fontSize:'20px', cursor:'pointer'}}/>
@@ -3280,7 +3081,7 @@ imgresnew && imgresnew.map(item=>(
                   </div>
                 </div>
                
-
+     
               </div>
 
               ))
@@ -3295,31 +3096,12 @@ imgresnew && imgresnew.map(item=>(
 
         <div className='homepage' >
 
-            <div className='inputdiv' >
-                <div className='inputdiv' >
-                <input  type='number'  onChange={event=> setUserId(event.target.value)} />
-
-
-                </div>
-                <div className='search'>
-                    <button style={{width:'120px', height:'50px', marginTop:'20px'}}
-                    onClick={searchHandler}
-                    >Search</button>
-                </div>
-                <div className='search'>
-                    <button style={{width:'120px', height:'50px', marginTop:'20px', marginLeft:'40px'}}
-                    onClick={allMerchantHandler}
-                    >All Merchant</button>
-                </div>
-             
-
-            </div>
 
             <div>
                            
             </div>
 
-            <div className='urldiv' >
+            <div className='urldiv'  style={{display:'none'}} >
              <div className='urldiv1' >
                 <p>merchantid</p>
                 <p>{userid} {merchant && merchant} </p>

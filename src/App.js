@@ -22,6 +22,7 @@ import Applicants from "./Applicants";
 import CategoryForm from "./CategoryForm";
 import Success from "./Success";
 import Uploadbrand from "./Uploadbrand";
+import Viewar from "./Viewar";
 
 
 function App() {
@@ -44,6 +45,8 @@ function App() {
           <Route path="/form" component={CategoryForm} />
           <Route path="/paymentinfo" component={Success} />
           <Route path="/uploadbrand" component={Uploadbrand} />
+          <Route path="/viewar" component={Viewar} />
+
 
 
 

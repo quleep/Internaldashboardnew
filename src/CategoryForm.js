@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Navbar from './Navbar'
 import { RxCross2 } from 'react-icons/rx';
 import axios from 'axios';
+import { FaCheck } from 'react-icons/fa';
 const categoryuploadurl = 'https://eh16rizdbi.execute-api.ap-south-1.amazonaws.com/production/addcategoryandsubcategory'
 const updatesubcaturl= 'https://eh16rizdbi.execute-api.ap-south-1.amazonaws.com/production/updatesubcategory'
 const designstyleurl= 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/adddesigndata'
@@ -9,6 +10,10 @@ const addtagsurl= 'https://eh16rizdbi.execute-api.ap-south-1.amazonaws.com/produ
 const addcolorurl= 'https://eh16rizdbi.execute-api.ap-south-1.amazonaws.com/production/addcolor'
 const addcollectionurl= 'https://eh16rizdbi.execute-api.ap-south-1.amazonaws.com/production/addcollection'
 const addroomtypeurl= 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/addroomtype'
+const addcategoryimageurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/addcategoryimage'
+const uploadfileurl= 'https://6wxwjxwnyc.execute-api.ap-south-1.amazonaws.com/default/arnxt_products_category_functions'
+const addsubcatdetails= 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/addsubcatdetail'
+
 
 
 const CategoryForm = () => {
@@ -24,6 +29,8 @@ const CategoryForm = () => {
 
     const [colortag, setColorTag] = useState([])
     const [color, setColor] = useState('')
+    const [categoryimage, setCategoryImage] = useState()
+
     const [colorreRender, setColorreRender] = useState(false)
 
     
@@ -49,6 +56,33 @@ const CategoryForm = () => {
     const [roomsreRender, setRoomsreRender] = useState(false)
     const [roomdata, setRoomData] = useState('')
 
+    const [categoryname, setCategoryName] = useState()
+    const [subcategoryname, setSubCategoryName] = useState();
+ const [serviceList, setServiceList] = useState([{ itemname: "", itemvalue:''}]);
+ const [subcategorylist, setSubCategoryList] = useState([{ itemname: "", itemvalue:''}]);
+
+  let lastId;
+
+ function getId(){
+    let currentId = new Date().getTime();
+    if (lastId == currentId) {
+      currentId++;
+    }
+    lastId = currentId;
+    return lastId;
+}
+
+
+const fileToBase64 = (file, cb) => {
+const reader = new FileReader()
+reader.readAsDataURL(file)
+reader.onload = function () {
+  cb(null, reader.result)
+}
+reader.onerror = function (error) {
+  cb(error, null)
+}
+}
 
 
     const  roomRender = () => {
@@ -444,12 +478,314 @@ const CategoryForm = () => {
             })
         }
 
+        const handleSubcategoryAdd = (e, index) => {
 
 
+            if(e.target.files){
+              let files = Array.from(e.target.files) 
+            files.forEach(file => {
+             fileToBase64(file, (err, result) => {
+               if (result) {
+               
+                     
+            const url= uploadfileurl
+            fetch(url,{
+              method: "POST",
+              body: file.name
+            
+            }).then((res)=>res.json())
+               .then((res)=>{
+            
+                fetch(res.uploadURL, {
+                  
+                  method: "PUT",
+                  headers: {
+                    "ContentType": "application/json",
+                  
+                  },
+            
+                body: file
+                
+            
+                })
+                   .then((res)=>{
+                  
+                    if(res.status === 200){
+          
+                        let resnew= res.url.split('?')
+                        let imgurl= resnew[0]
+                       
+                        let { name,value } = e.target;
+           
+                        const list = [...subcategorylist];
+                         
+                           value = imgurl
+                        list[index][name] = value;
+                       
+                        setSubCategoryList(list);
+                        document.querySelector(`#checkticksub_${index}`).style.display = 'block'
+                      
+                      }
+                  
+                   })
+                   .catch((err)=>console.log(err))
+                 
+               })
+               .catch((err)=>console.log(err))
+          
+               }
+             })
+            
+             const reader = new FileReader();
+          
+             reader.readAsDataURL(file)
+             
+          })
+          
+          
+            } else{
+              let { name,value } = e.target;
+           
+              const list = [...subcategorylist];
+              list[index][name] = value;
+             
+              setSubCategoryList(list);
+            }
+          
+            
+           
+                  
+             
+          
+          }
 
+ 
+        const handleServiceChange = (e, index) => {
+
+
+            if(e.target.files){
+              let files = Array.from(e.target.files) 
+            files.forEach(file => {
+             fileToBase64(file, (err, result) => {
+               if (result) {
+               
+                     
+            const url= uploadfileurl
+            fetch(url,{
+              method: "POST",
+              body: file.name
+            
+            }).then((res)=>res.json())
+               .then((res)=>{
+            
+                fetch(res.uploadURL, {
+                  
+                  method: "PUT",
+                  headers: {
+                    "ContentType": "application/json",
+                  
+                  },
+            
+                body: file
+                
+            
+                })
+                   .then((res)=>{
+                  
+                    if(res.status === 200){
+          
+                        let resnew= res.url.split('?')
+                        let imgurl= resnew[0]
+                       
+                        let { name,value } = e.target;
+           
+                        const list = [...serviceList];
+                         
+                           value = imgurl
+                        list[index][name] = value;
+                       
+                        setServiceList(list);
+                        document.querySelector(`#checktick_${index}`).style.display = 'block'
+                      
+                      }
+                  
+                   })
+                   .catch((err)=>console.log(err))
+                 
+               })
+               .catch((err)=>console.log(err))
+          
+               }
+             })
+            
+             const reader = new FileReader();
+          
+             reader.readAsDataURL(file)
+             
+          })
+          
+          
+            } else{
+              let { name,value } = e.target;
+           
+              const list = [...serviceList];
+              list[index][name] = value;
+             
+              setServiceList(list);
+            }
+          
+            
+           
+                  
+             
+          
+          }
+          console.log(serviceList)
+          
+          const handleServiceRemove = (index) => {
+            const list = [...serviceList];
+            list.splice(index, 1);
+            setServiceList(list);
+          };
+          const handleSubRemove = (index) => {
+            const list = [...subcategorylist];
+            list.splice(index, 1);
+            setSubCategoryList(list);
+          };
+          
+          
+          const handleServiceAdd = () => {
+            setServiceList([...serviceList, { itemname: "", itemvalue : "" }]);
+          };
+          const handleSubAdd = () => {
+            setSubCategoryList([...subcategorylist, { itemname: "", itemvalue : "" }]);
+          };
+          
+          
+          
+          const filechangecategoryimage = e=>{
 
        
+            let files = Array.from(e.target.files) 
+            files.forEach(file => {
+             fileToBase64(file, (err, result) => {
+               if (result) {
+     
+                    let newval= file.name
+      
+        
+         
+         let indx = newval.lastIndexOf(".") + 1;
+         let filetype = newval.substr(indx, newval.length).toLowerCase();
+     
+         if(filetype === 'png' || filetype === 'jpeg' || filetype === 'jpg'){
+     
+     
+            const url= uploadfileurl
+         fetch(url,{
+           method: "POST",
+           body: file.name
+         
        
+       
+         }).then((res)=>res.json())
+            .then((res)=>{
+         
+             fetch(res.uploadURL, {
+               
+               method: "PUT",
+               headers: {
+                 "ContentType": "application/json",
+               
+               },
+         
+             body: file
+           
+             })
+                .then((res)=>{
+               
+                 if(res.status === 200){
+       
+                     let resnew= res.url.split('?')
+                     let imgurl= resnew[0]
+                    
+                     console.log(imgurl)
+                     document.querySelector('#tickmarkcategory').style.display= 'block'
+                    setCategoryImage(imgurl)
+                   
+     
+                   }
+               
+                })
+                .catch((err)=>console.log(err))
+              
+            })
+            .catch((err)=>console.log(err))
+           
+       
+         } else{
+           document.querySelector('#glbmessage').innerHTML= 'jpeg, jpg, png required'
+           setTimeout(() => {
+           document.querySelector('#glbmessage').innerHTML= ''
+     
+             
+           }, [5000]);
+           return
+         }
+               
+               }
+             })
+            
+             const reader = new FileReader();
+         
+             reader.readAsDataURL(file)
+             
+         })
+     
+     } 
+      
+
+const handleCategorySubmit=()=>{
+    const body={
+        category: categoryname,
+        categoryimage: categoryimage,
+        subcategory: serviceList
+    }
+    axios.post(addcategoryimageurl, body).then(res=>{
+        if(res.status === 200){
+            document.querySelector('#submitmessage').innerHTML = 'Submitted'
+            setTimeout(() => {
+            document.querySelector('#submitmessage').innerHTML = ''
+                
+            }, 2000);
+        }
+    }).catch(error=>{
+        console.log(error)
+    })
+}
+const handleSubcategorySubmit=()=>{
+    const body={
+        subcategoryname: subcategoryname,
+      
+        subcategorydetails: subcategorylist
+    }
+
+    axios.post(addsubcatdetails, body).then(res=>{
+        if(res.status === 200){
+            document.querySelector('#submitmessagesub').innerHTML = 'Submitted'
+            setTimeout(() => {
+            document.querySelector('#submitmessagesub').innerHTML = ''
+                
+            }, 2000);
+        }
+    }).catch(error=>{
+        console.log(error)
+    })
+
+}
+    
+       
+     
   return (
     <div>
 
@@ -457,112 +793,164 @@ const CategoryForm = () => {
   <Navbar/>
 
 <div className='catagorysubmit' >
+    <div className='catformdisplay'>
+        <label>Category name</label>
+        <input type='text' onChange={(e)=>setCategoryName(e.target.value)} placeholder='categoryname'/>
+        <label>category image</label>
+        <div >
+               
+                <input type='file' onChange={filechangecategoryimage} />
+                 <FaCheck  id='tickmarkcategory' className='tickdisplay' style={{color:'green'}}/>
+               <p id ='glbmessage'></p>
+            </div>
 
-   <div className='catformdisplay'>
+        <label>subcategory</label>
+        <div className='itemnamevalue'>
+               
+               {
+                serviceList && serviceList.map((item, index)=>(
 
-   <div>
-    <h2>Add Category</h2>
-    <label>Category</label>
-    <input type='text' value={category} onChange={(e)=>setCategory(e.target.value)} />
+               <div key={index}  className='keyvalueinput' >
+                
+
+               <input  
+                name="itemname"
+                type="text"
+                id="service"
+                className='inputfirst'
+                placeholder='subcategoryname'
+              
+                onChange={(e) => handleServiceChange(e, index)}
+                required
+              />
+               <input
+                name="itemvalue"
+                type="file"
+                id="service"
+                className='inputsecond'
+              
+                onChange={(e) => handleServiceChange(e, index)}
+                required
+              />
+              <FaCheck id= {`checktick_${index}`} className='tickdisplay' style={{color:'green'}}/>
+
+
+               {serviceList.length - 1 === index  && (
+
+                <div>
+               
+                  <span   
+                  onClick={handleServiceAdd}
+                  className="add-btn" ><i style={{fontSize:'30px'}} class='bx bx-message-square-add'></i></span>
+             
+
+
+                  </div>
+             
+              )}
+
+
+             <div className="second-division">
+              {serviceList.length !== 1 && (
+               
+                
+                
+                  <span   
+                  onClick={() => handleServiceRemove(index)}
+                  className="remove-btn" ><i  style={{fontSize:'30px'}} class='bx bx-message-square-minus' ></i></span>
+               
+              )}
+            </div>
+              
+                 </div>
+
+                )) }
+
+             </div>
+             <button onClick={handleCategorySubmit}> submit</button>
+             <p id='submitmessage' style={{color:'green'}}></p>
 
     </div>
-    <div>
-    <label>Subcategory</label>
-    <div className='AddTagContainer'>
-    <div className="addTagBox">
-      
-        <div className="addTagInput">
-            {
-                roomtypetag.map((tag, index) => {
-                    return (
-                        <div className="tags" key={index}>
-                            <span>{tag}</span>
-                            <div className="crossIcon"
-                                onClick={() => handleDeleteRoomTag(index)}>
-                                <RxCross2 />
-                            </div>
-
-                        </div>
-                    )
-                })
-            }
-
-
-            <input className='input' type="text" autoFocus
-             placeholder='Add subcategory'
-                value={roomtypetext}
-                onKeyUpCapture={(e) => { handleRoomTypeTag(e) }}
-                onChange={(e) => setRoomTypeText(e.target.value)}
-            />
-          
-        </div>
-    </div>
-</div>
-
-    </div>
-
-    <div>
-        <button type='submit' onClick={handleSubmit} >Submit</button>
-    </div>
-
-    <p id='catmessagered' style={{color:'red', fontSize:'15px'}}></p>
-    <p id='catmessagegreen' style={{color:'green', fontSize:'15px'}}></p>
-
-
-    </div> 
 
     <div className='catformdisplay'>
-
-   <div  className='inputcategory'>
-    <h2>Update Subcategory</h2>
-    <label>Category</label>
-    <input type='text' value={updatecategory} onChange={(e)=>setUpdateCategory(e.target.value)} />
-
-    </div>
-    <div>
-    <label>Subcategory</label>
-    <div className='AddTagContainer'>
-    <div className="addTagBox">
+        <label>Subcategory name</label>
+        <input type='text' onChange={(e)=>setSubCategoryName(e.target.value)} placeholder='Subcategoryname'/>
       
-        <div className="addTagInput">
-            {
-                updatecategorytag.map((tag, index) => {
-                    return (
-                        <div className="tags" key={index}>
-                            <span>{tag}</span>
-                            <div className="crossIcon"
-                                onClick={() => handleDeleteUpdateTag(index)}>
-                                <RxCross2 />
-                            </div>
+   
 
-                        </div>
-                    )
-                })
-            }
+        <label>subcategory details</label>
+        <div className='itemnamevalue'>
+               
+               {
+                subcategorylist && subcategorylist.map((item, index)=>(
+
+               <div key={index}  className='keyvalueinput' >
+                
+
+               <input  
+                name="itemname"
+                type="text"
+                id="service"
+                className='inputfirst'
+                placeholder='details name'
+              
+                onChange={(e) => handleSubcategoryAdd(e, index)}
+                required
+              />
+               <input
+                name="itemvalue"
+                type="file"
+                id="service"
+                className='inputsecond'
+              
+                onChange={(e) => handleSubcategoryAdd(e, index)}
+                required
+              />
+              <FaCheck id= {`checkticksub_${index}`} className='tickdisplay' style={{color:'green'}}/>
 
 
-            <input className='input' type="text" autoFocus
-             placeholder='Add subcategory'
-                value={updatecategorytext}
-                onKeyUpCapture={(e) => { handleUpdateTag(e) }}
-                onChange={(e) => setUpdateCategoryText(e.target.value)}
-            />
-          
-        </div>
+               {subcategorylist.length - 1 === index  && (
+
+                <div>
+               
+                  <span   
+                  onClick={handleSubAdd}
+                  className="add-btn" ><i style={{fontSize:'30px'}} class='bx bx-message-square-add'></i></span>
+             
+
+
+                  </div>
+             
+              )}
+
+
+             <div className="second-division">
+              {subcategorylist.length !== 1 && (
+               
+                
+                
+                  <span   
+                  onClick={() => handleSubRemove(index)}
+                  className="remove-btn" ><i  style={{fontSize:'30px'}} class='bx bx-message-square-minus' ></i></span>
+               
+              )}
+            </div>
+              
+                 </div>
+
+                )) }
+
+             </div>
+             <button onClick={handleSubcategorySubmit}> submit</button>
+             <p id='submitmessagesub' style={{color:'green'}}></p>
+
     </div>
-</div>
 
-    </div>
-
-    <div>
-        <button type='submit' onClick={handleUpdate} >Update</button>
-    </div>
-
-    <p id='updatemessagered' style={{color:'red', fontSize:'15px'}}></p>
-    <p id='updatemessagegreen' style={{color:'green', fontSize:'15px'}}></p>
+   
 
 
-    </div> 
+
+  
 
 
     <div className='catformdisplay'>
