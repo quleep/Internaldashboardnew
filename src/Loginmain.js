@@ -2836,7 +2836,7 @@ imgresnew && imgresnew.map(item=>(
                <div>
 
             </div>
-         <QRCode value= {`brand.arnxt.com/view?id=${item.product_Id}`}/>
+         <QRCode value= {`admin.arnxt.com/view?id=${item.product_Id}`}/>
 
                 </span>	
 	      		<h4 className='dataupload'> Scan the QR code with your mobile device to view the product in your space.</h4>	          		
