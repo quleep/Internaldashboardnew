@@ -1728,11 +1728,7 @@ const searchHandlerQualityMerchant=()=>{
                   onClick={()=>handleStatusValue("Model uploaded")}
                     >Status Model Uploaded</button>
                 </div>
-                <div className='search'>
-                    <button 
-                  onClick={()=>handleStatusValue("Model in progress")}
-                    >Status Model Inprogress</button>
-                </div>
+             
                 <div className='search'>
                     <button
                  onClick={()=>handleStatusValue("Model rejected")}
@@ -2035,7 +2031,7 @@ const searchHandlerQualityMerchant=()=>{
                           <div style={{display:'flex', flexWrap:'wrap', flexDirection:'column'}}>
                           <select onChange={event=>setImageStatus(event.target.value)} >
                      <option></option>
-                       <option value='Model in progress' >Accepted</option>
+                       <option value='Model uploaded' >Accepted</option>
                            <option value='Image rejected'>Rejected</option>
                           </select>
 
@@ -2745,11 +2741,7 @@ imgresnew && imgresnew.map(item=>(
                   onClick={()=>handleStatusAll("Model uploaded")}
                     >Status Model Uploaded</button>
                 </div>
-                <div className='search'>
-                    <button 
-                  onClick={()=>handleStatusValue("Model in progress")}
-                    >Status Model Inprogress</button>
-                </div>
+              
                 <div className='search'>
                     <button
                  onClick={()=>handleStatusAll("Models rejected")}
