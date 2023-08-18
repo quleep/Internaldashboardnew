@@ -211,7 +211,7 @@ const imagequalitymerchant= (pid,  len)=>{
 
 const img = new Image();
 
-const onChangeimg =(e)=>{
+const onChangeimg =(e,len)=>{
 
 
  
@@ -234,11 +234,13 @@ const onChangeimg =(e)=>{
         if(!newarr.includes(filetype)){
           setImgfile('')
        
-          document.querySelector('#imagemessage').innerHTML= '.jpg, .jpeg, .png files accepted'
-          document.querySelector('#b4').value = ''
+          document.getElementById(`imagemessage_${len}`).innerHTML= '.jpg, .jpeg, .png files accepted'
+          document.getElementById(`b4_${len}`).value = ''
+          document.getElementById(`filenameimage_${len}`).innerHTML =  ''
        
          setTimeout(() => {
-          document.querySelector('#imagemessage').innerHTML= ''
+          document.getElementById(`imagemessage_${len}`).innerHTML= ''
+
 
           
          }, [3000]);
@@ -258,12 +260,17 @@ const onChangeimg =(e)=>{
           if(imgWidth === 600 && imgHeight === 600){
             setImgfile(file)
             setImageUploadStatus(true)
+            document.getElementById(`filenameimage_${len}`).innerHTML =  file.name
           }
             else{
-            document.querySelector('#imagemessage').innerHTML= 'Image should be 600 * 600'
-              document.querySelector('#b4').value = ''
+            document.getElementById(`imagemessage_${len}`).innerHTML= 'Image should be 600 * 600'
+            document.getElementById(`filenameimage_${len}`).innerHTML =  ''
+
+              document.getElementById(`b4_${len}`).value = ''
             setTimeout(()=>{
-            document.querySelector('#imagemessage').innerHTML= ''
+              document.getElementById(`imagemessage_${len}`).innerHTML= ''
+
+
   
               
             },[3000])
@@ -350,20 +357,15 @@ const sendImage =(val, merid, len)=>{
         console.log(error)
       })
 
-      
-
-    
-     
-  
     
    })
 
     })
 
   } else{
-     document.querySelector('#imagemessage').innerHTML= 'Please select a file'
+     document.getElementById(`imagemessage_${len}`).innerHTML= 'Please select a file'
     setTimeout(()=>{
-      document.querySelector('#imagemessage').innerHTML= ''
+      document.getElementById(`imagemessage_${len}`).innerHTML= ''
 
     },3000)
   }
@@ -376,7 +378,7 @@ const sendImage =(val, merid, len)=>{
 
 
     
-  const onChangefbx = (e) => {
+  const onChangefbx = (e,len) => {
    
     
    let files = Array.from(e.target.files) 
@@ -384,26 +386,25 @@ const sendImage =(val, merid, len)=>{
     fileToBase64(file, (err, result) => {
       if (result) {
 
-        
-
-      
-
         let newval= file.name
         let indx = newval.lastIndexOf(".") + 1;
         let filetype = newval.substr(indx, newval.length).toLowerCase();
        
         if(  filetype === 'zip'){
           setFileName(file)
-          document.querySelector('#fbxmessage').innerHTML= ''
+          document.getElementById(`fbxmessage_${len}`).innerHTML= ''
+          document.getElementById(`filenamefbx_${len}`).innerHTML = file.name
+
           }
       else{
-        document.querySelector('#fbxmessage').innerHTML= 'upload a zip '
-        document.querySelector('#b1').value = ''
+        document.getElementById(`fbxmessage_${len}`).innerHTML= 'upload a zip '
+        document.getElementById(`filenamefbx_${len}`).innerHTML = ''
+
+        document.getElementById(`b1_${len}`).value = ''
         setFileName('')
       setTimeout(() => {
-        document.querySelector('#fbxmessage').innerHTML= ''
+        document.getElementById(`fbxmessage_${len}`).innerHTML= ''
 
-        
       }, [3000]);
         return
         }
@@ -418,8 +419,7 @@ const sendImage =(val, merid, len)=>{
     reader.onload = () => {
         if (reader.readyState === 2) {
            
-            setImagesPreview(oldArray => [...oldArray, reader.result])
-            setImages(oldArray => [...oldArray, file])
+         
         
 
            
@@ -438,7 +438,7 @@ const sendImage =(val, merid, len)=>{
 }
 
 
-const onChangeglb = e => {
+const onChangeglb = (e,len) => {
 
    
  let files = Array.from(e.target.files) 
@@ -455,15 +455,18 @@ const onChangeglb = e => {
 
         setFileNewglb(result)
         setFileGlv(file)
-     
+        document.getElementById(`filenameglb_${len}`).innerHTML= file.name
+        
       }
       else{
-       document.querySelector('#glbmessage').innerHTML= 'upload a glb file'
+       document.getElementById(`glbmessage_${len}`).innerHTML= 'upload a glb file'
+       document.getElementById(`filenameglb_${len}`).innerHTML= ''
+
            setFileGlv('')
-           document.querySelector('#b2').value = ''
+           document.getElementById(`b2_${len}`).value = ''
        setTimeout(() => {
 
-       document.querySelector('#glbmessage').innerHTML= ''
+        document.getElementById(`glbmessage_${len}`).innerHTML= ''
 
         
        }, [3000]);
@@ -491,8 +494,7 @@ const onChangeglb = e => {
   reader.onload = () => {
       if (reader.readyState === 2) {
          
-          setImagesPreview(oldArray => [...oldArray, reader.result])
-          setImages(oldArray => [...oldArray, file])
+   
       
 
          
@@ -513,7 +515,7 @@ const onChangeglb = e => {
 
 
   
-const onChangegltf = e => {
+const onChangegltf = (e,len) => {
 
   
  let files = Array.from(e.target.files) 
@@ -530,15 +532,18 @@ const onChangegltf = e => {
 
         setFileNewGltf(result)
         setFileGltf(file)
-     
+       document.getElementById(`filenamegltf_${len}`).innerHTML= file.name
+        
       }
       else{
-       document.querySelector('#usdzmessage').innerHTML= 'upload a usdz or usd or usdc file'
-       document.querySelector('#b3').value = ''
+       document.getElementById(`usdzmessage_${len}`).innerHTML= 'upload a usdz or usd or usdc file'
+       document.getElementById(`b3_${len}`).value = ''
+       document.getElementById(`filenamegltf_${len}`).innerHTML= ''
+
        setFileNewGltf(null)
        setFileGltf('')
        setTimeout(() => {
-       document.querySelector('#usdzmessage').innerHTML= ''
+       document.getElementById(`usdzmessage_${len}`).innerHTML= ''
 
         
        }, [3000]);
@@ -557,9 +562,7 @@ const onChangegltf = e => {
   reader.onload = () => {
       if (reader.readyState === 2) {
          
-          setImagesPreview(oldArray => [...oldArray, reader.result])
-          setImages(oldArray => [...oldArray, file])
-      
+        
 
          
           }
@@ -683,9 +686,10 @@ if (fileglb){
       })
     }
     else{
-      document.querySelector('#glbmessage').innerHTML= 'Please select a file'
+      document.getElementById(`glbmessage_${len}`).innerHTML= 'Please select a file'
       setTimeout(()=>{
-        document.querySelector('#glbmessage').innerHTML= ''
+      document.getElementById(`glbmessage_${len}`).innerHTML= ''
+       
 
       },3000)
     }
@@ -747,9 +751,11 @@ if (fileglb){
         })
 
       } else{
-         document.querySelector('#usdzmessage').innerHTML = 'Please select a file'
+        document.getElementById(`usdzmessage_${len}`).innerHTML= 'Please select a file'
+
         setTimeout(()=>{
-          document.querySelector('#usdzmessage').innerHTML = ''
+          document.getElementById(`usdzmessage_${len}`).innerHTML= ''
+
 
         },3000)
       }
@@ -807,9 +813,11 @@ if (fileglb){
         })
       }
       else{
-         document.querySelector('#fbxmessage').innerHTML= 'Please select a file'
+        document.getElementById(`fbxmessage_${len}`).innerHTML= 'Please select a file'
+
         setTimeout(()=>{
-          document.querySelector('#fbxmessage').innerHTML= ''
+          document.getElementById(`usdzmessage_${len}`).innerHTML= ''
+
          
         },3000)
       }
@@ -1073,6 +1081,18 @@ if(height){
     }, 3000);
     return
     }
+
+    if(modeluploadstatus === 'Model rejected' && modelrejectreason === '' ){
+      document.getElementById(`${pid}_finalstatus_${len}`).innerHTML= 'Please provide a reason'
+    setTimeout(() => {
+      document.getElementById(`${pid}_finalstatus_${len}`).innerHTML= ''
+      
+    }, 3000);
+    return
+    }
+
+
+  
       
       const body={
         productid: Number(pid),
@@ -1080,13 +1100,17 @@ if(height){
         reason: modelrejectreason
       }
       axios.post(updatemodelstatus, body).then(res=>{
-        document.getElementById(`${pid}_finalstatus_${len}`).innerHTML= 'Submitted Successfully'
-        setTimeout(()=>{
-        document.getElementById(`${pid}_finalstatus_${len}`).innerHTML= ''
-    
-    
-        }, [2000])
-        console.log(res)
+        if(res.status === 200){
+          setModelUploadStatus('')
+          setModelRejectReason('')
+          document.getElementById(`${pid}_finalstatus_${len}`).innerHTML= 'Submitted Successfully'
+          setTimeout(()=>{
+          document.getElementById(`${pid}_finalstatus_${len}`).innerHTML= ''
+      
+      
+          }, [2000])
+        }
+   
       }).catch(error=>{
         console.log(error)
       })
@@ -1316,8 +1340,13 @@ const assignModeler=(uid, pid, len) =>{
     }, 3000);
     return
    }
-   if(imagestatus === 'Model in progress'){
-    setImageRejectReason('')
+   if(imagestatus === 'Image rejected' && imagerejectreason === ''){
+    document.getElementById(`${pid}_modstatus_${len}`).innerHTML= 'Please provide a reason '
+    setTimeout(() => {
+    document.getElementById(`${pid}_modstatus_${len}`).innerHTML= ''
+      
+    }, 3000);
+    return
    }
 
   
@@ -1331,6 +1360,9 @@ const assignModeler=(uid, pid, len) =>{
           }
     axios.post(uplodanameurl, newbody).then(res=>{
       if(res.status === 200){
+        setModName('')
+        setImageStatus('')
+        setImageRejectReason('')
       document.getElementById(`${pid}_modstatus_${len}`).innerHTML= 'Assigned Successfully'
       setTimeout(()=>{
       document.getElementById(`${pid}_modstatus_${len}`).innerHTML= ''
@@ -1707,12 +1739,39 @@ const searchHandlerQualityMerchant=()=>{
         reason: ''
       }
       axios.post(updatemodelstatus, body).then(res=>{
-          document.getElementById(`${val}_modstatus_${len}`).innerHTML = 'Submitted successfully'
 
-        setTimeout(()=>{
-        document.getElementById(`${val}_modstatus_${len}`).innerHTML = ''
+           if(res.status === 200){
+             setFbxUploadStatus(false)
+             setGlbUploadStatus(false)
+             setUsdzUploadStatus(false)
+             setImageUploadStatus(false)
+             setFileName('')
+             setFileGlv('')
+             setFileGltf('')
+             setImgfile('')
+               document.getElementById(`${val}_img_${len}`).style.display ='none'
+               document.getElementById(`${val}_gltf_${len}`).style.display ='none'
+               document.getElementById(`${val}_glb_${len}`).style.display ='none'
+               document.getElementById(`${val}_fbx_${len}`).style.display ='none'
+               document.getElementById(`b1_${len}`).value = ''
+               document.getElementById(`b2_${len}`).value = ''
+               document.getElementById(`b3_${len}`).value = ''
+               document.getElementById(`b4_${len}`).value = ''
+               document.getElementById(`filenamefbx_${len}`).innerHTML = ''
+               document.getElementById(`filenameimage_${len}`).innerHTML = ''
+               document.getElementById(`filenamegltf_${len}`).innerHTML = ''
+               document.getElementById(`filenameglb_${len}`).innerHTML = ''
 
-        }, [2000])
+
+
+            document.getElementById(`${val}_modstatus_${len}`).innerHTML = 'Submitted successfully'
+
+            setTimeout(()=>{
+            document.getElementById(`${val}_modstatus_${len}`).innerHTML = ''
+    
+            }, [2000])
+           }
+       
        
       }).catch(error=>{
         console.log(error)
@@ -2435,11 +2494,11 @@ const searchHandlerQualityMerchant=()=>{
                       <div  >
     <div  >
       <h4>Upload fbx</h4>
-    <input type='file' id='b1'  onChange={onChangefbx}  style={{marginBottom:'10px', paddingLeft:'30px'}} />
+    <input type='file' id={`b1_${i}`}  onChange={(e)=>onChangefbx(e,i)}  style={{marginBottom:'10px', paddingLeft:'30px'}} />
     <button  value={item.product_Id}  onClick={()=>sendfunctionfbx(item.product_Id, item.merchant_Id, i)}>upload model</button><span id={`${item.product_Id}_fbx_${i}`}  className='tickmarkfbx' ><FaCheck/></span>
-    <p id='fbxmessage' style={{color:'red'}} ></p>
+    <p id={`fbxmessage_${i}`} style={{color:'red'}} ></p>
 
-    <p style={{color:'green', fontFamily:'Manrope, sanserif'}}  >{filename && filename.name}</p>
+    <p  id= {`filenamefbx_${i}`} style={{color:'green', fontFamily:'Manrope, sanserif'}}  ></p>
 
   
 
@@ -2452,11 +2511,11 @@ const searchHandlerQualityMerchant=()=>{
 
     <div  >
     <h4>Upload glb</h4>
-    <input type='file' id='b2' onChange={onChangeglb} style={{marginBottom:'10px', paddingLeft:'30px'}}  /> 
+    <input type='file' id={`b2_${i}`} onChange={(e)=>onChangeglb(e,i)} style={{marginBottom:'10px', paddingLeft:'30px'}}  /> 
     <button  value={item.product_Id} onClick={()=>sendfunctionglb(item.product_Id, item.merchant_Id, i)} >upload model</button><span id={`${item.product_Id}_glb_${i}`}  className='tickmarkfbx' ><FaCheck/></span>
-    <p id= 'glbmessage' style={{color:'red'}} ></p>
+    <p id= {`glbmessage_${i}`} style={{color:'red'}} ></p>
 
-    <p style={{color:'green', fontFamily:'Manrope, sanserif'}} >{fileglb && fileglb.name}</p>
+    <p  id={`filenameglb_${i}`} style={{color:'green', fontFamily:'Manrope, sanserif'}} ></p>
 
     {    }
 
@@ -2474,11 +2533,11 @@ const searchHandlerQualityMerchant=()=>{
 
 <div  >
 <h4>Upload usdz</h4>
-<input type='file' id='b3' onChange={onChangegltf} style={{marginBottom:'10px', paddingLeft:'30px'}}  /> 
+<input type='file' id={`b3_${i}`} onChange={(e)=>onChangegltf(e,i)} style={{marginBottom:'10px', paddingLeft:'30px'}}  /> 
 <button  value={item.product_Id} onClick={()=>sendfunctiongltf(item.product_Id, item.merchant_Id, i)} >upload model</button><span id={`${item.product_Id}_gltf_${i}`}  className='tickmarkfbx' ><FaCheck/></span>
-<p id= 'usdzmessage' style={{color:'red'}} ></p>
+<p id={`usdzmessage_${i}`} style={{color:'red'}} ></p>
 
-<p style={{color:'green', fontFamily:'Manrope, sanserif'}} >{filegltf && filegltf.name}</p>
+<p  id={`filenamegltf_${i}`} style={{color:'green', fontFamily:'Manrope, sanserif'}} ></p>
 
 {    }
 
@@ -2492,7 +2551,7 @@ const searchHandlerQualityMerchant=()=>{
 
 <h4 >Image upload</h4>
 
- <input type='file' id='b4' onChange={onChangeimg}/>
+ <input type='file' id={`b4_${i}`} onChange={(e)=>onChangeimg(e,i)}/>
 
 
 
@@ -2502,8 +2561,8 @@ const searchHandlerQualityMerchant=()=>{
 
  
 
- <p id='imagemessage' style={{color:'red'}} ></p>
- <p style={{color:'green', fontFamily:'Manrope, sanserif'}} >{imgfile && imgfile.name}</p>
+ <p id={`imagemessage_${i}`} style={{color:'red'}} ></p>
+ <p id ={`filenameimage_${i}`}  style={{color:'green', fontFamily:'Manrope, sanserif'}} ></p>
 
  {   }
 
