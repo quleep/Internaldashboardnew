@@ -199,6 +199,8 @@
 .tickmarkfbx {
   display: none;
   color: green;
+ 
+ 
 }
 .tickmarkglb {
   display: none;
@@ -464,6 +466,15 @@ body {
 .navoperation a {
   text-decoration: none;
 }
+.modelerassigned{
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
 
 #addrolesdiv {
   display: none;
@@ -473,6 +484,7 @@ body {
 }
 .modmain2 {
   display: none;
+
 }
 .modmain3 {
   display: none;
@@ -1093,6 +1105,20 @@ height: 200px;
   height: fit-content;
   padding: 10px;
  
+  height: 400px;
+  overflow: scroll;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+ 
+}
+.updatedatacontainer input{
+  width:  250px;
+}
+
+.updatedatacontainer button{
+  margin-left: 5px;
+ 
 }
 .statustab2 input{
   margin-left: 35px;
@@ -1146,9 +1172,8 @@ height: 200px;
  
   font-family: monospace;
   font-size: 20px;
-  width: 130px;
-  height: 40px;
-   padding-top: 8px;
+
+   padding: 10px;
   border: 1px solid green;
   border-radius: 10px;
 }
@@ -1157,7 +1182,10 @@ height: 200px;
   font-family: monospace;
   font-size: 15px;
  
+  padding: 10px;
+ 
   border: 1px solid green;
+  border-radius: 5px;
 }
 
 

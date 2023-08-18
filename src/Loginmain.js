@@ -44,6 +44,13 @@ const Loginmain = ({history}) => {
     const [userid, setUserId] = useState('');
     const [modeluploadstatus, setModelUploadStatus] = useState('')
     const [modelrejectreason, setModelRejectReason] = useState('')
+    const [glbuploadstatus, setGlbUploadStatus] = useState(false)
+    const [usdzuploadstatus, setUsdzUploadStatus] = useState(false)
+
+    const [imageuploadstatus, setImageUploadStatus] = useState(false)
+
+    const [fbxuploadstatus, setFbxUploadStatus] = useState(false)
+
 
     const [admin, setAdmin] = useState(false);
 
@@ -53,7 +60,7 @@ const Loginmain = ({history}) => {
     const [usermodel, setUserModel] = useState();
     const [dimension, setDimension] = useState(false);
     const [dimdata, setDimData] = useState();
-    const [modname, setModName]= useState();
+    const [modname, setModName]= useState('');
     const [loggeduser, setLoginUser]= useState(false)
     const [assigndate, setAssignDate]= useState();
     const [merchant, setMerchant]= useState();
@@ -80,7 +87,7 @@ const Loginmain = ({history}) => {
 
     const [imgfile, setImgfile] = useState();
 
-    const [imagestatus, setImageStatus] = useState();
+    const [imagestatus, setImageStatus] = useState('');
     const [allmerchantdata, setAllMerchantData] = useState();
     const [statusall, setStatusAll] = useState([]);
     const [modelalldata, setModelAllData] = useState();
@@ -223,6 +230,20 @@ const onChangeimg =(e)=>{
 
 
         img.src =  result;
+        let newarr =['jpeg', 'png', 'jpg']
+        if(!newarr.includes(filetype)){
+          setImgfile('')
+       
+          document.querySelector('#imagemessage').innerHTML= '.jpg, .jpeg, .png files accepted'
+          document.querySelector('#b4').value = ''
+       
+         setTimeout(() => {
+          document.querySelector('#imagemessage').innerHTML= ''
+
+          
+         }, [3000]);
+         return
+        }
 
         img.onload = function() {
 
@@ -232,59 +253,29 @@ const onChangeimg =(e)=>{
 
 
          
-        if( filetype === 'jpeg' || filetype === 'png' || filetype === 'jpg' && imgWidth === 600 && imgHeight === 600 ){
-         
-      
-          setImgfile(file)
-         
+        if( filetype === 'jpeg' || filetype === 'png' || filetype === 'jpg' ){
+
+          if(imgWidth === 600 && imgHeight === 600){
+            setImgfile(file)
+            setImageUploadStatus(true)
           }
-          else{
-            document.querySelector('#imagemessage').innerHTML= '.jpg, .jpeg, .png files accepted'
-          
+            else{
+            document.querySelector('#imagemessage').innerHTML= 'Image should be 600 * 600'
+              document.querySelector('#b4').value = ''
             setTimeout(()=>{
             document.querySelector('#imagemessage').innerHTML= ''
   
               
             },[3000])
-            setImgfile(null)
-            imgstatus = false
+            setImgfile('')
+         
       
           }
          
-
-         if (imgWidth !== 600){
-
-          document.querySelector('#imagemessage').innerHTML= 'image width and height should be 600 * 600'
-          setImgfile(null)
-          
-          setTimeout(()=>{
-          document.querySelector('#imagemessage').innerHTML= ''
-
-            
-          },[3000])
-         
-           imgstatus = false
-        }
-              
-   
-      if (imgHeight !==  600){
-        document.querySelector('#imagemessage').innerHTML= 'image width and height should be 600 * 600'
-        setImgfile(null)
       
-        setTimeout(()=>{
-        document.querySelector('#imagemessage').innerHTML= ''
-
-        
-          
-        },[3000])
        
-
-      
-        imgstatus = false
-      }
-        if(!imgstatus){
-          return
-        }
+         
+          }
 
         };
   
@@ -297,8 +288,7 @@ const onChangeimg =(e)=>{
      reader.onload = () => {
          if (reader.readyState === 2) {
             
-             setImagesPreview(oldArray => [...oldArray, reader.result])
-             setImages(oldArray => [...oldArray, file])
+          
          
  
             
@@ -353,6 +343,7 @@ const sendImage =(val, merid, len)=>{
       }
       axios.post(uploadmodelfbx, imgbody).then(res=>{
         if (res.status === 200){
+          setImageUploadStatus(true)
           document.getElementById(`${val}_img_${len}` ).style.display= 'block'
         }
       }).catch(error=>{
@@ -370,9 +361,10 @@ const sendImage =(val, merid, len)=>{
     })
 
   } else{
-    setMessage('please select file')
+     document.querySelector('#imagemessage').innerHTML= 'Please select a file'
     setTimeout(()=>{
-      setMessage('')
+      document.querySelector('#imagemessage').innerHTML= ''
+
     },3000)
   }
 
@@ -406,6 +398,8 @@ const sendImage =(val, merid, len)=>{
           }
       else{
         document.querySelector('#fbxmessage').innerHTML= 'upload a zip '
+        document.querySelector('#b1').value = ''
+        setFileName('')
       setTimeout(() => {
         document.querySelector('#fbxmessage').innerHTML= ''
 
@@ -465,6 +459,8 @@ const onChangeglb = e => {
       }
       else{
        document.querySelector('#glbmessage').innerHTML= 'upload a glb file'
+           setFileGlv('')
+           document.querySelector('#b2').value = ''
        setTimeout(() => {
 
        document.querySelector('#glbmessage').innerHTML= ''
@@ -538,8 +534,9 @@ const onChangegltf = e => {
       }
       else{
        document.querySelector('#usdzmessage').innerHTML= 'upload a usdz or usd or usdc file'
+       document.querySelector('#b3').value = ''
        setFileNewGltf(null)
-       setFileGltf(null)
+       setFileGltf('')
        setTimeout(() => {
        document.querySelector('#usdzmessage').innerHTML= ''
 
@@ -672,11 +669,9 @@ if (fileglb){
             if(res.status === 200){
         
               setUploaded(true)
+              setGlbUploadStatus(true)
               document.getElementById(`${val}_glb_${len}`).style.display ='block'
-
-            
-              
-            }
+              }
             console.log(res)
            }).catch(error=>{
             console.log(error)
@@ -688,9 +683,10 @@ if (fileglb){
       })
     }
     else{
-      setMessage('please select file')
+      document.querySelector('#glbmessage').innerHTML= 'Please select a file'
       setTimeout(()=>{
-        setMessage('')
+        document.querySelector('#glbmessage').innerHTML= ''
+
       },3000)
     }
         
@@ -735,12 +731,10 @@ if (fileglb){
              axios.post(uploadmodelfbx, reqbody).then(res=>{
 
               if(res.status === 200){
-              
+                setUsdzUploadStatus(true)
                 setUploaded(true)
                 document.getElementById(`${val}_gltf_${len}`).style.display ='block'
-
-               
-                
+  
               }
               console.log(res)
              }).catch(error=>{
@@ -753,9 +747,10 @@ if (fileglb){
         })
 
       } else{
-        setMessage('please select file')
+         document.querySelector('#usdzmessage').innerHTML = 'Please select a file'
         setTimeout(()=>{
-          setMessage('')
+          document.querySelector('#usdzmessage').innerHTML = ''
+
         },3000)
       }
           
@@ -797,7 +792,7 @@ if (fileglb){
               }
              axios.post(uploadmodelfbx, reqbody).then(res=>{
               if(res.status === 200){
-              
+                setFbxUploadStatus(true)
                 setUploaded(true)
                 document.getElementById(`${val}_fbx_${len}`).style.display ='block'
                 
@@ -812,9 +807,10 @@ if (fileglb){
         })
       }
       else{
-        setMessage('please select file')
+         document.querySelector('#fbxmessage').innerHTML= 'Please select a file'
         setTimeout(()=>{
-          setMessage('')
+          document.querySelector('#fbxmessage').innerHTML= ''
+         
         },3000)
       }
           
@@ -1068,6 +1064,16 @@ if(height){
   
 
   const handlemodelsubmit=(pid,len)=>{
+
+    if(modeluploadstatus === ''){
+      document.getElementById(`${pid}_finalstatus_${len}`).innerHTML= 'Please select a status'
+    setTimeout(() => {
+      document.getElementById(`${pid}_finalstatus_${len}`).innerHTML= ''
+      
+    }, 3000);
+    return
+    }
+      
       const body={
         productid: Number(pid),
         statusvalue: modeluploadstatus,
@@ -1294,30 +1300,53 @@ if(modelrequired === ''){
 
 
 const assignModeler=(uid, pid, len) =>{
-
-
-  const newbody={
-    merchant_Id: Number(uid),
-        product_Id: pid,
-        modelername: modname,
-        modelstatus: imagestatus,
-        modelrequired: modelrequired,
-        rejectionreason: imagerejectreason 
-        }
-  axios.post(uplodanameurl, newbody).then(res=>{
-    if(res.status === 200){
-    document.getElementById(`${pid}_modstatus_${len}`).innerHTML= 'Assigned Successfully'
-    setTimeout(()=>{
+   if(imagestatus === ''){
+    document.getElementById(`${pid}_modstatus_${len}`).innerHTML= 'Please select Image quality'
+    setTimeout(() => {
     document.getElementById(`${pid}_modstatus_${len}`).innerHTML= ''
+      
+    }, 3000);
+    return
+   }
+   if(imagestatus === 'Model in progress' && modname === ''  ){
+    document.getElementById(`${pid}_modstatus_${len}`).innerHTML= 'Please select a modeler '
+    setTimeout(() => {
+    document.getElementById(`${pid}_modstatus_${len}`).innerHTML= ''
+      
+    }, 3000);
+    return
+   }
+   if(imagestatus === 'Model in progress'){
+    setImageRejectReason('')
+   }
 
+  
+    const newbody={
+      merchant_Id: Number(uid),
+          product_Id: pid,
+          modelername: modname,
+          modelstatus: imagestatus,
+          modelrequired: modelrequired,
+          rejectionreason: imagerejectreason 
+          }
+    axios.post(uplodanameurl, newbody).then(res=>{
+      if(res.status === 200){
+      document.getElementById(`${pid}_modstatus_${len}`).innerHTML= 'Assigned Successfully'
+      setTimeout(()=>{
+      document.getElementById(`${pid}_modstatus_${len}`).innerHTML= ''
+  
+  
+      }, [2000])
+      
+      }
+    }).catch(error=>{
+      console.log(error)
+    })
+     
 
-    }, [2000])
-    
-    }
-  }).catch(error=>{
-    console.log(error)
-  })
    
+
+
 }
 
 
@@ -1661,6 +1690,37 @@ const searchHandlerQualityMerchant=()=>{
 
  }
 
+ const handleModelSubmitClick=(val, len)=>{
+   if(!fbxuploadstatus || !glbuploadstatus || !usdzuploadstatus || !imageuploadstatus){
+    document.getElementById(`${val}_modstatus_${len}`).innerHTML = 'Please upload all the files'
+    setTimeout(() => {
+    document.getElementById(`${val}_modstatus_${len}`).innerHTML = ''
+       
+    }, 3000);
+    return
+   }
+
+   else{
+       const body={
+        productid: Number(val),
+        statusvalue: "Model uploaded",
+        reason: ''
+      }
+      axios.post(updatemodelstatus, body).then(res=>{
+          document.getElementById(`${val}_modstatus_${len}`).innerHTML = 'Submitted successfully'
+
+        setTimeout(()=>{
+        document.getElementById(`${val}_modstatus_${len}`).innerHTML = ''
+
+        }, [2000])
+       
+      }).catch(error=>{
+        console.log(error)
+      })
+   }
+
+ }
+
   return (
     <div>
     <div>
@@ -1722,6 +1782,11 @@ const searchHandlerQualityMerchant=()=>{
                     <button 
                     onClick={()=>handleStatusValue("Image rejected")}
                     >Status Image rejected</button>
+                </div>
+                    <div className='search'>
+                    <button 
+                    onClick={()=>handleStatusValue("Model in progress")}
+                    >Status Model in progress</button>
                 </div>
                 <div className='search'>
                     <button 
@@ -1806,6 +1871,13 @@ const searchHandlerQualityMerchant=()=>{
                         modeldetails && modeldetails.map(itemnew=>(
                          itemnew.product_Id === item.product_Id ?
                          <p>{itemnew. modeluploaddate  && itemnew.modeluploaddate.split(' ').slice(0,4).join(' ')}</p>: ''
+                        ))
+                      }
+                           <label>Rejection reason (If rejected)</label>
+                      {
+                        modeldetails && modeldetails.map(itemnew=>(
+                         itemnew.product_Id === item.product_Id ?
+                         <p>{itemnew.rejectionreason  && itemnew.rejectionreason}</p>: ''
                         ))
                       }
 
@@ -2031,7 +2103,7 @@ const searchHandlerQualityMerchant=()=>{
                           <div style={{display:'flex', flexWrap:'wrap', flexDirection:'column'}}>
                           <select onChange={event=>setImageStatus(event.target.value)} >
                      <option></option>
-                       <option value='Model uploaded' >Accepted</option>
+                       <option value='Model in progress' >Accepted</option>
                            <option value='Image rejected'>Rejected</option>
                           </select>
 
@@ -2109,592 +2181,367 @@ const searchHandlerQualityMerchant=()=>{
     </div>
     <div className='modmain2' id ='main2' >
 
-    <div className=''>
+    <div className='modelerassigned'>
+            {
+              newuserdata && newuserdata .map((item,i)=>(
 
-        
-      
-        
-{
-  newuserdata && newuserdata.map((item, i)=>(
-<div className='userdatanew'>
-   
-  
-  <div  style={{display:'flex', flexDirection:'row', flexWrap:'wrap', margin:'10px'}}>
-    <div style={{flex:'1', marginRight:'20px'}} className='merchantbodydiv' >
-      <p className='merchanthead' > Merchant Id</p>
+                <div className='merchantdatacontainerinside'>
+                <div >
+                  <div className='merchantdatadetail' >
+                   <div>
+                      <label>MerchantId</label>
+                      <p>{item.merchant_Id}</p>
+                      <label>product_Id</label>
+                      <p>{item.product_Id}</p>
+                     
+                  
+                     
+                      <label>Image upload date</label>
+                      {
+                        allproducts && allproducts.map(itemnew=>(
+                         itemnew.product_Id === item.product_Id ?
+                         <p>{itemnew. registration_Time  && itemnew.registration_Time.split(' ').slice(0,4).join(' ')}</p>: ''
+                        ))
+                      }
+                     
+                      <label>Model upload date</label>
+                      {
+                        modelalldata && modelalldata.map(itemnew=>(
+                         itemnew.product_Id === item.product_Id ?
+                         <p>{itemnew. modeluploaddate  && itemnew.modeluploaddate.split(' ').slice(0,4).join(' ')}</p>: ''
+                        ))
+                      }
+                           <label>Rejection Reason (If rejected)</label>
+                      {
+                        modelalldata && modelalldata.map(itemnew=>(
+                         itemnew.product_Id === item.product_Id ?
+                         <p>{itemnew.rejectionreason  && itemnew.rejectionreason}</p>: ''
+                        ))
+                      }
 
-      <p className='merchantcell'> {item.merchant_Id}</p>
-      
-    </div>
-   
+                    </div> 
+                   <div>
+                    <label>Images</label>
+                    <div className='imagesdivmerchant'>
+                      {
+                        allproducts && allproducts.map(itemnew=>(
+                          itemnew.product_Id === item.product_Id ?
+                           itemnew.imageurl.map(it=>(
+                            <div>
+                             <img src={it}/>
+                             <a href={it}>download</a>
+                            </div>
+                           )):''
+                        ))
 
-  
-    
+                         
+                          
+                      }
+                    
+                   </div>
+                   <div className='viewproductcontainer'>
+                    <button type='submit' onClick={()=>viewproduct(i)} >View Product Details</button>
+                    </div>
+                    <div  id={`viewproduct_${i}`} className='viewproductsdata'>
+                      <div className='closeproductview'  onClick={()=>closeproductview(i)}>
+                        <FaTimes style={{color:"red", fontSize:'20px', cursor:'pointer'}}/>
+                      </div>
+
+                      {
+                        allproducts && allproducts.map(itemnew=>(
+                          itemnew.product_Id === item.product_Id ?
+                          <div className='productdetailsinside'>
+
+                          <div >
+                           <label>Product name</label>
+                           <p>{itemnew.productname}</p>
+                          </div>
+                          <div>
+                          <label>Brand</label>
  
-
-  <div  style={{flex:'1', paddingRight:'20px', marginRight:'20px'}}  className='merchantbodydiv'>
-    
-      <div style={{flex:'1'}}>
-      <p className='merchanthead'>Product Id</p>
-        <div  style={{display:'flex', alignContent:'center', justifyContent:'center', borderBottom:'1px solid green', paddingBottom:'15px'}}>
-          
-        <p className='merchantcell'> {item.product_Id}</p>
-      
-
-
-        </div>
-
-        <div style={{borderBottom:'1px solid green', paddingBottom:'15px'}}>
-        <p  className='merchanthead' >Status</p>
-
-          {
-
-            modelalldata && modelalldata.map(itemnew=>(
-               itemnew.product_Id === item.product_Id ?
-               <p className='merchantcell'>{itemnew.statusmod ? itemnew.statusmod : 'pending'}</p>:<p></p>
-
-
-            
-
-            ))
-         
-                }
-        </div>
-        <div style={{borderBottom:'1px solid green', paddingBottom:'15px'}} >
-          <p  className='merchanthead'>verified date</p>
-          {
-
-modelalldata && modelalldata.map(itemnew=>(
-itemnew.product_Id === item.product_Id ?
-<p className='merchantcell'>{itemnew.verifydate.split(' ').slice(0,4).join(' ')}</p>:<p></p>
-
-
-
-
-))
-
-}
-
-
-        </div>
-       
-
-      </div>
-     
-    
-  </div>
-
-  <div className='dimensioncontainer'  >
-
-  <div >
-    <p className='merchanthead'>Length (inch)</p>
-
-    {
-      allproducts && allproducts.map(itemnew=>(
-         item.product_Id === itemnew.product_Id
-         ? 
-         <p className='merchantcell'>{itemnew.lengthprod}</p> : <p></p>
-
-      ))
-    }
-  </div>
-
-  <div  >
-    <p className='merchanthead'>Breadth (inch)</p>
-  {
-      allproducts && allproducts.map(itemnew=>(
-         item.product_Id === itemnew.product_Id
-         ? 
-         <p className='merchantcell'>{itemnew.breadthprod}</p> : <p></p>
-
-      ))
-    }
-
-      
-
-  </div>
-  <div  >
-
-    <p className='merchanthead'>Height (inch)</p>
-  {
-      allproducts && allproducts.map(itemnew=>(
-         item.product_Id === itemnew.product_Id
-         ? 
-         <p className='merchantcell'>{itemnew.height}</p> : <p></p>
-
-      ))
-    }
-  </div>
-
-
-
-
-  </div>
-
-
-
-      <div className='imageurlcontainer' >
-
-      <p className='merchanthead'>Image url</p>
-
-     { allproducts && allproducts.map((itemnew )=> (
-       item.product_Id === itemnew.product_Id ?
-       
-
-        itemnew.imageurl.map((it,k)=>(
-
-         
-       
-             <div className='previewimage'>
-             <img  src= {it}/>
-          <button><a href={it}> download  </a></button>
-              </div>
-
-        
-          
-        
-
-        )): <div></div>
-
-      
-
-
-        
-     
-
-     )) 
-     
-  
-     }
-
-
-       </div>
-
-
-{
-/*
-
-             {
-allproducts && allproducts.map((itemnew,k)=>(
-<div  className='imageurlbuttondiv' >
-{
-item.product_Id === itemnew.product_Id ? 
-<div  style={{border:'1px solid blue'}} >{itemnew.imageurl.map(it=>(
-<button><a href={it}> Image {k+1}  </a>  </button>
-))}</div>: <div></div>
-}
-</div>
-))
-}
-
-
-*/
-}      
-
-
-
-
-
-
-  <div className='merchantbodydiv'  style={{marginRight:'20px'}}>
-    <p className='merchanthead'>Assigned On</p>
-  {
-     modelalldata  && modelalldata.map(itemnew=>(
-         item.product_Id === itemnew.product_Id
-         ? 
-         <p className='merchantcell'>{itemnew.modelassigndate.split(' ').slice(0,4).join(' ')}</p> : <p></p>
-
-      ))
-    }
-
-
-
-  </div>
-
-  
-  <div  style={{flex:'1', marginRight:"20px"}}  className='merchantbodydiv'>
-    <div  style={{display:'flex', alignItems:'center', justifyContent:'center', flexDirection:'column'}}>
-    <p className='merchanthead'>fbx zip file</p>
+                           <p>{itemnew.brand}</p>
+                          </div>
+                          <div>
+                          <label>Length</label>
+ 
+                           <p>{itemnew.lengthprod}</p>
+                          </div> <div>
+                          <label>Breadth</label>
+ 
+                           <p>{itemnew.breadthprod}</p>
+                          </div> 
+                          <div>
+                             <label>Height</label>
+ 
+                           <p>{itemnew.height}</p>
+                          </div> 
+                          <div>
+                             <label>Unit</label>
+ 
+                           <p>{itemnew.unit}</p>
+                          </div> 
+                          <div>
+                             <label>category</label>
+ 
+                           <p>{itemnew.category}</p>
+                          </div> 
+                          <div>
+                             <label>Sub category</label>
+ 
+                           <p>{itemnew.subcategory}</p>
+                          </div>
+                          <div>
+                             <label>Subcategory Details</label>
+ 
+                           <p>{itemnew.subcatdetails}</p>
+                          </div>
+                          <div>
+                             <label>Weight</label>
+ 
+                           <p>{itemnew.weight}</p>
+                          </div>
+                          <div>
+                             <label>Weight unit</label>
+ 
+                           <p>{itemnew.weightunit}</p>
+                          </div>
+                          <div>
+                             <label>Tags</label>
+ 
+                              {
+                               itemnew.tags.map(itemnew=>(
+                                 <p>{itemnew}</p>
+                               ))
+                              }
+                          </div>
+                          <div>
+                             <label>Color</label>
+ 
+                              {
+                               itemnew.colorvalue.map(itemnew=>(
+                                 <p>{itemnew}</p>
+                               ))
+                              }
+                          </div>
+                          <div>
+                             <label>Room type</label>
+ 
+                              {
+                               itemnew.roomtype.map(itemnew=>(
+                                 <p>{itemnew}</p>
+                               ))
+                              }
+                          </div>
+                          <div>
+                             <label>Additional</label>
+ 
+                           <p>{itemnew.additional}</p>
+                          </div>
+                          <div>
+                             <label>Care</label>
+ 
+                           <p>{itemnew.care}</p>
+                          </div>
+                          <div>
+                             <label>Collection</label>
+ 
+                           <p>{itemnew.collection}</p>
+                          </div>
+                          <div>
+                             <label>Currency</label>
+ 
+                           <p>{itemnew.currency}</p>
+                          </div>
+                          <div>
+                             <label>Design style</label>
+ 
+                           <p>{itemnew.designstyle}</p>
+                          </div>
+                           <div>
+                             <label>Discount</label>
+ 
+                           <p>{itemnew.discount}</p>
+                          </div>
+                          <div>
+                             <label>Model no</label>
+ 
+                           <p>{itemnew.modelno}</p>
+                          </div>
+                          <div>
+                             <label>Mrp</label>
+ 
+                           <p>{itemnew.mrp}</p>
+                          </div>
+                          <div>
+                             <label>Offer price</label>
+ 
+                           <p>{itemnew.offerprice}</p>
+                          </div>
+                          <div>
+                             <label>Primary material</label>
+ 
+                           <p>{itemnew.primarymaterial}</p>
+                          </div>
+                          <div>
+                             <label>SKU</label>
+ 
+                           <p>{itemnew.sku}</p>
+                          </div>
+                          <div>
+                             <label>Seller info</label>
+ 
+                           <p>{itemnew.sellerinfo}</p>
+                          </div>
+                          <div>
+                             <label>Specification</label>
+ 
+                           <p>{itemnew.specification}</p>
+                          </div>
+                           
+                           
+                           
+                           
+                           
+                           
+                      
+ 
+                          
+                         </div> :''
+                        ))
+                      }
+                   
+                    </div>
+                    </div>  
+                   <div className='updatedatacontainer' >
+                     <div >
+                   
+                     {
+                      allproducts && allproducts.map(itemnew=>(
+                        itemnew.product_Id === item.product_Id ?
+                        <div className='statustab'>
+                            <label>Status</label>
+                           <p>{itemnew.statusvalue}</p>
+                          </div>
+                       :''
+                      ))
+                     }
+                  
+                     </div>
+                     
+                
+                     <div className='statustabthree'>
+                
+                      <div className='statustab2'>
+                      <div  >
+    <div  >
+      <h4>Upload fbx</h4>
     <input type='file' id='b1'  onChange={onChangefbx}  style={{marginBottom:'10px', paddingLeft:'30px'}} />
-    <button  value={item.product_Id}  onClick={()=>sendfunctionfbx(item.product_Id, item.merchant_Id, i)}>upload model</button>
+    <button  value={item.product_Id}  onClick={()=>sendfunctionfbx(item.product_Id, item.merchant_Id, i)}>upload model</button><span id={`${item.product_Id}_fbx_${i}`}  className='tickmarkfbx' ><FaCheck/></span>
     <p id='fbxmessage' style={{color:'red'}} ></p>
 
     <p style={{color:'green', fontFamily:'Manrope, sanserif'}}  >{filename && filename.name}</p>
 
   
 
-    {  <span id={`${item.product_Id}_fbx_${i}`}  className='tickmarkfbx' ><FaCheck/></span>  }
+    {    }
 
 
     </div>
-   
-  
+               </div>
+                 <div  >
 
-
-
-  </div>
-  <div  style={{flex:'1',marginRight:"20px"}}  className='merchantbodydiv'>
-
-    <div style={{display:'flex', alignItems:'center', justifyContent:'center', flexDirection:'column'}} >
-    <p className='merchanthead'>glb file</p>
+    <div  >
+    <h4>Upload glb</h4>
     <input type='file' id='b2' onChange={onChangeglb} style={{marginBottom:'10px', paddingLeft:'30px'}}  /> 
-    <button  value={item.product_Id} onClick={()=>sendfunctionglb(item.product_Id, item.merchant_Id, i)} >upload model</button>
+    <button  value={item.product_Id} onClick={()=>sendfunctionglb(item.product_Id, item.merchant_Id, i)} >upload model</button><span id={`${item.product_Id}_glb_${i}`}  className='tickmarkfbx' ><FaCheck/></span>
     <p id= 'glbmessage' style={{color:'red'}} ></p>
 
     <p style={{color:'green', fontFamily:'Manrope, sanserif'}} >{fileglb && fileglb.name}</p>
 
-    {  <span id={`${item.product_Id}_glb_${i}`}  className='tickmarkfbx' ><FaCheck/></span>  }
+    {    }
 
 
       </div>
    
-
+           
 
 
 
 
         </div>
-      <div  style={{flex:'1',marginRight:"20px"}}  className='merchantbodydiv'>
 
-       <div style={{display:'flex', alignItems:'center', justifyContent:'center', flexDirection:'column'}} >
-       <p className='merchanthead'>usdz file</p>
-    <input type='file' id='b3' onChange={onChangegltf} style={{marginBottom:'10px', paddingLeft:'30px'}}  /> 
-    <button  value={item.product_Id} onClick={()=>sendfunctiongltf(item.product_Id, item.merchant_Id, i)} >upload model</button>
-    <p id= 'usdzmessage' style={{color:'red'}} ></p>
+        <div  >
 
-    <p style={{color:'green', fontFamily:'Manrope, sanserif'}} >{filegltf && filegltf.name}</p>
-
-    {  <span id={`${item.product_Id}_gltf_${i}`}  className='tickmarkfbx' ><FaCheck/></span>  }
-
-
-
-        </div>
-        
-
-
-
-
-
-      </div>
-      <div  style={{flex:'1',marginRight:"20px"}}  className='merchantbodydiv'>
-
-
-    <p className='merchanthead'>image upload</p>
-
-     <input type='file' id='imgfile' onChange={onChangeimg}/>
-
-
-
-
-      <p>    <button    className='' id={i} value={item.product_Id}  onClick={()=>sendImage(item.product_Id, item.merchant_Id, i)} >upload image </button>
-
-
-     </p> 
-
-     <p id='imagemessage' style={{color:'red'}} ></p>
-     <p style={{color:'green', fontFamily:'Manrope, sanserif'}} >{imgfile && imgfile.name}</p>
-
-     {  <span id={`${item.product_Id}_img_${i}`}  className='tickmarkfbx' ><FaCheck/></span>  }
-
-
-
-
-
-
-
-
-
-</div>
-
-
-
-
-
-
-  </div>
- 
-
-
-
-</div>
-))
-  }
-
-
-
-
-
-</div>
-
-   
-        <div className='homepage' style={{display:'none'}} >
-
-            <div className='inputdiv' >
-              
-                <div className='search'>
-                    <button style={{width:'120px', height:'50px', marginTop:'20px'}}
-                    onClick={userHandler}
-                    >Search</button>
-                </div>
-
-             
-              
-
-            </div>
-
-            <div>
-                           
-            </div>
-
-            <div className='urldiv' >
-             <div className='urldiv1' >
-                <p>merchantid</p>
-                <p>{userid} {merchant && merchant} </p>
-
-             </div>
-             <div className='urldiv2'>
-                <div>
-                    <p  >productid</p>
-                </div>
-
-          
-                {
-                    result &&
-                    result.map((item,i)=>(
-                    
-                     
-                    <div style={{
-                     height:'120px', marginBottom:'40px', margin:'10px'}} 
-                     
-                   id={""} value={""} >{""}
-
-                   <p  style={{marginTop:'30px'}} id={i} value={item.product_Id} >{item.product_Id}</p>
-                    </div>
-
-                    ))
-                }
-          
-       
-
-             </div>
-             <div className='urldiv3'>
-                <div>
-                    <p>image url</p>
-                </div>
-          
-                <div  >
-
-{/*
-{newres && newres.map((item,i)=>(
-<p ><a className='linkimage' href={item[1]} >{item[1]}</a></p>
-))}
-*/}
 <div  >
+<h4>Upload usdz</h4>
+<input type='file' id='b3' onChange={onChangegltf} style={{marginBottom:'10px', paddingLeft:'30px'}}  /> 
+<button  value={item.product_Id} onClick={()=>sendfunctiongltf(item.product_Id, item.merchant_Id, i)} >upload model</button><span id={`${item.product_Id}_gltf_${i}`}  className='tickmarkfbx' ><FaCheck/></span>
+<p id= 'usdzmessage' style={{color:'red'}} ></p>
 
-</div>
-<div       >
+<p style={{color:'green', fontFamily:'Manrope, sanserif'}} >{filegltf && filegltf.name}</p>
 
+{    }
 
-
-
-
-{
-
-
-
-imgresnew && imgresnew.map(item=>(
-
-
-  
-<div style={{height:'120px', marginBottom:'40px', margin:'10px', overflowY:'scroll'}}>
- 
-  
-  {item.map(it=>(
-
-
-  <p style={{fontSize:'10px'}} ><a href={it}>{it}</a></p>
- 
-))
-
-  }
- 
 
 
  </div>
+ 
+</div>
+<div >
 
-)
-)}
+
+<h4 >Image upload</h4>
+
+ <input type='file' id='b4' onChange={onChangeimg}/>
+
+
+
+
+    <button    className='' id={i} value={item.product_Id}  onClick={()=>sendImage(item.product_Id, item.merchant_Id, i)} >upload image </button><span id={`${item.product_Id}_img_${i}`}  className='tickmarkfbx' ><FaCheck/></span> 
+
+
+ 
+
+ <p id='imagemessage' style={{color:'red'}} ></p>
+ <p style={{color:'green', fontFamily:'Manrope, sanserif'}} >{imgfile && imgfile.name}</p>
+
+ {   }
+
 
 
 </div>
 
-</div>
-                   
-         
-            </div>
-            <div className='urldiv4'>
-              <p>length (inch)</p>
-                 <div  className='dimdiv'> 
-
-                 {
-                  lenres && lenres.map(item=>(
-                     <p>{item}</p>
-                   
-                  ))
-                 }
-                
-                 </div>
-                
-
                 </div>
-                <div className='urldiv5'>
-                  <p>breadth (inch)</p>
-
-                  <div  className='dimdiv'> 
-
-                 {
-                  breres && breres.map(item=>(
-                      <p>{item}</p>
-  
-                        ))
-                      }
-
-</div>
-                </div>
-                <div className='urldiv6'>
-                  <p>height (inch)</p>
-                  <div  className='dimdiv'> 
-
-                        {
-                        heightres && heightres.map(item=>(
-                        <p>{item}</p>
-  
-                          ))
-                         }
-
-                       </div>
-                </div>
-                <div className='urldiv7'>
-                  <p>created date</p>
-                  {
-                    regres && regres.map(item=>(
-                      <p  style={{marginBottom:'50px'}}>{item.split(' ').slice(0,4).join(' ')}</p>
-                    ))
-                  }
-
-                </div>
-          
-                <div className='urldiv8'> 
-                <p>status</p>
-                {
-                  modelsdata && modelsdata.map(item=>(
-                    <p>{item.statusmod}</p>
-                  ))
-                }
-              
-              
-
-
-                </div>
-                <div className='urldiv8'>
-                  <p>model (fbx)  </p>
-
-                  <input type='file' id='b1' onChange={onChangefbx} /> 
-                  {
-                    result &&
-                    result.map((item,i)=>(
-                    
-                   <div className='modelscontainer' >
-
-                     <p>    <button   className='btnuploadmodel' id={i} value={item.product_Id}  onClick={()=>sendfunctionfbx(item.product_Id,i)} >upload file
-                 
-                 
-                 </button>
-                 {  <span id={`${item.product_Id}_fbx_${i}`}  className='tickmarkfbx' ><FaCheck/></span>  }
-                
-              
-                </p> 
-
-                   </div> 
-                
-                   
                      
-                    ))
-                }
-
-                    <p>{message &&  <p> {message} </p> }</p>
-                </div>
-                <div className='urldiv8'>
-                  <p>model (glb)  </p>
-                  <input type='file' id='b2' onChange={onChangeglb} /> 
-                  {
-                    result &&
-                    result.map((item,i)=>(
-                    
-                    
-                 <p>    <button    className='btnuploadmodel' id={i} value={item.product_Id}  onClick={()=>sendfunctionglb(item.product_Id,i)} >upload file</button>
-                 
-                 {  <span id={`${item.product_Id}_glb_${i}`}  className='tickmarkglb' ><FaCheck/></span>  }
-                 </p> 
-
-               
-
-                    ))
-                }
-                       <p>{message &&  <p> {message} </p> }</p>
-                </div>
-                <div className='urldiv8'>
-                  <p>model (gltf) </p>
-
-                  <input type='file' id='b3' onChange={onChangegltf} /> 
-                  {
-                    result &&
-                    result.map((item,i)=>(
-                    
-                    
-                 <p>    <button  className='btnuploadmodel' id={i} value={item.product_Id }  onClick={()=>sendfunctiongltf(item.product_Id, i)} >upload file </button>
-                 
-                 {  <span id={`${item.product_Id}_gltf_${i}`}  className='tickmarkgltf' ><FaCheck/></span>  }
-                 </p> 
-
-                 
-
-                    ))
-                }
-                 <p>{message &&  <p> {message} </p> }</p>
-
-                </div>
-
-                <div className='urldiv8'>
-                  <p>image upload</p>
+                        
+                     
+                        <div className='statustab3'>
+                      
+                      <button  type='submit' onClick={()=>handleModelSubmitClick(item.product_Id,i)}  >Submit</button>
+                      <p id={`${item.product_Id}_modstatus_${i}`} style={{color:'green' }}>  </p> 
+                          </div>
                   
-                  <input type='file' id='imgfile' onChange={onChangeimg}/>
+                     
+                     </div>
+                    </div>  
 
-                  {
-                    result &&
-                    result.map((item,i)=>(
-                    
-                    
-                 <p>    <button    className='' id={i} value={item.product_Id}  onClick={()=>sendImage(item.product_Id,i)} >upload image </button>
-                 
-                 {  <span id={`${item.product_Id}_img_${i}`}  className='imagetickmark' ><FaCheck/></span>  }
-                 </p> 
+                  
 
+                  </div>
+                </div>
                
 
-                    ))
-                }
+              </div>
 
-                
-                </div>
-                <div className='urldiv8'> 
-                <p>Verified data</p>
+              ))
+            
+             
+                    }
 
-                </div>
+             </div>
 
-            </div>
 
-        </div>
+   
 
 
       
@@ -2731,6 +2578,11 @@ imgresnew && imgresnew.map(item=>(
                     onClick={()=>handleStatusAll("Image uploaded")}
                     >Status Image Uploaded</button>
                 </div>
+                      <div className='search'>
+                    <button 
+                    onClick={()=>handleStatusAll("Model in progress")}
+                    >Status Model in progress</button>
+                </div>
                 <div className='search'>
                     <button 
                     onClick={()=>handleStatusAll("Image rejected")}
@@ -2744,7 +2596,7 @@ imgresnew && imgresnew.map(item=>(
               
                 <div className='search'>
                     <button
-                 onClick={()=>handleStatusAll("Models rejected")}
+                 onClick={()=>handleStatusAll("Model rejected")}
                     >Status Model rejected</button>
                 </div>
                 <div className='search'>
@@ -2816,6 +2668,14 @@ imgresnew && imgresnew.map(item=>(
                          <p>{itemnew.modeluploaddate && itemnew.modeluploaddate.split(' ').slice(0,4).join(' ')}</p>: ''
                         ))
                       }
+                            <label>Rejection reason (If rejected)</label>
+                      {
+                        modeldetails && modeldetails.map(itemnew=>(
+                         itemnew.product_Id === item.product_Id ?
+                         <p>{itemnew.rejectionreason && itemnew.rejectionreason}</p>: ''
+                        ))
+                      }
+
 
                     </div> 
                    <div>
@@ -3054,7 +2914,7 @@ imgresnew && imgresnew.map(item=>(
                       <select onChange={(e)=> setModelUploadStatus(e.target.value)} >
                         <option style={{display:'none'}}></option>
                         <option value='Models completed' >Models complete</option>
-                        <option value= 'Models rejected'>Reject</option>
+                        <option value= 'Model rejected'>Reject</option>
                         <option value= 'Product live'>Make product live</option>
 
 
