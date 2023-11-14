@@ -372,12 +372,7 @@ const sendImage =(val, merid, len)=>{
 
 
 }
-
-
-
-
-
-    
+ 
   const onChangefbx = (e,len) => {
    
     
@@ -474,13 +469,6 @@ const onChangeglb = (e,len) => {
   
       }
     
-    
-      
-    
-    
-
-     
-   
    }
   })
  
@@ -1800,6 +1788,11 @@ const searchHandlerQualityMerchant=()=>{
       <img src={Divider} alt="Your SVG" className="divider-svg" />
       <div >
         <p  className="navoperation"  style={{cursor:'pointer'}}><a href=""  onClick={qualityHandler} >Verify Models</a></p>
+        <div className="alert-box warning3" id='warning3' >Access Denied !</div>
+      </div>
+      <img src={Divider} alt="Your SVG" className="divider-svg" />
+      <div >
+        <p  className="navoperation"  style={{cursor:'pointer'}}><a href="/edit"   >Edit Products</a></p>
         <div className="alert-box warning3" id='warning3' >Access Denied !</div>
       </div>
     </div>

@@ -154,6 +154,175 @@
  
 }
 
+.bulkmain{
+  display: flex;
+  width: 100%;
+  height: 100vh;
+ 
+  padding: 50px;
+}
+.bulkuploaddiv{
+  width: 100%;
+   height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  border: 1px solid rgb(128, 128, 128);
+  flex-direction: row;
+  overflow: scroll;
+  border-radius: 10px;
+  padding: 10px;
+
+  
+}
+.bulkuploaddiv>*{
+  flex: 1 1 1000px;
+ 
+  margin: 10px;
+  padding: 10px;
+ 
+   
+}
+.bulkuploadfields{
+  display: flex;
+   width: 100%;
+   max-height: 120px;
+  flex-wrap: wrap;
+  
+  flex-direction: column;
+  
+
+}
+.bulkuploadfields>*{
+  flex: 1 1 400px;
+  height: 50px;
+  width: fit-content;
+
+  margin: 5px;
+ 
+}
+.bulkinputs{
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  
+  
+ 
+}
+.bulkinputs p{
+  font-family: Manrope sans-serif;
+  margin-right: 10px;
+  color: rgb(73, 73, 73);
+  font-size: 20px;
+  margin-top: 5px;
+  font-weight: bold;
+ 
+  
+}
+.bulkinputs input{
+  border: 1px solid gray;
+  border-radius: 5px;
+  height: 40px;
+  padding-left: 10px;
+}
+.bulkinputs input[type='file']{
+  width: 180px;
+  margin-left: 5px;
+}
+.bulkinputs input:focus{
+  outline: none;
+}
+.bulkinputs button{
+  width: 140px;
+  height: fit-content;
+  border: 1px solid black;
+  background-color: #8a98a0;
+  border-radius: 10px;
+  color: white;
+  margin-right: 10px;
+  margin-left: 5px;
+ 
+}
+.bulkinputs img{
+  max-width: 60px;
+  max-height: 60px;
+  object-fit: contain;
+}
+.tooltipbulkimage{
+  position: relative;
+ max-width: 280px;
+ 
+  height: 80px;
+  overflow-x: scroll;
+  border: 1px solid rgb(86, 92, 86);
+ border-radius: 5px;
+ display: flex;
+}
+ .tooltipimageinside{
+ 
+  border: 1px solid green;
+ 
+ }
+.tooltipbulkimage img{
+  max-height: 40px;
+  max-width: 60px;
+  object-fit: contain;
+  margin: 5px;
+  
+}
+.checkcircleimage{
+  display: none;
+  color: green;
+}
+.checkcircleglb{
+   font-size: 40px;
+  color: green; 
+  display: none;
+}
+.checkcircleusdz{
+  display: none;
+  font-size: 40px;
+  color: green;
+}
+.checkcircleupdatedata{
+  font-size: 20px;
+  color: green;
+  display: none;
+ 
+}
+.filesubmit{
+  display: flex;
+  flex-direction: column;
+  
+}
+.filesubmit input{
+  width: 200px;
+  height: 50px;
+  margin: 5px;
+}
+.filesubmit input:focus{
+  outline: none;
+}
+.qrcodecontainer{
+  opacity: 1;
+  
+  width: fit-content;
+  height: fit-content;
+  padding: 5px;
+  background-color: white;
+}
+.filesubmit button{
+  margin-right: 10px;
+  border: 1px solid gray;
+  background-color: #566ea7;
+  border-radius: 5px;
+  color: white;
+  margin: 5px;
+  
+}
+.filesubmit button:hover{
+ background-color: white;
+ color: black;
+}
 .productiddiv {
   display: flex;
   flex-direction: column;

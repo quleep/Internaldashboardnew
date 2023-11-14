@@ -23,6 +23,7 @@ import CategoryForm from "./CategoryForm";
 import Success from "./Success";
 import Uploadbrand from "./Uploadbrand";
 import Viewar from "./Viewar";
+import Editproducts from "./Editproducts";
 
 
 function App() {
@@ -46,6 +47,8 @@ function App() {
           <Route path="/paymentinfo" component={Success} />
           <Route path="/uploadbrand" component={Uploadbrand} />
           <Route path="/viewar" component={Viewar} />
+          <Route path="/edit" component={Editproducts} />
+
 
 
 
