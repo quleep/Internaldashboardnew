@@ -24,6 +24,8 @@ import Success from "./Success";
 import Uploadbrand from "./Uploadbrand";
 import Viewar from "./Viewar";
 import Editproducts from "./Editproducts";
+import GenerateQrcode from "./GenerateQrcode";
+import Uploadbulk from "./Uploadbulk";
 
 
 function App() {
@@ -48,6 +50,10 @@ function App() {
           <Route path="/uploadbrand" component={Uploadbrand} />
           <Route path="/viewar" component={Viewar} />
           <Route path="/edit" component={Editproducts} />
+          <Route path="/generateqr" component={GenerateQrcode} />
+          <Route path="/uploadbulk" component={Uploadbulk} />
+
+
 
 
 

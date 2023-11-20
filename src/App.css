@@ -153,7 +153,209 @@
   height: 40px;
  
 }
+.bulkmain{
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  border: 1px solid red;
+  padding: 50px;
+}
+.bulkuploaddiv{
+  width: 100%;
+   height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  border: 1px solid rgb(128, 128, 128);
+  flex-direction: row;
+  overflow: scroll;
+  border-radius: 10px;
+  padding: 10px;
 
+  
+}
+.bulkuploaddiv>*{
+  flex: 1 1 1000px;
+ 
+  margin: 10px;
+  padding: 10px;
+ 
+   
+}
+.bulkuploadfields{
+  display: flex;
+   width: 100%;
+   max-height: 120px;
+  flex-wrap: wrap;
+  
+  flex-direction: column;
+  
+
+}
+.bulkuploadfields>*{
+  flex: 1 1 400px;
+  height: 50px;
+  width: fit-content;
+
+  margin: 5px;
+ 
+}
+.bulkinputs{
+  display: flex;
+  justify-content: center;
+  height: 100%;
+ 
+}
+.bulkinputs p{
+  font-family: Manrope, sans-serif;
+  margin-right: 10px;
+  color: rgb(73, 73, 73);
+  font-size: 20px;
+  margin-top: 5px;
+  font-weight: bold;
+}
+.bulkinputs input{
+  border: 1px solid gray;
+  border-radius: 5px;
+  height: 40px;
+  padding-left: 10px;
+}
+.bulkinputs input:focus{
+  outline: none;
+}
+.bulkinputs button{
+  width: 140px;
+  height: 40px;
+  border: 1px solid black;
+  background-color: #8a98a0;
+  border-radius: 10px;
+  color: white;
+  margin-right: 10px;
+ 
+}
+.filesubmit{
+  display: flex;
+  
+}
+.filesubmit button{
+  margin-right: 10px;
+  border: 1px solid gray;
+  background-color: #566ea7;
+  border-radius: 5px;
+  color: white;
+  
+}
+.filesubmit button:hover{
+ background-color: white;
+ color: black;
+}
+.tooltipbulkimage{
+  position: relative;
+ max-width: 280px;
+ 
+  height: 80px;
+  overflow-x: scroll;
+  border: 1px solid rgb(86, 92, 86);
+ border-radius: 5px;
+ display: flex;
+}
+ .tooltipimageinside{
+ 
+  border: 1px solid green;
+ 
+ }
+.tooltipbulkimage img{
+  max-height: 40px;
+  max-width: 40px;
+  object-fit: contain;
+  margin: 5px;
+  border: 1px solid green;
+}
+.bulkinputs input[type=file]{
+  width: 120px;
+  height: fit-content;
+  margin-right: 10px;
+  margin: 5px;
+  border: none;
+}
+.bulkinputs button{
+  border: none;
+  background-color: #5b89a3;
+  color: white;
+  border-radius: 5px;
+  margin: 5px;
+}
+.bulkinputs button:hover{
+  background-color: white;
+  color: black;
+  border: 1px solid gray;
+}
+
+
+.brandqrcode{
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  border: 1px solid red;
+  flex-wrap: wrap;
+}
+.brandqrcodeinside{
+  display: flex;
+  margin: 20px;
+  width: 100%;
+  height: 100%;
+  border: 1px solid green;
+}
+.brandapicontainer{
+  flex: 2;
+  border: 1px solid blue;
+  margin: 10px;
+}
+.brandqrcodecontainer{
+  flex: 4;
+  border: 1px solid red;
+  margin: 10px;
+
+}
+.qrcodeimagedivcontainer{
+  flex: 2;
+  border: 1px solid green;
+}
+.qrcodeimagedivcontainer img{
+  object-fit: contain;
+  max-width: 200px;
+  max-height: 100px;
+}
+.qrcodeimagecontainer{
+  flex: 2;
+  border: 1px solid pink;
+  
+}
+.qrcodepatternnocontainer{
+  flex: 1;
+  border: 1px solid red;
+}
+.qrcodeinsidediv{
+  display: flex;
+  width: 100%;
+   max-height: 800px;
+  border: 1px solid green;
+  flex-wrap: wrap;
+  overflow: scroll;
+}
+.qrcodeinsidediv>*{
+  flex: 1 1 300px;
+  border: 1px solid blue ;
+  margin: 5px;
+}
+.qrcodescanimage{
+  
+   width: fit-content;
+   height: fit-content;
+   padding: 10px;
+   border: 1px solid green;
+  
+  
+}
 .bulkmain{
   display: flex;
   width: 100%;

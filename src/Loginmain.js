@@ -1795,6 +1795,10 @@ const searchHandlerQualityMerchant=()=>{
         <p  className="navoperation"  style={{cursor:'pointer'}}><a href="/edit"   >Edit Products</a></p>
         <div className="alert-box warning3" id='warning3' >Access Denied !</div>
       </div>
+      <div >
+        <p  className="navoperation"  style={{cursor:'pointer'}}><a href="/uploadbulk"   >Bulk Upload</a></p>
+        <div className="alert-box warning3" id='warning3' >Access Denied !</div>
+      </div>
     </div>
 
   
