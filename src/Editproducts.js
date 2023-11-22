@@ -545,7 +545,7 @@ const handleProductNameSearch = ()=>{
     return
   }
   const body={
-    searchdata: productname
+    searchdata: productname.toLowerCase()
   }
   axios.post(searchmodelurl, body).then(res=>{
       setAllProductData(res.data)

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Papa from 'papaparse';
-import { FaTimes } from 'react-icons/fa';
+import { FaCheckCircle, FaTimes } from 'react-icons/fa';
 import axios from 'axios';
 
 
@@ -83,6 +83,26 @@ const fileToBase64 = (file, cb) => {
   }
 }
 
+const addItem = (newItem, id) => {
+    console.log(newItem)
+    
+    const existingItem = images.findIndex(item => item.id === id);
+  
+    if (existingItem !== -1) {
+        const updatedData = [...images];
+        updatedData[existingItem] = {
+          ...updatedData[existingItem],
+          imagearray: [...updatedData[existingItem].imagearray, newItem],
+        }
+    } else {
+        setImages(oldArray=>[...oldArray,{
+            id: id,
+            imagearray: [newItem]
+          }])
+         
+    }
+  };
+
 const handleImageFileSelect =(e, len)=>{
    
   let val= document.getElementById(`imagefile_${len}`).value;
@@ -95,27 +115,20 @@ const handleImageFileSelect =(e, len)=>{
 
  let files = Array.from(e.target.files) 
 
-  let newarray= []
-  for (let i=0; i<files.length; i++){
-       newarray.push(files[i])
-  }    
-  
-  setImages(oldArray=>[...oldArray,{
-    id: len,
-    imagearray: newarray
-  }])
+
  files.forEach(file => {
   fileToBase64(file, (err, result) => {
    
     if (result) {
       setFile(result)
       setFileName(file)
+      addItem(file, len)
    
  
     }
   })
  
-
+ 
   const reader = new FileReader();
 
   reader.onload = () => {
@@ -123,8 +136,6 @@ const handleImageFileSelect =(e, len)=>{
          
           setImagesPreview(oldArray => [...oldArray, reader.result])
         
-       
-
           }
        
   }
@@ -138,7 +149,7 @@ const handleImageFileSelect =(e, len)=>{
   }
 
   else{
-     console.log('wrongfile')
+    window.alert('please select a jpeg, jpg or png file')
      return
   }
 
@@ -146,7 +157,13 @@ const handleImageFileSelect =(e, len)=>{
 }
 
 
+
 const uploadimage= async (e, len)=>{
+
+    if (document.getElementById(`imagefile_${len}`).value === ''){
+        window.alert('please select an image file')
+        return
+    }
 
   let newarray = images.filter(item=>(
     item.id === len
@@ -189,6 +206,7 @@ let producturl = []
    
     
                   producturl.push(imgurl)
+                  document.getElementById(`uploadimage_${len}`).style.display = 'block'
                  
                 }
     
@@ -204,6 +222,8 @@ let producturl = []
       imageurl: producturl
     }])
 
+    
+
   }else{
     window.alert('please select an image')
     return
@@ -215,8 +235,19 @@ let producturl = []
  }
  
  const handleRemoveImage=(val)=>{
-  setImages((oldArray)=>oldArray.filter((item)=> item !== val))
+    console.log(val)
+  setImages((oldArray)=>oldArray.filter(
+
+    
+    
+    (item)=> 
+      item.id === val ?
+    item.imagearray.filter((_,index)=> index != val) :''  ) ) 
  }
+
+ console.log(images)
+
+
  const userEmail= sessionStorage.getItem('user')
  const emailID= JSON.parse(userEmail)
  let p_id=  emailID && emailID.userid
@@ -426,11 +457,11 @@ const handleSubmitForm = async ()=>{
 
                                 item.id === i ?
 
-                                 item.imagearray && item.imagearray.map(it=>(
+                                 item.imagearray && item.imagearray.map((it,len)=>(
 
                                   <div style={{display:'flex', flexDirection:'column'}}>
                                      <img src= {URL.createObjectURL(it)} />
-                                       <FaTimes  style={{alignSelf:'center'}}/>
+                                       <FaTimes  onClick={()=>handleRemoveImage(len)} style={{alignSelf:'center'}}/>
                                     </div>
                                
                                     
@@ -444,7 +475,7 @@ const handleSubmitForm = async ()=>{
                              }
                             </div>
                   
-                    <span   className='bulkinputs'>   <input  type='file'  accept= "image/*" multiple id = {`imagefile_${i}`}  onChange={(e)=>handleImageFileSelect(e,i)}  /> <button disabled ={item.imageurl === null ? false : true} onClick={(e)=>uploadimage(e, i)} >Upload Image</button> </span>
+                    <span   className='bulkinputs'>   <input  type='file'  accept= "image/*" multiple id = {`imagefile_${i}`}  onChange={(e)=>handleImageFileSelect(e,i)}  /> <FaCheckCircle  id = {`uploadimage_${i}`} className='checkcirclebutton'/> <button disabled ={item.imageurl === null ? false : true}   onClick={(e)=>uploadimage(e, i)} >Upload Image</button> </span>
                     </div> : 
                            <div>
                            <span   className='bulkinputs'> <p>Image Url:</p> <input value={item.imageurl}  onChange={(e)=> handleInputChange(i, 'imageurl', e.target.value)}/></span>
