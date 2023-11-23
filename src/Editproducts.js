@@ -495,9 +495,9 @@ const handleUpdateClick =(e, len)=>{
 
   const newproduct = {
       productdetails : allproductsdata[len],
-      glburl : document.getElementById(`glbfileurl_${len}`).value,
-      usdzurl : document.getElementById(`usdzfileurl_${len}`).value,
-      qrcodeurl: document.getElementById(`qrcodeurl_${len}`).value
+      glburl : document.getElementById(`glbfileurl_${len}`)?.value,
+      usdzurl : document.getElementById(`usdzfileurl_${len}`)?.value,
+      qrcodeurl: document.getElementById(`qrcodeurl_${len}`)?.value
   }
 
   axios.post(updateproducturl, newproduct).then(res=>{
