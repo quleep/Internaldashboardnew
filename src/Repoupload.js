@@ -337,7 +337,7 @@ const Repoupload = () => {
             <TextField fullWidth label="Width" type='number' name = 'width' value={formdata.width} onChange={handleinputchange} variant="outlined" />
           </Grid>
           <Grid item xs={3}>
-            <TextField fullWidth label="Height" type='number' name = 'height' value={formdata.width} onChange={handleinputchange} variant="outlined" />
+            <TextField fullWidth label="Height" type='number' name = 'height' value={formdata.height} onChange={handleinputchange} variant="outlined" />
           </Grid>
           <Grid item xs={3}>
             <TextField fullWidth label="Unit" type='text' name = 'unit' value={formdata.unit} onChange={handleinputchange} variant="outlined" />

@@ -27,6 +27,7 @@ import Editproducts from "./Editproducts";
 import GenerateQrcode from "./GenerateQrcode";
 import Uploadbulk from "./Uploadbulk";
 import Repoupload from "./Repoupload";
+import Repodisplay from "./Repodisplay";
 
 
 function App() {
@@ -54,6 +55,8 @@ function App() {
           <Route path="/generateqr" component={GenerateQrcode} />
           <Route path="/uploadbulk" component={Uploadbulk} />
           <Route path="/uploadrepo" component={Repoupload} />
+          <Route path="/repodisplay" component={Repodisplay} />
+
 
 
 
