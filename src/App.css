@@ -34,6 +34,16 @@
  
 }
 
+.uploadrepomain{
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  padding-top: 100px;
+  background-image: url('https://arnxtdealerpageproducts.s3.ap-south-1.amazonaws.com/blue-gradient-blank-background-business_53876-120508.avif');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
 .inputdiv {
   display: flex;
   width: 100%;
@@ -1320,14 +1330,14 @@ label {
 h6 {
   display: inline;
 }
-input  {
+/* input  {
   border: 1px solid #c4c4c4;
   border-radius: 5px;
   background-color: #fff;
   padding: 10px;
   box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.1);
   width: 90%;
-}
+} */
 .container {
   margin: 2em auto;
   width: 90%;
@@ -1354,7 +1364,7 @@ td {
   border-bottom: 1px solid #ddd;
 }
 
-input[type="text"] {
+/* input[type="text"] {
   width: 100%;
   padding: 12px 20px;
   margin: 8px 0;
@@ -1372,7 +1382,7 @@ input[type="file"] {
  
  
 
-}
+} */
 .merchantdatacontainer{
   display: flex;
   width: 100%;
@@ -1566,9 +1576,9 @@ height: 200px;
 }
 
 
-input[type="text"]:focus {
+/* input[type="text"]:focus {
   border: 2px solid #555;
-}
+} */
 
 .text-center {
   text-align: center;

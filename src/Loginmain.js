@@ -1795,8 +1795,15 @@ const searchHandlerQualityMerchant=()=>{
         <p  className="navoperation"  style={{cursor:'pointer'}}><a href="/edit"   >Edit Products</a></p>
         <div className="alert-box warning3" id='warning3' >Access Denied !</div>
       </div>
+      <img src={Divider} alt="Your SVG" className="divider-svg" />
       <div >
         <p  className="navoperation"  style={{cursor:'pointer'}}><a href="/uploadbulk"   >Bulk Upload</a></p>
+        <div className="alert-box warning3" id='warning3' >Access Denied !</div>
+      </div>
+      <img src={Divider} alt="Your SVG" className="divider-svg" />
+
+      <div >
+        <p  className="navoperation"  style={{cursor:'pointer'}}><a href="/uploadrepo"   >Upload to repo</a></p>
         <div className="alert-box warning3" id='warning3' >Access Denied !</div>
       </div>
     </div>

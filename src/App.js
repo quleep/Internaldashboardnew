@@ -26,6 +26,7 @@ import Viewar from "./Viewar";
 import Editproducts from "./Editproducts";
 import GenerateQrcode from "./GenerateQrcode";
 import Uploadbulk from "./Uploadbulk";
+import Repoupload from "./Repoupload";
 
 
 function App() {
@@ -52,6 +53,8 @@ function App() {
           <Route path="/edit" component={Editproducts} />
           <Route path="/generateqr" component={GenerateQrcode} />
           <Route path="/uploadbulk" component={Uploadbulk} />
+          <Route path="/uploadrepo" component={Repoupload} />
+
 
 
 
