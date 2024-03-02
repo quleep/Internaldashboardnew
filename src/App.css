@@ -42,6 +42,7 @@
   background-image: url('https://arnxtdealerpageproducts.s3.ap-south-1.amazonaws.com/blue-gradient-blank-background-business_53876-120508.avif');
   background-repeat: no-repeat;
   background-size: cover;
+  flex-direction: column;
 }
 
 .inputdiv {

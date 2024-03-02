@@ -20,10 +20,12 @@ const Repoupload = () => {
 
   const uploadfileurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/uploadfilerepo'
   const registerurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/registercenteralrepoitem'
+  const deleteitemurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/deletecenteralrepoitem'
     const [category, setCategory] = useState('');
     const [subcategory, setSubcategory] = useState('');
     const [tempglbfile, setTempGlbFile] = useState()
     const [errortext, setErrorText] = useState()
+    const [uploadeditem, setUploadedItem] = useState()
     const [formdata, setFormData] = useState({
       productname : '',
       brandname : '',
@@ -122,11 +124,15 @@ const Repoupload = () => {
           try{
             await axios.post(registerurl, body).then(res=>{
                if(res.status === 200){
+                setUploadedItem(res.data.Item)
+               
                  document.querySelector('.alertdiv').style.display = 'flex'
                  setTimeout(() => {
                  document.querySelector('.alertdiv').style.display = 'none'
                   
                  }, 3000);
+
+                 document.querySelector('.uploadedmodal').style.display = 'flex'
                 setFormData({
                   productname : '',
                   brandname : '',
@@ -259,7 +265,13 @@ const Repoupload = () => {
        
    
 
-       const handleuploadfileglb = async (e, type)=>{
+       const handleuploadfileglb = async (e, type, filetype)=>{
+            
+
+        if(document.getElementById(`${filetype}file`).value ===  ''){
+           window.alert('please select a file')
+           return
+        }
 
         const url=  uploadfileurl;
         await fetch(url,{
@@ -293,6 +305,7 @@ const Repoupload = () => {
                    })
               
                 setTempGlbFile('')
+                document.getElementById(`${filetype}file`).value = ''
                   document.querySelector(`.icon${type}`).style.display = 'block'
                   setTimeout(() => {
                   document.querySelector(`.icon${type}`).style.display = 'none'
@@ -307,6 +320,28 @@ const Repoupload = () => {
           })
           .catch((err)=>console.log(err))
 
+       }
+
+       const handledeleteitem = async (idvalue)=>{
+          const body = {
+            id: idvalue
+          }
+          try{
+            await axios.post(deleteitemurl, body).then(res=>{
+               if(res.status === 200){
+                window.alert('Item deleted')
+               }
+               document.querySelector('.uploadedmodal').style.display = 'none'
+
+            }).catch(error=>{
+              console.log(error)
+            })
+          }catch(error){
+             console.log(error)
+          }
+       }
+       const handlecloseuploadedmodel = ()=>{
+           document.querySelector('.uploadedmodal').style.display ='none'
        }
 
   return (
@@ -356,7 +391,7 @@ const Repoupload = () => {
              <Grid item xs={5}  style={{ display:'flex'}}>
           
           <label htmlFor= 'glbfile' >
-            <InputFile  id={`glbfile`} type="file"  onChange={(e)=>handlefileselectglb(e, 'glb')} />
+            <InputFile  id={`glbfile`} type="file"    onChange={(e)=>handlefileselectglb(e, 'glb')} />
             <Button 
            
               variant="contained" 
@@ -367,7 +402,7 @@ const Repoupload = () => {
           </label>
           <Grid item xs={3}>
         <Button 
-              onClick={(e)=>handleuploadfileglb(e ,'glburl')}
+              onClick={(e)=>handleuploadfileglb(e ,'glburl', 'glb')}
               variant="contained" 
               component="span" 
               startIcon={<Upload />}
@@ -396,7 +431,7 @@ const Repoupload = () => {
           </label>
           <Grid item xs={3}>
         <Button 
-         onClick={(e)=>handleuploadfileglb(e, 'usdzurl')}
+         onClick={(e)=>handleuploadfileglb(e, 'usdzurl', 'usdz')}
               variant="contained" 
               component="span" 
               startIcon={<Upload />}
@@ -429,7 +464,7 @@ const Repoupload = () => {
           </label>
           <Grid item xs={3}>
         <Button 
-        onClick={(e)=>handleuploadfileglb(e, 'objurl')}
+        onClick={(e)=>handleuploadfileglb(e, 'objurl', 'obj')}
               variant="contained" 
               component="span" 
               startIcon={<Upload />}
@@ -458,7 +493,7 @@ const Repoupload = () => {
           </label>
           <Grid item xs={3}>
         <Button 
-         onClick={(e)=>handleuploadfileglb(e, 'fbxurl')}
+         onClick={(e)=>handleuploadfileglb(e, 'fbxurl', 'fbx')}
               variant="contained" 
               component="span" 
               startIcon={<Upload />}
@@ -490,7 +525,7 @@ const Repoupload = () => {
           </label>
           <Grid item xs={3}>
         <Button 
-         onClick={(e)=>handleuploadfileglb(e, 'renderimage')}
+         onClick={(e)=>handleuploadfileglb(e, 'renderimage' , 'jpg')}
               variant="contained" 
               component="span" 
               startIcon={<Upload />}
@@ -531,6 +566,60 @@ const Repoupload = () => {
       <Grid container display={'none'} xs= {12} marginTop={'20px'} className='alertdiv' alignContent={'center'} justifyContent={'center'}>
           <Alert severity="success" variant='filled' > Data Uploaded</Alert>
           </Grid>
+    </Container>
+
+    <Container >
+      <Grid  xs= {8} overflow={'scroll'}  sx={{display:'none', marginTop:'40px'}} className='uploadedmodal' >
+        
+             
+            <Grid xs = {3} sx={{display:'flex', flexDirection:'column', flexWrap:'wrap', justifyContent:'flex-start', alignItems:'start'}}>
+            <Button
+            onClick={()=>handledeleteitem(uploadeditem.Id)}
+            >
+                Delete
+              </Button>
+              <Button
+              onClick={()=>handlecloseuploadedmodel()}>
+                Ok
+              </Button>
+            <Typography>
+              productname :   {uploadeditem?.productname}
+            </Typography>
+            <Typography>
+              brandname :    {uploadeditem?.brandname}
+            </Typography>
+            <Typography>
+              length :  {uploadeditem?.productlength}
+            </Typography>
+            <Typography>
+              width :  {uploadeditem?.productwidth}
+            </Typography>
+            <Typography>
+              height:   {uploadeditem?.productheight}
+            </Typography>
+            <Typography>
+              glb :  {uploadeditem?.glburl}
+            </Typography>
+            <Typography>
+             usdz:   {uploadeditem?.usdzurl}
+            </Typography>
+            <Typography>
+              fbx : {uploadeditem?.fbxurl}
+            </Typography>
+            <Typography>
+              obj:  {uploadeditem?.objurl}
+            </Typography>
+
+             <Grid xs={2} >
+              <img src= {uploadeditem?.imageurl} sx={{maxWidth:"100%", maxHeight:'200px', objectFit:'contain'}} />
+              </Grid>
+        
+
+          </Grid>
+      
+
+      </Grid>
+         
     </Container>
       
     </div>
