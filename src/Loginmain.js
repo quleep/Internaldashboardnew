@@ -1768,6 +1768,8 @@ const searchHandlerQualityMerchant=()=>{
 
  }
 
+
+
   return (
     <div>
     <div>
@@ -1798,6 +1800,11 @@ const searchHandlerQualityMerchant=()=>{
       <img src={Divider} alt="Your SVG" className="divider-svg" />
       <div >
         <p  className="navoperation"  style={{cursor:'pointer'}}><a href="/uploadbulk"   >Bulk Upload</a></p>
+        <div className="alert-box warning3" id='warning3' >Access Denied !</div>
+      </div>
+      <img src={Divider} alt="Your SVG" className="divider-svg" />
+      <div >
+        <p  className="navoperation"  style={{cursor:'pointer'}}><a href="/luxeadmin"   >Manage Luxe</a></p>
         <div className="alert-box warning3" id='warning3' >Access Denied !</div>
       </div>
       <img src={Divider} alt="Your SVG" className="divider-svg" />
@@ -1886,11 +1893,8 @@ const searchHandlerQualityMerchant=()=>{
         </div>
 
       <div  className='allmerchantdata'>
-  
 
       <div>
-
-    
 
       <div className='inputdiv'  style={{display:'none'}} >
                 <div className='inputdiv' >
@@ -1908,9 +1912,7 @@ const searchHandlerQualityMerchant=()=>{
                     onClick={allMerchantHandler}
                     >All merchants</button>
                 </div>
-             
-             
-
+            
             </div>
             <div className='merchantdatacontainer'>
             {
@@ -1924,8 +1926,6 @@ const searchHandlerQualityMerchant=()=>{
                       <p>{item.merchant_Id}</p>
                       <label>product_Id</label>
                       <p>{item.product_Id}</p>
-                     
-                  
                      
                       <label>Image upload date</label>
                       <p>{item.registration_Time.split(' ').slice(0,4).join(' ')}</p>
@@ -2113,14 +2113,6 @@ const searchHandlerQualityMerchant=()=>{
                           <p>{item.specification}</p>
                          </div>
                           
-                          
-                          
-                          
-                          
-                          
-                     
-
-                         
                         </div>
                     </div>
                     </div>  
@@ -2228,19 +2220,10 @@ const searchHandlerQualityMerchant=()=>{
 
              </div>
 
-   
-   
-  
-
-
       </div>
 
       </div>
 
-    
-
-
-      
     </div>
     <div className='modmain2' id ='main2' >
 
@@ -2461,14 +2444,6 @@ const searchHandlerQualityMerchant=()=>{
                            <p>{itemnew.specification}</p>
                           </div>
                            
-                           
-                           
-                           
-                           
-                           
-                      
- 
-                          
                          </div> :''
                         ))
                       }
@@ -2526,11 +2501,6 @@ const searchHandlerQualityMerchant=()=>{
 
       </div>
    
-           
-
-
-
-
         </div>
 
         <div  >
@@ -2545,8 +2515,6 @@ const searchHandlerQualityMerchant=()=>{
 
 {    }
 
-
-
  </div>
  
 </div>
@@ -2557,13 +2525,7 @@ const searchHandlerQualityMerchant=()=>{
 
  <input type='file' id={`b4_${i}`} onChange={(e)=>onChangeimg(e,i)}/>
 
-
-
-
     <button    className='' id={i} value={item.product_Id}  onClick={()=>sendImage(item.product_Id, item.merchant_Id, i)} >upload image </button><span id={`${item.product_Id}_img_${i}`}  className='tickmarkfbx' ><FaCheck/></span> 
-
-
- 
 
  <p id={`imagemessage_${i}`} style={{color:'red'}} ></p>
  <p id ={`filenameimage_${i}`}  style={{color:'green', fontFamily:'Manrope, sanserif'}} ></p>
@@ -2602,12 +2564,7 @@ const searchHandlerQualityMerchant=()=>{
                     }
 
              </div>
-
-
-   
-
-
-      
+ 
     </div>
     <div className='modmain3' id='main3' >
 
@@ -2951,14 +2908,6 @@ const searchHandlerQualityMerchant=()=>{
                           <p>{item.specification}</p>
                          </div>
                           
-                          
-                          
-                          
-                          
-                          
-                     
-
-                         
                         </div>
                     </div>
                     </div>  
@@ -3060,16 +3009,6 @@ const searchHandlerQualityMerchant=()=>{
                       ))
                     ))
                      
-
-                   
-
-                        
-                    
-                      
-                       
-
-                       
-                  
                    } 
                  
                    
@@ -3086,12 +3025,6 @@ const searchHandlerQualityMerchant=()=>{
                    ))
                  }
                 
-              
-
-               
-
-                
-
                  </div>
                 
 
@@ -3108,13 +3041,7 @@ const searchHandlerQualityMerchant=()=>{
                     ))
                    ))
                  }
-                
-
-
-
-
-
-
+       
 </div>
                 </div>
                 <div className='urldiv6'>
@@ -3129,12 +3056,6 @@ const searchHandlerQualityMerchant=()=>{
                    ))
                  }
                 
-
-
-
-
-
-
                        </div>
                 </div>
                 <div className='urldiv7' >
@@ -3321,30 +3242,14 @@ const searchHandlerQualityMerchant=()=>{
                  <button  onClick={()=>statussubmitHandler(it.product_Id,j)}  style={{marginLeft:'20px'}}>submit</button>
                   <p  style={{color:'green'}} id={`${it.product_Id}_modelacceptstatus_${j}`} >  </p> 
 
-
-
                     </p>
 
-                    
-
                       ))
-                      
-                  
-
-                
-
+                     
                     ))
-
-                    
 
                 }
 
-
-
-
-             
-
-              
 
                 </div>
                 <div className='urldiv8'> 
@@ -3371,42 +3276,16 @@ const searchHandlerQualityMerchant=()=>{
 
                 </div>
 
-          
-          
-            
-
-            
-
-
             </div>
 
         </div>
         </div>
-
-
-      
+  
     </div>
 
     
     </div>
   )
 }
-
-
-
-
-   
-    
-
-  
-                
-
-
-
- 
-
-
-
-
 
 export default Loginmain

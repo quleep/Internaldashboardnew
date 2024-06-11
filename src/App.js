@@ -28,6 +28,8 @@ import GenerateQrcode from "./GenerateQrcode";
 import Uploadbulk from "./Uploadbulk";
 import Repoupload from "./Repoupload";
 import Repodisplay from "./Repodisplay";
+import Test from "./Test";
+import Luxeadmin from "./Luxeadmin";
 
 
 function App() {
@@ -56,6 +58,10 @@ function App() {
           <Route path="/uploadbulk" component={Uploadbulk} />
           <Route path="/uploadrepo" component={Repoupload} />
           <Route path="/repodisplay" component={Repodisplay} />
+          <Route path="/luxeadmin" component={Luxeadmin} />
+
+          <Route path="/test" component={Test} />
+
 
 
 

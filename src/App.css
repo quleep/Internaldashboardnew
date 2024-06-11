@@ -33,6 +33,34 @@
   height: 100%;
  
 }
+.luxeuploadpage{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 120px;
+  
+}
+.luxecontentinside{
+  width: 800px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+    height: auto;
+  border: 1px solid rgb(182, 181, 181);
+  border-radius: 10px;
+  overflow: scroll;
+}
+ .luxecontentinside>*{
+  flex: 1 1 auto;
+  margin: 10px;
+
+  
+ }
+.luxecontentinput{
+  padding: 5px;
+}
 
 .uploadrepomain{
   width: 100vw;

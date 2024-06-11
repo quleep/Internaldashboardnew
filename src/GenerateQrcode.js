@@ -24,7 +24,7 @@ const GenerateQrcode = () => {
 
     }
 
-    console.log(brandqrcodedata)
+    
   return (
     <div>
 
@@ -41,6 +41,7 @@ const GenerateQrcode = () => {
               </div>
               <div className='brandqrcodecontainer'>
                 <div className='qrcodeinsidediv' >
+                {/* <QRCode  size={400} style={{padding:'10px'}} viewBox='0 0 200 200' value={`https://arhorizon.in/arvideo/index.html?id=1713162542905`} /> */}
                     {
                         brandqrcodedata && brandqrcodedata.map((item,i)=>(
                             <div>

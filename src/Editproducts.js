@@ -525,6 +525,7 @@ const handleBrandClickSubmit = ()=>{
 
   axios.post(branddetailsurl, body).then(res=>{
     setAllProductData(res.data)
+    
   }).catch(error=>{
     console.log(error)
   })
