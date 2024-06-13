@@ -1646,6 +1646,12 @@ const searchHandlerProduct=()=>{
   })
 
 }
+
+const handlemodelerassignclient = ()=>{
+
+  history.push('/assignmodeler')
+
+}
 const searchHandlerMerchant=()=>{
   const body={
     merchantid: Number(merchantinput)
@@ -1804,6 +1810,11 @@ const searchHandlerQualityMerchant=()=>{
       </div>
       <img src={Divider} alt="Your SVG" className="divider-svg" />
       <div >
+        <p  className="navoperation"  style={{cursor:'pointer'}}><a href="/uploadclient"   >Upload client data</a></p>
+        <div className="alert-box warning3" id='warning3' >Access Denied !</div>
+      </div>
+      <img src={Divider} alt="Your SVG" className="divider-svg" />
+      <div >
         <p  className="navoperation"  style={{cursor:'pointer'}}><a href="/luxeadmin"   >Manage Luxe</a></p>
         <div className="alert-box warning3" id='warning3' >Access Denied !</div>
       </div>
@@ -1827,6 +1838,11 @@ const searchHandlerQualityMerchant=()=>{
                 <input  type='number'  onChange={event=> setMerchantInput(event.target.value)} />
 
 
+                </div>
+                <div className='search'>
+                    <button 
+                    onClick={handlemodelerassignclient}
+                    >Assign modeler for client data</button>
                 </div>
                 <div className='search'>
                     <button 
