@@ -31,15 +31,26 @@ const Modelerasignpage = () => {
         }
 
         fetchdata()
+        console.log('fasfdsa')
 
       
 
-     },[])
+     },[modelername])
+
+
 
      const updateimgstatus = async (id, index)=>{
+
+         let tempimgstatus = ''
+          if(imagestatus === undefined){
+            tempimgstatus = 'Image Accepted'
+          }else{
+            tempimgstatus = imagestatus
+          }
+        
         const body = {
              Id : id,
-             imgstatus : imagestatus
+             imgstatus : tempimgstatus
 
         }
 
@@ -64,7 +75,12 @@ const Modelerasignpage = () => {
 
 
      }
-     const assignModeler = async (id,  index)=>{
+     const assignModeler = async (id,  index, statusvalue)=>{
+
+      if(statusvalue === 'Image Rejected'){
+         window.alert('Please accept the Image first')
+         return
+      }
 
         const body = {
             Id : id,
@@ -139,10 +155,6 @@ const Modelerasignpage = () => {
                                 ))
                              }
                               
-                                
-     
-                                  
-     
                              </div>  
                           </div>
                           <div>
@@ -166,19 +178,21 @@ const Modelerasignpage = () => {
      
                              </div>
                              <div style={{marginTop:'10px', display:'flex', width:'100%'}}>
+
+                           
                              <select   style={{minWidth: '140px'}} onChange={(e)=>setModelerName(e.target.value)}>
                                      <option  disabled>Assign Modeler</option>
-                                     <option><p>Modeler1</p></option>
-                                     <option><p>Modeler2</p></option>
-                                     <option><p>Modeler3</p></option>
-                                     <option><p>Modeler4</p></option>
-                                     <option><p>Modeler5</p></option>
-                                     <option><p>Modeler6</p></option>
+                                     <option value={'modeler1@arnxt.com'}><p>Modeler1</p></option>
+                                     <option value={'modeler2@arnxt.com'}><p>Modeler2</p></option>
+                                     <option value={'modeler3@arnxt.com'}><p>Modeler3</p></option>
+                                     <option value={'modeler4@arnxt.com'}><p>Modeler4</p></option>
+                                     <option value={'modeler5@arnxt.com'}><p>Modeler5</p></option>
+                                     <option value={'modeler6@arnxt.com'}><p>Modeler6</p></option>
      
      
                                   </select>
                                   <div style={{marginLeft:'5px'}}>
-                                  <Button variant='contained' onClick={()=>assignModeler(item.Id, index)}>Assign</Button>
+                                  <Button variant='contained' onClick={()=>assignModeler(item.Id, index, item.statusval)}>Assign</Button>
 
                                   </div>
                                   <div className='alertstatusimage' id = {`alertstatusmodeler_${index}`} >
@@ -189,7 +203,7 @@ const Modelerasignpage = () => {
                              </div>
                              <div style={{marginTop:'5px', display:'flex', justifyContent:'start', alignItems:'start', width:'100%'}}>
                                 <div className='clientdatadiv1'>
-                                <span style={{display:'flex'}}>  <p className='labelclient'> status : </p>  <p >{item.statusval}</p></span>
+                                <span style={{display:'flex'}}>  <p className='labelclient'> status : </p>  <p  style={ item.statusval === 'Models Uploaded' ?   {backgroundColor:"green", color:'white'}: {backgroundColor:'yellow'}}  >{item.statusval}</p></span>
 
                                </div>
                                  

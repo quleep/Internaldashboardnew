@@ -96,6 +96,7 @@ const Uploadclient = () => {
             productheight : formdata.height,
             images : formdata.images,
             dimensionunit : formdata.unit,
+            statusval: 'Images Uploaded',
             uploadedby : emailID?.email,
             uploaddate : new Date().toString()
          }
@@ -277,7 +278,6 @@ const Uploadclient = () => {
   
          }
 
-         console.log(formdata)
   
          const handledeleteitem = async (idvalue)=>{
             const body = {

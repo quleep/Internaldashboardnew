@@ -690,11 +690,6 @@ if (fileglb){
          
        if(filegltf){
 
-     
-
-       
-       
-  
         fetch(urlimagesend,{
           method:'POST',
           body: filegltf.name
@@ -1048,16 +1043,6 @@ if(height){
  let useremail= JSON.parse(userdata)
   let loginuser= useremail.email
   let roleuse= useremail.role
-
-
-
-
-
-
-
-
-
-  
 
   const handlemodelsubmit=(pid,len)=>{
 
@@ -1775,6 +1760,19 @@ const searchHandlerQualityMerchant=()=>{
  }
 
 
+ const handleclientupload = ()=>{
+
+  if(roleuse === 'user' || roleuse === 'admin' ){
+
+     history.push('/modeluploadclient')
+
+  }else{
+    window.alert('Access Denied')
+  }
+      
+ }
+
+
 
   return (
     <div>
@@ -1819,11 +1817,15 @@ const searchHandlerQualityMerchant=()=>{
         <div className="alert-box warning3" id='warning3' >Access Denied !</div>
       </div>
       <img src={Divider} alt="Your SVG" className="divider-svg" />
-
       <div >
-        <p  className="navoperation"  style={{cursor:'pointer'}}><a href="/uploadrepo"   >Upload to repo</a></p>
+        <p  className="navoperation"  style={{cursor:'pointer'}}><a href="" onClick={handleclientupload}   >Upload client models</a></p>
         <div className="alert-box warning3" id='warning3' >Access Denied !</div>
       </div>
+
+      {/* <div >
+        <p  className="navoperation"  style={{cursor:'pointer'}}><a href="/uploadrepo"   >Upload to repo</a></p>
+        <div className="alert-box warning3" id='warning3' >Access Denied !</div>
+      </div> */}
     </div>
 
   
