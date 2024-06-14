@@ -195,7 +195,7 @@ const Modelerasignpage = () => {
    size={256}
    style={{ height: "auto", maxWidth: "100%", width: "100%", padding: '20px'}}
 
-value = {`https://admin.arnxt.com/viewmodel?id=${clientprodid}`}
+value = {`https://www.admin.arnxt.com/viewmodel?id=${clientprodid}`}
 
 />
 
@@ -313,7 +313,7 @@ value = {`https://admin.arnxt.com/viewmodel?id=${clientprodid}`}
                              </div>
 
                              {
-                              item.statsval === 'Models Uploaded' ? 
+                              item.statusval === 'Models Uploaded' ? 
                               <div style={{marginTop:'5px', display:'flex', width:'100%'}}>
                        
                               <div style={{marginLeft:'5px', display:'flex', gap:'5px'}}>
