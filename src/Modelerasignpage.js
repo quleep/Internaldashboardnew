@@ -57,7 +57,7 @@ const Modelerasignpage = () => {
 
         }
 
-        console.log('gettingdata')
+   
 
         fetchdata()
       
@@ -186,7 +186,7 @@ const Modelerasignpage = () => {
         <Dialog open= {popup} onClose={handlepopupclose}  >
 
 <DialogTitle>
-  Scan the qr code
+  Scan the QR code
 
 </DialogTitle>
 
@@ -206,8 +206,6 @@ value = {`https://www.admin.arnxt.com/viewmodel?id=${clientprodid}`}
 
 <div>
    <img src= {renderedimage} />
-
-
 </div>
 
 </Dialog>
@@ -345,8 +343,6 @@ value = {`https://www.admin.arnxt.com/viewmodel?id=${clientprodid}`}
                                    <Alert severity="success" variant='filled' ></Alert>
                                     </div>
 
-                              
-     
                              </div>
                             
                              </div> 
@@ -364,9 +360,6 @@ value = {`https://www.admin.arnxt.com/viewmodel?id=${clientprodid}`}
                     ))
                 }
          
-           
-
-
              </div>
 
         </div>

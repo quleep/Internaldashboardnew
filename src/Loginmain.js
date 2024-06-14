@@ -1772,6 +1772,39 @@ const searchHandlerQualityMerchant=()=>{
       
  }
 
+ const handleClientImages = ()=>{
+  if(roleuse === 'modelhead' || roleuse === 'admin' ){
+
+    history.push('/uploadclient')
+
+ }else{
+   window.alert('Access Denied')
+ }
+    
+ }
+
+ const handleManageLuxe = ()=>{
+  if(roleuse === 'modelhead' || roleuse === 'admin' ){
+
+    history.push('/luxeadmin')
+
+ }else{
+   window.alert('Access Denied')
+ }
+   
+ }
+ const handleBulkUpload = ()=>{
+  if(roleuse === 'modelhead' || roleuse === 'admin' ){
+
+    history.push('/uploadbulk')
+
+ }else{
+   window.alert('Access Denied')
+ }
+   
+ }
+
+
 
 
   return (
@@ -1803,17 +1836,17 @@ const searchHandlerQualityMerchant=()=>{
       </div>
       <img src={Divider} alt="Your SVG" className="divider-svg" />
       <div >
-        <p  className="navoperation"  style={{cursor:'pointer'}}><a href="/uploadbulk"   >Bulk Upload</a></p>
+        <p  className="navoperation"  style={{cursor:'pointer'}}><a  onClick={handleBulkUpload}  >Bulk Upload</a></p>
         <div className="alert-box warning3" id='warning3' >Access Denied !</div>
       </div>
       <img src={Divider} alt="Your SVG" className="divider-svg" />
       <div >
-        <p  className="navoperation"  style={{cursor:'pointer'}}><a href="/uploadclient"   >Upload client data</a></p>
+        <p  className="navoperation"  style={{cursor:'pointer'}}><a onClick={handleClientImages}  >Upload client data</a></p>
         <div className="alert-box warning3" id='warning3' >Access Denied !</div>
       </div>
       <img src={Divider} alt="Your SVG" className="divider-svg" />
       <div >
-        <p  className="navoperation"  style={{cursor:'pointer'}}><a href="/luxeadmin"   >Manage Luxe</a></p>
+        <p  className="navoperation"  style={{cursor:'pointer'}}><a  onClick={handleManageLuxe}  >Manage Luxe</a></p>
         <div className="alert-box warning3" id='warning3' >Access Denied !</div>
       </div>
       <img src={Divider} alt="Your SVG" className="divider-svg" />

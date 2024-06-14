@@ -56,7 +56,7 @@ const Login = ({history}) => {
     <div  className='loginbackground'>
 
 <form class="login"  onSubmit={loginHandler}>
-  <h2>ARnxt, Users!</h2>
+  <h2>ArNXT Users!</h2>
   <p>Please log in</p>
 
    <div style={{display:'flex', gap:'10px', flexDirection:'column'}}>
