@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar'
 import axios from 'axios'
-import { Container, TextField, Grid, Button, Select, MenuItem, InputLabel, FormControl, styled, Typography, autocompleteClasses, Alert } from '@mui/material';
+import { Container, TextField, Grid, Button, Select, MenuItem, InputLabel, FormControl, styled, Typography, autocompleteClasses, Alert, Dialog, DialogTitle, DialogContent } from '@mui/material';
+import QRCode from "react-qr-code";
 
 
 const Modelerasignpage = () => {
@@ -9,10 +10,36 @@ const Modelerasignpage = () => {
     const dataurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/fetchclientalldata'
     const updateimgstatusurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/updateimagestatusclient'
      const assignmodelerurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/assignmodelerclient'
+     const finalstatusuploadurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/updatestatusclientupload'
 
     const [clientdata, setClientData] = useState()
     const [imagestatus, setImageStatus] = useState()
     const [modelername, setModelerName] = useState()
+
+    const [popup, setPopUp] = useState(false)
+    const [openrenderedimage, setOpenRenderedImage] = useState(false)
+    const [openviewer, setOpenViewer] = useState(false)
+    const [renderedimage, setRenderedImage] = useState()
+    const [clientprodid, setClientProdId] = useState()
+    const [dataupdate, setDataUpdate] = useState(false)
+
+    const handlepopupclose = ()=>{
+      setPopUp(false)
+    }
+
+    const handlemodelopen = (id)=>{
+      setPopUp(true)
+      setClientProdId(id)
+
+     
+    }
+    const handelopenimage = (renderedimage)=>{
+      setOpenRenderedImage(true)
+      setRenderedImage(renderedimage)
+    }
+    const handlecloseimage = ()=>{
+      setOpenRenderedImage(false)
+    }
 
      useEffect(()=>{
 
@@ -30,27 +57,24 @@ const Modelerasignpage = () => {
 
         }
 
+        console.log('gettingdata')
+
         fetchdata()
-        console.log('fasfdsa')
-
       
-
-     },[modelername])
+     },[dataupdate])
 
 
 
      const updateimgstatus = async (id, index)=>{
 
-         let tempimgstatus = ''
-          if(imagestatus === undefined){
-            tempimgstatus = 'Image Accepted'
-          }else{
-            tempimgstatus = imagestatus
-          }
+            if(document.getElementById(`imageselect_${index}`).value === ''){
+               window.alert('Please accept of reject image')
+               return
+            }
         
         const body = {
              Id : id,
-             imgstatus : tempimgstatus
+             imgstatus : document.getElementById(`imageselect_${index}`).value
 
         }
 
@@ -58,11 +82,12 @@ const Modelerasignpage = () => {
             const res = await axios.post(updateimgstatusurl, body)
 
             if(res.status === 200){
+               setDataUpdate(true)
                 document.getElementById(`alertstatus_${index}`).style.display = 'flex'
 
                 setTimeout(() => {
                 document.getElementById(`alertstatus_${index}`).style.display = 'none'
-
+                setDataUpdate(false)
                     
                 }, 3000);
             }  
@@ -77,14 +102,23 @@ const Modelerasignpage = () => {
      }
      const assignModeler = async (id,  index, statusvalue)=>{
 
-      if(statusvalue === 'Image Rejected'){
-         window.alert('Please accept the Image first')
+      if( document.getElementById(`imageselect_${index}`).value === '' ){
+         window.alert('Please accept or reject the image first')
          return
+      }
+      if(statusvalue === 'Image Rejected'){
+         window.alert('Please accept the image to assign modeler')
+         return 
+      }
+
+      if(document.getElementById(`modelerselect_${index}`).value === ''){
+        window.alert('please select a modeler')
+        return
       }
 
         const body = {
             Id : id,
-             modelername : modelername
+             modelername : document.getElementById(`modelerselect_${index}`).value
 
        }
 
@@ -94,8 +128,11 @@ const Modelerasignpage = () => {
            if(res.status === 200){
                document.getElementById(`alertstatusmodeler_${index}`).style.display = 'flex'
 
+                 setDataUpdate(true)
+
                setTimeout(() => {
                document.getElementById(`alertstatusmodeler_${index}`).style.display = 'none'
+               setDataUpdate(false)
 
                    
                }, 3000);
@@ -109,6 +146,34 @@ const Modelerasignpage = () => {
 
      }
 
+     const handleFinalStatusUpdate = async (id, index)=>{
+        
+         if(document.getElementById(`finalstatus_${index}`).value === ''){
+            window.alert('Please select a status')
+            return
+         }
+       const body ={
+          Id: id,
+          statusvalue : document.getElementById(`finalstatus_${index}`).value
+       }
+
+       try{
+         const res = await axios.post(finalstatusuploadurl, body)
+           if(res.status === 200){
+            setDataUpdate(true)
+            setTimeout(() => {
+            setDataUpdate(false)
+               
+            }, 3000);
+           }
+
+       }catch(error){
+         console.log(error)
+       }
+
+
+     }
+
     
 
   return (
@@ -117,6 +182,35 @@ const Modelerasignpage = () => {
         <Navbar/>
 
         <div className='clientalldatacontainer'>
+
+        <Dialog open= {popup} onClose={handlepopupclose}  >
+
+<DialogTitle>
+  Scan the qr code
+
+</DialogTitle>
+
+     
+<QRCode
+   size={256}
+   style={{ height: "auto", maxWidth: "100%", width: "100%", padding: '20px'}}
+
+value = {`https://admin.arnxt.com/viewmodel?id=${clientprodid}`}
+
+/>
+
+</Dialog>
+
+<Dialog open= {openrenderedimage} onClose={handlecloseimage} hideBackdrop >
+
+
+<div>
+   <img src= {renderedimage} />
+
+
+</div>
+
+</Dialog>
              
              <div className='clientdatamain'>
 
@@ -160,8 +254,8 @@ const Modelerasignpage = () => {
                           <div>
                           <div className='clientdatadiv4'>
                              <div style={{marginTop:'10px', display:'flex', width:'100%'}}>
-                             <select  style={{minWidth: '140px'}} onChange={(e)=>setImageStatus(e.target.value)} >
-                                     <option  disabled>Status</option>
+                             <select  style={{minWidth: '140px'}} id= {`imageselect_${index}`} onChange={(e)=>setImageStatus(e.target.value)} >
+                                     <option  disabled selected value={''}>Image Status</option>
                                      <option><p>Image Accepted</p></option>
                                      <option><p>Image Rejected</p></option>
      
@@ -180,8 +274,8 @@ const Modelerasignpage = () => {
                              <div style={{marginTop:'10px', display:'flex', width:'100%'}}>
 
                            
-                             <select   style={{minWidth: '140px'}} onChange={(e)=>setModelerName(e.target.value)}>
-                                     <option  disabled>Assign Modeler</option>
+                             <select   style={{minWidth: '140px'}} id= {`modelerselect_${index}`} onChange={(e)=>setModelerName(e.target.value)}>
+                                     <option  disabled selected value={''}>Assign Modeler</option>
                                      <option value={'modeler1@arnxt.com'}><p>Modeler1</p></option>
                                      <option value={'modeler2@arnxt.com'}><p>Modeler2</p></option>
                                      <option value={'modeler3@arnxt.com'}><p>Modeler3</p></option>
@@ -215,6 +309,43 @@ const Modelerasignpage = () => {
 
                                </div>
                                  
+     
+                             </div>
+
+                             {
+                              item.statsval === 'Models Uploaded' ? 
+                              <div style={{marginTop:'5px', display:'flex', width:'100%'}}>
+                       
+                              <div style={{marginLeft:'5px', display:'flex', gap:'5px'}}>
+                                <Button variant='contained' color='primary' onClick={()=>handlemodelopen(item.Id)}>
+                                 View Model
+                                </Button>
+                                <Button variant='contained' color='primary' onClick={()=>handelopenimage(item.renderedimage)}>
+                                   View Rendered image
+                                </Button>
+                        
+                              </div>
+
+                         </div> : ''
+                             }
+                       
+                             <div style={{marginTop:'10px', display:'flex', width:'100%'}}>
+                             <select  style={{minWidth: '140px'}} id= {`finalstatus_${index}`} >
+                                     <option  disabled selected value={''}>Change final status</option>
+                                     <option value = {'Model Accepted'}><p>Model Accepted</p></option>
+                                     <option value = {'Model Rejected'}><p>Model Rejected</p></option>
+                                      <option value = {'Product live'}><p>Product live</p></option>
+     
+                                  </select>
+                                  <div style={{marginLeft:'5px'}}>
+                                  <Button variant='contained'  onClick={()=>handleFinalStatusUpdate(item.Id,index)} >Submit</Button>
+                                  </div>
+
+                                   <div className='alertstatusimage' id = {`alertdivfinalstatus`} >
+                                   <Alert severity="success" variant='filled' ></Alert>
+                                    </div>
+
+                              
      
                              </div>
                             

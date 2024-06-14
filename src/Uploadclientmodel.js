@@ -329,8 +329,6 @@ const uploadallfilesurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.c
         }
     }
 
-    console.log(imagefile)
-
     const uploadImageFile = async ()=>{
       if(document.getElementById('imagefile').value === ''){
         window.alert('Please select an jpeg,jpg,png file')
