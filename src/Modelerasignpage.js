@@ -234,6 +234,7 @@ value = {`https://www.admin.arnxt.com/viewmodel?id=${clientprodid}`}
                                 <span style={{display:'flex'}}>  <p className='labelclient'>product width : </p>  <p>{item.productwidth}</p></span>
                                 <span style={{display:'flex'}}>  <p className='labelclient'>product height :  </p>  <p>{item.productheight}</p></span>
                                 <span style={{display:'flex'}}>  <p className='labelclient'>Unit :</p>  <p>{item.dimensionunit}</p></span>
+                                <span style={{display:'flex'}}>  <a href={item.productpageurl} target='blank' >Open page url</a></span>
                          
      
                              </div> 
@@ -242,9 +243,14 @@ value = {`https://www.admin.arnxt.com/viewmodel?id=${clientprodid}`}
                           <div className='clientdatadiv3'>
 
                              {
+
+                               item.images.length > 0 ? 
                                 item.images.map((img)=>(
                                     <img style={{maxWidth:'300px', maxHeight: '300px', margin:'10px', objectFit:'contain'}} src= {img}/>
                                 ))
+                                :<p>
+                                 No images available
+                                </p>
                              }
                               
                              </div>  

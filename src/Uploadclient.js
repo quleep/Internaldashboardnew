@@ -39,7 +39,8 @@ const Uploadclient = () => {
         width : '',
         height : '',
         images : [],
-        unit : ''
+        unit : '',
+        pageurl: ''
      
       })
   
@@ -90,12 +91,12 @@ const Uploadclient = () => {
             Id : new Date().getTime().toString(),
             productname : formdata.productname.toLowerCase(),
             brandname : formdata.brandname.toLowerCase(),
-          
+            productpageurl: formdata.pageurl,
             productlength : formdata.length,
             productwidth : formdata.width,
             productheight : formdata.height,
             images : formdata.images,
-            dimensionunit : formdata.unit,
+            dimensionunit : formdata.unit.toLowerCase(),
             statusval: 'Images Uploaded',
             uploadedby : emailID?.email,
             uploaddate : new Date().toString()
@@ -120,7 +121,8 @@ const Uploadclient = () => {
                     width : '',
                     height : '',
                      images: [],
-                    unit : ''
+                    unit : '',
+                    pageurl: ''
                   })
   
                  }
@@ -332,6 +334,9 @@ const Uploadclient = () => {
      </Grid>
      <Grid item xs={3}>
        <TextField fullWidth label="Unit" type='text' name = 'unit' value={formdata.unit} onChange={handleinputchange} variant="outlined" />
+     </Grid>
+     <Grid item xs={3}>
+       <TextField fullWidth label="Product page url" type='text' name = 'pageurl' value={formdata.pageurl} onChange={handleinputchange} variant="outlined" />
      </Grid>
 
 

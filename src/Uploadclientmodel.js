@@ -443,17 +443,18 @@ const uploadallfilesurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.c
                                 <span style={{display:'flex'}}>  <p className='labelclient'>product width : </p>  <p>{item.productwidth}</p></span>
                                 <span style={{display:'flex'}}>  <p className='labelclient'>product height :  </p>  <p>{item.productheight}</p></span>
                                 <span style={{display:'flex'}}>  <p className='labelclient'>Unit :</p>  <p>{item.dimensionunit}</p></span>
-                         
-     
-                             </div> 
+                                <span style={{display:'flex'}}>  <a href={item.productpageurl} target='blank' >Open page url</a></span>
+                                 </div> 
                           </div>
                           <div>
                           <div className='clientdatadiv3'>
 
-                             {
+                             {  item.images.length > 0 ?
                                 item.images.map((img)=>(
                                     <img style={{maxWidth:'300px', maxHeight: '300px', margin:'10px', objectFit:'contain'}} src= {img}/>
                                 ))
+
+                                 : <p>No images available</p>
                              }
                               
                              </div>  
