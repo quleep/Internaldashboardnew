@@ -556,6 +556,18 @@ Upload image
                                  
      
                              </div>
+                             {
+                              item.statusval === 'Model Rejected' ? 
+                              <div style={{marginTop:'5px', display:'flex', justifyContent:'start', alignItems:'start', width:'100%'}}>
+                              <div className='clientdatadiv1'>
+                              <span style={{display:'flex'}}>  <p className='labelclient'> Remarks : </p>  <p  style={ item.statusval === 'Model Rejected' ?   {backgroundColor:"red", color:'white'}: {backgroundColor:'yellow'}}  >{item.rejectionreason}</p></span>
+
+                             </div>
+                               
+   
+                           </div> : ''
+                             }
+
                              <div style={{marginTop:'5px', display:'flex', justifyContent:'start',alignItems:'start', width:'100%'}}>
                                 <div className='clientdatadiv1'>
                                 <span style={{display:'flex'}}>  <p className='labelclient'>Modeler : </p>  <p >{item.modeler}</p></span>

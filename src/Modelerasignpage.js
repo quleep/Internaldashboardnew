@@ -152,9 +152,23 @@ const Modelerasignpage = () => {
             window.alert('Please select a status')
             return
          }
+
+         if(document.getElementById(`finalstatus_${index}`).value === 'Model Rejected'){
+         if(document.getElementById(`rejectionvalue_${index}`).value === ''){
+           window.alert('please provide a rejection reason')
+           return
+
+         }
+
+            
+         }
+            
+
+         
        const body ={
           Id: id,
-          statusvalue : document.getElementById(`finalstatus_${index}`).value
+          statusvalue : document.getElementById(`finalstatus_${index}`).value,
+          rejectionreason : document.getElementById(`rejectionvalue_${index}`).value 
        }
 
        try{
@@ -172,6 +186,15 @@ const Modelerasignpage = () => {
        }
 
 
+     }
+
+     const handlefinalstatuschange = (e,index)=>{
+          if(e.target.value === 'Model Rejected'){
+             document.getElementById(`rejectreason_${index}`).style.display = 'flex'
+          }else{
+            document.getElementById(`rejectreason_${index}`).style.display = 'none'
+
+          }
      }
 
     
@@ -307,6 +330,19 @@ value = {`https://www.admin.arnxt.com/viewmodel?id=${clientprodid}`}
                                  
      
                              </div>
+
+                             {
+                              item.statusval === 'Model Rejected' ? 
+                              <div style={{marginTop:'5px', display:'flex', justifyContent:'start', alignItems:'start', width:'100%'}}>
+                              <div className='clientdatadiv1'>
+                              <span style={{display:'flex'}}>  <p className='labelclient'> Remarks : </p>  <p  style={ item.statusval === 'Model Rejected' ?   {backgroundColor:"red", color:'white'}: {backgroundColor:'yellow'}}  >{item.rejectionreason}</p></span>
+
+                             </div>
+                               
+   
+                           </div> : ''
+                             }
+                         
                              <div style={{marginTop:'5px', display:'flex', justifyContent:'start',alignItems:'start', width:'100%'}}>
                                 <div className='clientdatadiv1'>
                                 <span style={{display:'flex'}}>  <p className='labelclient'>Modeler : </p>  <p >{item.modeler}</p></span>
@@ -334,13 +370,16 @@ value = {`https://www.admin.arnxt.com/viewmodel?id=${clientprodid}`}
                              }
                        
                              <div style={{marginTop:'10px', display:'flex', width:'100%'}}>
-                             <select  style={{minWidth: '140px'}} id= {`finalstatus_${index}`} >
+                             <select  style={{minWidth: '140px'}} id= {`finalstatus_${index}`} onChange={(e)=>handlefinalstatuschange(e,index)} >
                                      <option  disabled selected value={''}>Change final status</option>
                                      <option value = {'Model Accepted'}><p>Model Accepted</p></option>
                                      <option value = {'Model Rejected'}><p>Model Rejected</p></option>
                                       <option value = {'Product live'}><p>Product live</p></option>
      
                                   </select>
+                                    <div id={`rejectreason_${index}`} style={{display:'none'}}>
+                                       <TextField variant='outlined' label='Rejection reason' id={`rejectionvalue_${index}`} />
+                                       </div>
                                   <div style={{marginLeft:'5px'}}>
                                   <Button variant='contained'  onClick={()=>handleFinalStatusUpdate(item.Id,index)} >Submit</Button>
                                   </div>
