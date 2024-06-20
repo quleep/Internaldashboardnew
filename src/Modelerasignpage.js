@@ -3,6 +3,9 @@ import Navbar from './Navbar'
 import axios from 'axios'
 import { Container, TextField, Grid, Button, Select, MenuItem, InputLabel, FormControl, styled, Typography, autocompleteClasses, Alert, Dialog, DialogTitle, DialogContent } from '@mui/material';
 import QRCode from "react-qr-code";
+import GetQrcode from './GetQrcode';
+
+import * as htmlToImage from 'html-to-image';
 
 
 const Modelerasignpage = () => {
@@ -22,6 +25,8 @@ const Modelerasignpage = () => {
     const [renderedimage, setRenderedImage] = useState()
     const [clientprodid, setClientProdId] = useState()
     const [dataupdate, setDataUpdate] = useState(false)
+    const [qrcodeimage, setQrcodeImage] = useState()
+    const [qrcodeurl, setQrcodeUrl] = useState()
 
     const handlepopupclose = ()=>{
       setPopUp(false)
@@ -159,16 +164,18 @@ const Modelerasignpage = () => {
            return
 
          }
-
-            
+   
          }
+   
             
 
          
        const body ={
           Id: id,
           statusvalue : document.getElementById(`finalstatus_${index}`).value,
-          rejectionreason : document.getElementById(`rejectionvalue_${index}`).value 
+          rejectionreason : document.getElementById(`rejectionvalue_${index}`).value,
+          modelqrcode : qrcodeimage,
+          modelarurl : qrcodeurl
        }
 
        try{
@@ -188,14 +195,137 @@ const Modelerasignpage = () => {
 
      }
 
-     const handlefinalstatuschange = (e,index)=>{
+     const handlefinalstatuschange = (e,index,id)=>{
           if(e.target.value === 'Model Rejected'){
              document.getElementById(`rejectreason_${index}`).style.display = 'flex'
           }else{
             document.getElementById(`rejectreason_${index}`).style.display = 'none'
 
           }
+
+          if(e.target.value === 'Product live'){
+
+      
+     
+             
+          }
      }
+
+   
+
+     
+let x = Math.floor(Math.random()*10000)
+const fileName = `image${x}.jpeg`; 
+const fileType = "image/png";
+function base64ToImageFile(base64String, fileName, fileType,len) {
+  
+  const base64Data = base64String.replace(/^data:[^;]+;base64,/, '');
+
+
+  const binaryData = atob(base64Data);
+
+
+  const arrayBuffer = new ArrayBuffer(binaryData.length);
+  const uint8Array = new Uint8Array(arrayBuffer);
+  for (let i = 0; i < binaryData.length; i++) {
+    uint8Array[i] = binaryData.charCodeAt(i);
+  }
+
+ 
+  const blob = new Blob([arrayBuffer], { type: fileType });
+
+
+  const objectURL = URL.createObjectURL(blob);
+
+
+  const img = new Image();
+
+  img.onload = function () {
+  
+    const canvas = document.createElement('canvas');
+    canvas.width = img.width;
+    canvas.height = img.height;
+    const ctx = canvas.getContext('2d');
+
+   
+    ctx.drawImage(img, 0, 0);
+
+    canvas.toBlob(function (blob) {
+     
+      const file = new File([blob], fileName, { type: fileType });
+         uploadQrcode(file, len)
+    }, fileType);
+  };
+ 
+
+ 
+  img.src = objectURL;
+}
+
+     const uploadQrcode= async (imagedata, len )=>{
+
+
+      const url= 'https://g98tqv1tn6.execute-api.ap-south-1.amazonaws.com/default/ImagesUploaderArnxt';
+       await fetch(url,{
+        method: "POST",
+        body: imagedata.name
+      
+      }).then((res)=>res.json())
+         .then((res)=>{
+          
+        fetch(res.uploadURL, {
+            
+            method: "PUT",
+            headers: {
+              "ContentType": "image/jpeg",
+            
+            },
+      
+          body: imagedata
+          
+      
+          })
+             .then((res)=>{
+            
+                if(res.status === 200){
+    
+                  let resnew= res.url.split('?')
+                  let imgurl= resnew[0]
+                 
+                 setQrcodeImage(imgurl)
+                 setQrcodeUrl(`https://viewar.arnxt.com/arview/viewinar?id=${clientprodid}`)
+                 setPopUp(false)
+                 setClientProdId(null)
+               
+                
+                }
+    
+             })
+             .catch((err)=>console.log(err))
+           
+         })
+         .catch((err)=>console.log(err))
+      
+    
+    
+    }
+    
+
+ 
+
+     const handlesaveqrcode = ()=>{
+    
+
+       const qrcodevalue = document.getElementById(`productqrcode`)
+  
+  
+       htmlToImage.toJpeg(qrcodevalue).then((url)=>{
+         
+        base64ToImageFile(url, fileName, fileType)
+       })
+     }
+
+ 
 
     
 
@@ -206,23 +336,29 @@ const Modelerasignpage = () => {
 
         <div className='clientalldatacontainer'>
 
-        <Dialog open= {popup} onClose={handlepopupclose}  >
+          
+          <Dialog open= {popup} onClose={handlepopupclose}   >
+          <div id= 'productqrcode' className='qrcodecontainer'>
+   
+   <QRCode
+      size={256}
+      style={{ height: "auto", maxWidth: "100%", width: "100%", padding: '20px'}}
+   
+   value = {`https://viewar.arnxt.com/arview/viewinar?id=${clientprodid}`}
+   
+   />
+   
+   </div>
+   <div style={{width:'100%', display:'flex', justifyContent:'center', alignItems:'center'}}>
+     <button onClick={handlesaveqrcode} style={{margin:'5px', border:'1px solid grey', borderRadius:'5px', backgroundColor:'transparent'}}>Save QR code</button>
+   </div>
+   
+   </Dialog>
+  
 
-<DialogTitle>
-  Scan the QR code
+       
 
-</DialogTitle>
 
-     
-<QRCode
-   size={256}
-   style={{ height: "auto", maxWidth: "100%", width: "100%", padding: '20px'}}
-
-value = {`https://www.admin.arnxt.com/viewmodel?id=${clientprodid}`}
-
-/>
-
-</Dialog>
 
 <Dialog open= {openrenderedimage} onClose={handlecloseimage} hideBackdrop >
 
@@ -294,8 +430,8 @@ value = {`https://www.admin.arnxt.com/viewmodel?id=${clientprodid}`}
                                    <div className='alertstatusimage' id = {`alertstatus_${index}`} >
                                    <Alert severity="success" variant='filled' ></Alert>
                                     </div>
-
-                              
+                                      
+                                
      
                              </div>
                              <div style={{marginTop:'10px', display:'flex', width:'100%'}}>
@@ -346,28 +482,38 @@ value = {`https://www.admin.arnxt.com/viewmodel?id=${clientprodid}`}
                              <div style={{marginTop:'5px', display:'flex', justifyContent:'start',alignItems:'start', width:'100%'}}>
                                 <div className='clientdatadiv1'>
                                 <span style={{display:'flex'}}>  <p className='labelclient'>Modeler : </p>  <p >{item.modeler}</p></span>
+                                 
 
                                </div>
+
+
                                  
      
                              </div>
 
-                             {
-                              item.statusval === 'Models Uploaded' ? 
+                          
                               <div style={{marginTop:'5px', display:'flex', width:'100%'}}>
-                       
-                              <div style={{marginLeft:'5px', display:'flex', gap:'5px'}}>
-                                <Button variant='contained' color='primary' onClick={()=>handlemodelopen(item.Id)}>
-                                 View Model
-                                </Button>
-                                <Button variant='contained' color='primary' onClick={()=>handelopenimage(item.renderedimage)}>
-                                   View Rendered image
-                                </Button>
-                        
-                              </div>
 
-                         </div> : ''
-                             }
+                                {
+                                  item.glburl === undefined && item.renderedimage === undefined ?  '' 
+
+                                  : 
+                                  <div style={{marginLeft:'5px', display:'flex', gap:'5px'}}>
+                                  <Button variant='contained' color='primary' onClick={()=>handlemodelopen(item.Id)}>
+                                   View Model
+                                  </Button>
+                                  <Button variant='contained' color='primary' onClick={()=>handelopenimage(item.renderedimage)}>
+                                     View Rendered image
+                                  </Button>
+                          
+                                </div> 
+
+                                  
+                          
+                                }
+                       
+
+                         </div>
                        
                              <div style={{marginTop:'10px', display:'flex', width:'100%'}}>
                              <select  style={{minWidth: '140px'}} id= {`finalstatus_${index}`} onChange={(e)=>handlefinalstatuschange(e,index)} >
@@ -377,6 +523,8 @@ value = {`https://www.admin.arnxt.com/viewmodel?id=${clientprodid}`}
                                       <option value = {'Product live'}><p>Product live</p></option>
      
                                   </select>
+
+         
                                     <div id={`rejectreason_${index}`} style={{display:'none'}}>
                                        <TextField variant='outlined' label='Rejection reason' id={`rejectionvalue_${index}`} />
                                        </div>
@@ -393,7 +541,7 @@ value = {`https://www.admin.arnxt.com/viewmodel?id=${clientprodid}`}
                              </div> 
                              
                           </div>
-                          <div></div>
+                         
      
                          
                          </div>    

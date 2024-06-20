@@ -87,11 +87,14 @@ const uploadallfilesurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.c
         }
       }
 
-    const fileselectglb = (e)=>{
+    const fileselectglb = (e,index)=>{
+
+    
           
-        let val = document.getElementById("glbfile").value;
+        let val = document.getElementById(`glbfile_${index}`).value;
         let indx = val.lastIndexOf(".") + 1;
         let filetype = val.substr(indx, val.length).toLowerCase();
+
     
         if (filetype === 'glb') {
           let files = Array.from(e.target.files);
@@ -113,20 +116,26 @@ const uploadallfilesurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.c
     
             reader.readAsDataURL(file);
           });
+
+     
         } else {
 
             window.alert('please select a glb file')
-             document.getElementById("glbfile").value = ''
+             document.getElementById(`glbfile_${index}`).value = ''
             
             return
       
         }
+
+      
     }
 
+
+
     
-    const fileselectusdz = (e)=>{
+    const fileselectusdz = (e,index)=>{
           
-        let val = document.getElementById("usdzfile").value;
+        let val = document.getElementById(`usdzfile_${index}`).value;
         let indx = val.lastIndexOf(".") + 1;
         let filetype = val.substr(indx, val.length).toLowerCase();
     
@@ -153,16 +162,16 @@ const uploadallfilesurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.c
         } else {
 
             window.alert('please select an usdz file')
-             document.getElementById("usdzfile").value = ''
+             document.getElementById(`usdzfile_${index}`).value = ''
             
             return
       
         }
     }
 
-    const uploadUsdzFile = async ()=>{
+    const uploadUsdzFile = async (index)=>{
 
-       if(document.getElementById('usdzfile').value === ''){
+       if(document.getElementById(`usdzfile_${index}`).value === ''){
           window.alert('Please select an usdz file')
           return
        }
@@ -199,7 +208,7 @@ const uploadallfilesurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.c
                     ['usdzurl'] : imgurl
                   })
    
-               document.getElementById('alertdivusdzfile').style.display = 'flex'
+               document.getElementById(`alertdivusdzfile_${index}`).style.display = 'flex'
 
           
  
@@ -214,9 +223,13 @@ const uploadallfilesurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.c
      
     }
 
+  
 
-    const uploadGlbFile = async ()=>{
-      if(document.getElementById('glbfile').value === ''){
+
+    const uploadGlbFile = async (index)=>{
+
+      console.log(document.getElementById(`glbfile_${index}`).value)
+      if(document.getElementById(`glbfile_${index}`).value === ''){
         window.alert('Please select a glb file')
         return
      }
@@ -253,7 +266,7 @@ const uploadallfilesurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.c
                     ['glburl'] : imgurl
                   })
    
-               document.getElementById('alertdivglbfile').style.display = 'flex'
+               document.getElementById(`alertdivglbfile_${index}`).style.display = 'flex'
 
           
  
@@ -282,9 +295,9 @@ const uploadallfilesurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.c
   }
  
 
-    const fileselectimage = (e)=>{
+    const fileselectimage = (e, index)=>{
           
-        let val = document.getElementById("imagefile").value;
+        let val = document.getElementById(`imagefile_${index}`).value;
         let indx = val.lastIndexOf(".") + 1;
         let filetype = val.substr(indx, val.length).toLowerCase();
     
@@ -322,15 +335,15 @@ const uploadallfilesurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.c
         } else {
 
             window.alert('Only jpeg jpg png files are allowed')
-             document.getElementById("imagefile").value = ''
+             document.getElementById(`imagefile_${index}`).value = ''
             
             return
       
         }
     }
 
-    const uploadImageFile = async ()=>{
-      if(document.getElementById('imagefile').value === ''){
+    const uploadImageFile = async (index)=>{
+      if(document.getElementById(`imagefile_${index}`).value === ''){
         window.alert('Please select an jpeg,jpg,png file')
         return
      }
@@ -367,7 +380,7 @@ const uploadallfilesurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.c
                     ['imageurl'] : imgurl
                   })
    
-               document.getElementById('alertdivimagefile').style.display = 'flex'
+               document.getElementById(`alertdivimagefile_${index}`).style.display = 'flex'
 
                  }
      
@@ -463,7 +476,7 @@ const uploadallfilesurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.c
                           <div className='clientdatadiv4'>
                              <div style={{marginTop:'10px', display:'flex', width:'100%'}}>
                              <div >
-                <Button
+                {/* <Button
              component="label"
       
              role={undefined}
@@ -473,25 +486,25 @@ const uploadallfilesurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.c
               
                >
              Upload Glb file
-      <VisuallyHiddenInput type="file"   id= 'glbfile'  onChange={fileselectglb} />
-    </Button>
+      <VisuallyHiddenInput type="file"   id= {`glbfile_${index}`}  onChange={(e)=>fileselectglb(e, index)} />
+    </Button> */}
+
+                <input type='file' id= {`glbfile_${index}`}  onChange={(e)=>fileselectglb(e, index)} />
 
                 </div>
                                   <div style={{marginLeft:'5px'}}>
-                                  <Button variant='contained'  onClick={()=>uploadGlbFile()} >Upload</Button>
+                                  <Button variant='contained'  onClick={()=>uploadGlbFile(index)} >Upload</Button>
                                   </div>
 
-                                   <div className='alertstatusimage'  id = {`alertdivglbfile`} >
+                                   <div className='alertstatusimage'  id = {`alertdivglbfile_${index}`} >
                                    <Alert severity="success" variant='filled' ></Alert>
                                     </div>
 
-                              
-     
                              </div>
                              <div style={{marginTop:'10px', display:'flex', width:'100%'}}>
 
                              <div >
-                <Button
+                {/* <Button
              component="label"
              role={undefined}
                variant="contained"
@@ -499,16 +512,18 @@ const uploadallfilesurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.c
                startIcon={<CloudUploadIcon />}
                >
              Upload Usdz file
-      <VisuallyHiddenInput type="file" id ='usdzfile' onChange={fileselectusdz} />
-    </Button>
+      <VisuallyHiddenInput type="file" id ={`usdzfile_${index}`} onChange={(e)=>fileselectusdz(e,index)} />
+    </Button> */}
+
+    <input  type="file" id ={`usdzfile_${index}`} onChange={(e)=>fileselectusdz(e,index)}/>
 
                 </div>
                      
                                   <div style={{marginLeft:'5px'}}>
-                                  <Button variant='contained' onClick={()=>uploadUsdzFile()} >Upload</Button>
+                                  <Button variant='contained' onClick={()=>uploadUsdzFile(index)} >Upload</Button>
 
                                   </div>
-                                  <div className='alertstatusimage' id = {`alertdivusdzfile`} >
+                                  <div className='alertstatusimage' id = {`alertdivusdzfile_${index}`} >
                                    <Alert severity="success" variant='filled' ></Alert>
                                     </div>
                                  
@@ -517,7 +532,7 @@ const uploadallfilesurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.c
                              <div style={{marginTop:'10px', display:'flex', width:'100%'}}>
 
         <div >
-<Button
+{/* <Button
 component="label"
 role={undefined}
 variant="contained"
@@ -525,16 +540,18 @@ tabIndex={-1}
 startIcon={<CloudUploadIcon />}
 >
 Upload image
-<VisuallyHiddenInput type="file" id='imagefile' onChange={fileselectimage} />
-</Button>
+<VisuallyHiddenInput type="file" id={`imagefile_${index}`} onChange={(e)=>fileselectimage(e,index)} />
+</Button> */}
+
+<input type="file" id={`imagefile_${index}`} onChange={(e)=>fileselectimage(e,index)} />
 
 </div>
 
      <div style={{marginLeft:'5px'}}>
-     <Button variant='contained' onClick={()=>uploadImageFile()} >Upload</Button>
+     <Button variant='contained' onClick={()=>uploadImageFile(index)} >Upload</Button>
 
      </div>
-     <div className='alertstatusimage' id = {`alertdivimagefile`} >
+     <div className='alertstatusimage' id = {`alertdivimagefile_${index}`} >
       <Alert severity="success" variant='filled' ></Alert>
        </div>
 </div>

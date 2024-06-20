@@ -106,9 +106,9 @@ const Uploadclient = () => {
                  if(res.status === 200){
                   setUploadedItem(res.data.Item)
                  
-                   document.querySelector('.alertdivimage').style.display = 'flex'
+                   document.querySelector('.alertdiv').style.display = 'flex'
                    setTimeout(() => {
-                   document.querySelector('.alertdivimage').style.display = 'none'
+                   document.querySelector('.alertdiv').style.display = 'none'
                     
                    }, 3000);
   
