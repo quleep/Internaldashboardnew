@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { setUserSession } from './service/AuthService';
 import axios from 'axios';
+import TextField from '@mui/material/TextField';
 const adminloginurl= 'https://4xuh6eqvr6.execute-api.ap-south-1.amazonaws.com/production/adminlogin';
 
 const Login = ({history}) => {
@@ -55,15 +56,18 @@ const Login = ({history}) => {
     <div  className='loginbackground'>
 
 <form class="login"  onSubmit={loginHandler}>
-  <h2>ARnxt, Users!</h2>
+  <h2>ArNXT Users!</h2>
   <p>Please log in</p>
-  <input type='email' onChange={event=> setLoginEmail(event.target.value)} placeholder='ARnxt email' />
-  <input type='password'  onChange={event=> setLoginPassword(event.target.value)} placeholder='employee id' />
+
+   <div style={{display:'flex', gap:'10px', flexDirection:'column'}}>
+   <TextField fullWidth label="ARnxt email"  onChange={event=> setLoginEmail(event.target.value)}  variant="outlined" />
+   <TextField fullWidth label="Employee Id"   onChange={event=> setLoginPassword(event.target.value)}  variant="outlined" />
+
+   {/* <TextField fullWidth label="employee id"  type='password'  onChange={event=> setLoginPassword(event.target.value)} name='productname'  variant="outlined" /> */}
+   </div>
+
   <input type="submit" value="Log In" style={{cursor:'pointer'}} />
-  <div class="links">
-  
-   
-  </div>
+
 </form>
     {
       message && <p  style={{color:'red'}}>{message}</p>

@@ -690,11 +690,6 @@ if (fileglb){
          
        if(filegltf){
 
-     
-
-       
-       
-  
         fetch(urlimagesend,{
           method:'POST',
           body: filegltf.name
@@ -1048,16 +1043,6 @@ if(height){
  let useremail= JSON.parse(userdata)
   let loginuser= useremail.email
   let roleuse= useremail.role
-
-
-
-
-
-
-
-
-
-  
 
   const handlemodelsubmit=(pid,len)=>{
 
@@ -1646,6 +1631,12 @@ const searchHandlerProduct=()=>{
   })
 
 }
+
+const handlemodelerassignclient = ()=>{
+
+  history.push('/assignmodeler')
+
+}
 const searchHandlerMerchant=()=>{
   const body={
     merchantid: Number(merchantinput)
@@ -1769,6 +1760,52 @@ const searchHandlerQualityMerchant=()=>{
  }
 
 
+ const handleclientupload = ()=>{
+
+  if(roleuse === 'user' || roleuse === 'admin' ){
+
+     history.push('/modeluploadclient')
+
+  }else{
+    window.alert('Access Denied')
+  }
+      
+ }
+
+ const handleClientImages = ()=>{
+  if(roleuse === 'modelhead' || roleuse === 'admin' ){
+
+    history.push('/uploadclient')
+
+ }else{
+   window.alert('Access Denied')
+ }
+    
+ }
+
+ const handleManageLuxe = ()=>{
+  if(roleuse === 'modelhead' || roleuse === 'admin' ){
+
+    history.push('/luxeadmin')
+
+ }else{
+   window.alert('Access Denied')
+ }
+   
+ }
+ const handleBulkUpload = ()=>{
+  if(roleuse === 'modelhead' || roleuse === 'admin' ){
+
+    history.push('/uploadbulk')
+
+ }else{
+   window.alert('Access Denied')
+ }
+   
+ }
+
+
+
 
   return (
     <div>
@@ -1799,20 +1836,29 @@ const searchHandlerQualityMerchant=()=>{
       </div>
       <img src={Divider} alt="Your SVG" className="divider-svg" />
       <div >
-        <p  className="navoperation"  style={{cursor:'pointer'}}><a href="/uploadbulk"   >Bulk Upload</a></p>
+        <p  className="navoperation"  style={{cursor:'pointer'}}><a  onClick={handleBulkUpload}  >Bulk Upload</a></p>
         <div className="alert-box warning3" id='warning3' >Access Denied !</div>
       </div>
       <img src={Divider} alt="Your SVG" className="divider-svg" />
       <div >
-        <p  className="navoperation"  style={{cursor:'pointer'}}><a href="/luxeadmin"   >Manage Luxe</a></p>
+        <p  className="navoperation"  style={{cursor:'pointer'}}><a onClick={handleClientImages}  >Upload client data</a></p>
         <div className="alert-box warning3" id='warning3' >Access Denied !</div>
       </div>
       <img src={Divider} alt="Your SVG" className="divider-svg" />
+      <div >
+        <p  className="navoperation"  style={{cursor:'pointer'}}><a  onClick={handleManageLuxe}  >Manage Luxe</a></p>
+        <div className="alert-box warning3" id='warning3' >Access Denied !</div>
+      </div>
+      <img src={Divider} alt="Your SVG" className="divider-svg" />
+      <div >
+        <p  className="navoperation"  style={{cursor:'pointer'}}><a href="" onClick={handleclientupload}   >Upload client models</a></p>
+        <div className="alert-box warning3" id='warning3' >Access Denied !</div>
+      </div>
 
-      <div >
+      {/* <div >
         <p  className="navoperation"  style={{cursor:'pointer'}}><a href="/uploadrepo"   >Upload to repo</a></p>
         <div className="alert-box warning3" id='warning3' >Access Denied !</div>
-      </div>
+      </div> */}
     </div>
 
   
@@ -1827,6 +1873,11 @@ const searchHandlerQualityMerchant=()=>{
                 <input  type='number'  onChange={event=> setMerchantInput(event.target.value)} />
 
 
+                </div>
+                <div className='search'>
+                    <button 
+                    onClick={handlemodelerassignclient}
+                    >Assign modeler for client data</button>
                 </div>
                 <div className='search'>
                     <button 

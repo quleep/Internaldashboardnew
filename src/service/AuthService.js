@@ -11,9 +11,11 @@ module.exports=  {
     getToken: function(){
         return sessionStorage.getItem('token')
     },
-    setUserSession: function(user, token){
+    setUserSession: function(user, token, name){
         sessionStorage.setItem('user', JSON.stringify(user))
         sessionStorage.setItem('token', token)
+        sessionStorage.setItem('username', JSON.stringify(name))
+        
     },
      resetUserSession: function(){
    

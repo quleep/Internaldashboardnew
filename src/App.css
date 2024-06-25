@@ -42,6 +42,121 @@
   margin-top: 120px;
   
 }
+.alertstatusimage{
+   display: none;
+   margin-left: 10px;
+   height: 40px;
+   justify-content: center;
+   align-items: center;
+ 
+
+}
+.clientalldatacontainer{
+
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+
+}
+.clientdatamain{
+
+  margin-left: 120px;
+  margin-right: 120px;
+  margin-top: 120px;
+
+  width: 100%;
+  height: auto;
+  
+}
+.clientdatamain>*{
+  flex: 1 1 100%;
+  margin: 10px;
+ 
+  border-radius: 10px;
+  box-shadow: 5px 5px 5px gainsboro;
+
+}
+.clientdatainsidecontainer{
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+
+}
+.clientdatainsidecontainer>*{
+  flex: 1 1 auto;
+  margin: 10px;
+  height: 100%;
+
+}
+.clientdatadiv1{
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  width: 100%;
+  margin: 5px;
+  flex-direction: column;
+ 
+  
+}
+.clientdatadiv1 p{
+  font-family: 'Montserrat',sans-serif;
+  margin-left: 5px;
+  padding: 5px;
+  
+  
+   
+}
+.clientdatadiv2{
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  width: 100%;
+  margin: 5px;
+  flex-direction: column;
+
+  padding: 0px;
+
+
+}
+.clientdatadiv2 p{
+  font-family: 'Montserrat',sans-serif;
+  margin-left: 5px;
+  padding: 0px;
+
+}
+.clientdatadiv3{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 5px;
+   max-height: 300px;
+   overflow-y: scroll;
+  flex-direction: column;
+}
+.clientdatadiv3 p{
+  font-family: 'Montserrat',sans-serif;
+}
+.clientdatadiv4 p{
+  font-family: 'Montserrat',sans-serif;
+}
+.labelclient{
+  font-family: 'Montserrat',sans-serif;
+  font-weight: 600;
+}
+.clientdatadiv4{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 5px;
+   
+  
+  flex-direction: column;
+}
 .luxecontentinside{
   width: 800px;
   display: flex;
@@ -664,7 +779,11 @@
 .loginbackground{
   width: 100%;
   height: 100vh;
-
+  background-image: url('https://arnxtdealerpageproducts.s3.ap-south-1.amazonaws.com/blue-gradient-blank-background-business_53876-120508.avif');
+  background-repeat: no-repeat;
+  background-size: cover;
+  overflow: hidden;
+ 
 }
 .tickdisplay{
   display: none;
@@ -675,11 +794,11 @@
   padding: 40px 50px;
 width:  500px;
 height: 500px;
-  border-radius: 5px;
-  background: rgb(192, 193, 196);
-  box-shadow: 1px 1px 1px #666;
+
+
+  box-shadow: 5px 5px 5px 5px #c7c6c6;
 }
-.login input {
+/* .login input {
   width: 100%;
   display: block;
   box-sizing: border-box;
@@ -691,9 +810,9 @@ height: 500px;
 }
 .login input:focus{
   outline: none;
-}
+} */
 
-.login input[type="text"],
+/* .login input[type="text"],
 .login input[type="password"] {
   border: 1px solid #c0c0c0;
   transition: 0.2s;
@@ -704,7 +823,7 @@ height: 500px;
   border-color: #394be7;
   outline: none;
   transition: all 0.2s ease-in-out;
-}
+} */
 
 .login input[type="submit"] {
   border: none;
@@ -713,6 +832,8 @@ height: 500px;
   font-weight: bold;
   transition: 0.2s;
   margin: 20px 0px;
+  width: 100%;
+  height: 50px;
 }
 
 .login input[type="submit"]:hover {
@@ -2244,7 +2365,7 @@ hr {
 }
 
 
-
+iframe#webpack-dev-server-client-overlay{display:none!important}
 
 
 @media screen 

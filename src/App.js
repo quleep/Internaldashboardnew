@@ -30,6 +30,10 @@ import Repoupload from "./Repoupload";
 import Repodisplay from "./Repodisplay";
 import Test from "./Test";
 import Luxeadmin from "./Luxeadmin";
+import Uploadclient from "./Uploadclient";
+import Modelerasignpage from "./Modelerasignpage";
+import Uploadclientmodel from "./Uploadclientmodel";
+import Viewarclient from "./Viewarclient";
 
 
 function App() {
@@ -59,20 +63,14 @@ function App() {
           <Route path="/uploadrepo" component={Repoupload} />
           <Route path="/repodisplay" component={Repodisplay} />
           <Route path="/luxeadmin" component={Luxeadmin} />
+          <Route path="/uploadclient" component={Uploadclient} />
+          <Route path="/assignmodeler" component={Modelerasignpage} />
+          <Route path="/modeluploadclient" component={Uploadclientmodel} />
+          <Route path="/viewmodel" component={Viewarclient} />
+
+
 
           <Route path="/test" component={Test} />
-
-
-
-
-
-
-
-
-
-
-        
-
 
         </Switch>
       </Router>
