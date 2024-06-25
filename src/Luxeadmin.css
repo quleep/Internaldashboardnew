@@ -1,0 +1,11 @@
+.allTheField{
+      & .MuiFormLabel-asterisk { color: 'red'; font-size: '1.5rem'} 
+}
+#styleName{
+      width: '223px'
+}
+#AreaDescription{
+      width: 223px;
+      height: 200px;
+      margin: auto;
+}
