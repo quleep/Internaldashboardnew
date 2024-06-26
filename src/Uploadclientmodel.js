@@ -493,7 +493,7 @@ const uploadallfilesurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.c
 
                 </div>
                                   <div style={{marginLeft:'5px'}}>
-                                  <Button variant='contained'  onClick={()=>uploadGlbFile(index)} >Upload</Button>
+                                  <Button variant='contained'  onClick={()=>uploadGlbFile(index)} >Upload Glb</Button>
                                   </div>
 
                                    <div className='alertstatusimage'  id = {`alertdivglbfile_${index}`} >
@@ -520,7 +520,7 @@ const uploadallfilesurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.c
                 </div>
                      
                                   <div style={{marginLeft:'5px'}}>
-                                  <Button variant='contained' onClick={()=>uploadUsdzFile(index)} >Upload</Button>
+                                  <Button variant='contained' onClick={()=>uploadUsdzFile(index)} >Upload Usdz</Button>
 
                                   </div>
                                   <div className='alertstatusimage' id = {`alertdivusdzfile_${index}`} >
@@ -548,7 +548,7 @@ Upload image
 </div>
 
      <div style={{marginLeft:'5px'}}>
-     <Button variant='contained' onClick={()=>uploadImageFile(index)} >Upload</Button>
+     <Button variant='contained' onClick={()=>uploadImageFile(index)} >Upload Image</Button>
 
      </div>
      <div className='alertstatusimage' id = {`alertdivimagefile_${index}`} >
