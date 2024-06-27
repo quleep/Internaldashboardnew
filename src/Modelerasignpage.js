@@ -80,10 +80,10 @@ const Modelerasignpage = () => {
 
      const updateimgstatus = async (id, index)=>{
 
-            if(document.getElementById(`imageselect_${index}`).value === ''){
-               window.alert('Please accept of reject image')
-               return
-            }
+            // if(document.getElementById(`imageselect_${index}`).value === ''){
+            //    window.alert('Please accept of reject image')
+            //    return
+            // }
         
         const body = {
              Id : id,
@@ -110,19 +110,17 @@ const Modelerasignpage = () => {
 
         }
 
-
-
      }
      const assignModeler = async (id,  index, statusvalue)=>{
 
-      if( document.getElementById(`imageselect_${index}`).value === '' ){
-         window.alert('Please accept or reject the image first')
-         return
-      }
-      if(statusvalue === 'Image Rejected'){
-         window.alert('Please accept the image to assign modeler')
-         return 
-      }
+      // if( document.getElementById(`imageselect_${index}`).value === '' ){
+      //    window.alert('Please accept or reject the image first')
+      //    return
+      // }
+      // if(statusvalue === 'Image Rejected'){
+      //    window.alert('Please accept the image to assign modeler')
+      //    return 
+      // }
 
       if(document.getElementById(`modelerselect_${index}`).value === ''){
         window.alert('please select a modeler')
@@ -355,8 +353,6 @@ function base64ToImageFile(base64String, fileName, fileType,len) {
         <div className='statusbardiv'>
         <button onClick={()=>setCurrentStatus('Images Uploaded')} >Images Uploaded</button>
 
-        <button onClick={()=>setCurrentStatus('Image Accepted')} >Images Accepted</button>
-             
               <button onClick={()=>setCurrentStatus('Image Rejected')} >Images Rejected</button>
               <button onClick={()=>setCurrentStatus('Modeler assigned')} >Modeler Assigned</button>
 
@@ -365,6 +361,10 @@ function base64ToImageFile(base64String, fileName, fileType,len) {
               <button onClick={()=>setCurrentStatus('Model Rejected')} >Models Rejected</button>
 
               <button onClick={()=>setCurrentStatus('Product live')}>Product Live</button>
+          </div>
+
+          <div>
+            <p>Product Count : {clientdata && clientdata.length}</p>
           </div>
 
         <div className='clientalldatacontainer'>
@@ -447,7 +447,7 @@ function base64ToImageFile(base64String, fileName, fileType,len) {
                              <div style={{marginTop:'10px', display:'flex', width:'100%'}}>
                              <select  style={{minWidth: '140px'}} id= {`imageselect_${index}`} onChange={(e)=>setImageStatus(e.target.value)} >
                                      <option  disabled selected value={''}>Image Status</option>
-                                     <option><p>Image Accepted</p></option>
+                             
                                      <option><p>Image Rejected</p></option>
      
                                   </select>
@@ -458,9 +458,7 @@ function base64ToImageFile(base64String, fileName, fileType,len) {
                                    <div className='alertstatusimage' id = {`alertstatus_${index}`} >
                                    <Alert severity="success" variant='filled' ></Alert>
                                     </div>
-                                      
-                                
-     
+                               
                              </div>
                              <div style={{marginTop:'10px', display:'flex', width:'100%'}}>
 
@@ -473,9 +471,7 @@ function base64ToImageFile(base64String, fileName, fileType,len) {
                                      <option value={'modeler4@arnxt.com'}><p>Modeler4</p></option>
                                      <option value={'modeler5@arnxt.com'}><p>Modeler5</p></option>
                                      <option value={'modeler6@arnxt.com'}><p>Modeler6</p></option>
-     
-     
-                                  </select>
+                                      </select>
                                   <div style={{marginLeft:'5px'}}>
                                   <Button variant='contained' onClick={()=>assignModeler(item.Id, index, item.statusval)}>Assign</Button>
 
