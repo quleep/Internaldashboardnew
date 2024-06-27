@@ -14,6 +14,7 @@ const Modelerasignpage = () => {
     const updateimgstatusurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/updateimagestatusclient'
      const assignmodelerurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/assignmodelerclient'
      const finalstatusuploadurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/updatestatusclientupload'
+     const statusdataurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/getclientdatastatus'
 
     const [clientdata, setClientData] = useState()
     const [imagestatus, setImageStatus] = useState()
@@ -27,6 +28,7 @@ const Modelerasignpage = () => {
     const [dataupdate, setDataUpdate] = useState(false)
     const [qrcodeimage, setQrcodeImage] = useState('')
     const [qrcodeurl, setQrcodeUrl] = useState()
+    const [currentstatus, setCurrentStatus] = useState()
 
     const handlepopupclose = ()=>{
       setPopUp(false)
@@ -48,11 +50,19 @@ const Modelerasignpage = () => {
 
      useEffect(()=>{
 
+      console.log('getttingcalled')
+
 
         const fetchdata = async ()=>{
+
+          const body ={
+            statusvalue: currentstatus
+          }
           try{
 
-            const response = await axios.get(dataurl)
+            const response = await axios.post(statusdataurl, body).catch(err=>{
+              console.log(err)
+            })
             setClientData(response.data)
 
           }catch(err){
@@ -62,11 +72,9 @@ const Modelerasignpage = () => {
 
         }
 
-   
-
         fetchdata()
       
-     },[dataupdate])
+     },[dataupdate, currentstatus])
 
 
 
@@ -325,14 +333,39 @@ function base64ToImageFile(base64String, fileName, fileType,len) {
        })
      }
 
+
+    //  const handlegetliveproduct = async (val)=>{
+
+    //   const body = {
+    //     statusvalue: val
+    //   }
+
+    //   const response = await axios.post(statusdataurl, body).catch(err=>{
+    //     console.log(err)
+    //   })
+
+    //   console.log(response.data)
+
+    //  }
  
-
-    
-
   return (
     <div>
 
         <Navbar/>
+        <div className='statusbardiv'>
+        <button onClick={()=>setCurrentStatus('Images Uploaded')} >Images Uploaded</button>
+
+        <button onClick={()=>setCurrentStatus('Image Accepted')} >Images Accepted</button>
+             
+              <button onClick={()=>setCurrentStatus('Image Rejected')} >Images Rejected</button>
+              <button onClick={()=>setCurrentStatus('Modeler assigned')} >Modeler Assigned</button>
+
+              <button onClick={()=>setCurrentStatus('Models Uploaded')} >Models Uploaded</button>
+              <button onClick={()=>setCurrentStatus('Model Accepted')} >Models Accepted</button>
+              <button onClick={()=>setCurrentStatus('Model Rejected')} >Models Rejected</button>
+
+              <button onClick={()=>setCurrentStatus('Product live')}>Product Live</button>
+          </div>
 
         <div className='clientalldatacontainer'>
 
@@ -363,7 +396,7 @@ function base64ToImageFile(base64String, fileName, fileType,len) {
 </div>
 
 </Dialog>
-             
+ 
              <div className='clientdatamain'>
 
                 {
