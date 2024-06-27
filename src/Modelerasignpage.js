@@ -25,7 +25,7 @@ const Modelerasignpage = () => {
     const [renderedimage, setRenderedImage] = useState()
     const [clientprodid, setClientProdId] = useState()
     const [dataupdate, setDataUpdate] = useState(false)
-    const [qrcodeimage, setQrcodeImage] = useState()
+    const [qrcodeimage, setQrcodeImage] = useState('')
     const [qrcodeurl, setQrcodeUrl] = useState()
 
     const handlepopupclose = ()=>{
@@ -166,10 +166,13 @@ const Modelerasignpage = () => {
          }
    
          }
-   
-            
 
-         
+                      
+     if(qrcodeimage === ''){
+      window.alert('please save the qr code first')
+      return
+    }
+     
        const body ={
           Id: id,
           statusvalue : document.getElementById(`finalstatus_${index}`).value,
@@ -205,7 +208,7 @@ const Modelerasignpage = () => {
 
           if(e.target.value === 'Product live'){
 
-      
+
      
              
           }
@@ -310,11 +313,8 @@ function base64ToImageFile(base64String, fileName, fileType,len) {
     
     }
     
-
- 
-
      const handlesaveqrcode = ()=>{
-    
+
 
        const qrcodevalue = document.getElementById(`productqrcode`)
   
