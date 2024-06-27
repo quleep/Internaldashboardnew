@@ -341,7 +341,7 @@ function base64ToImageFile(base64String, fileName, fileType,len) {
           <div id= 'productqrcode' className='qrcodecontainer'>
    
    <QRCode
-      size={256}
+      size={80}
       style={{ height: "auto", maxWidth: "100%", width: "100%", padding: '20px'}}
    
    value = {`https://viewar.arnxt.com/arview/viewinar?id=${clientprodid}`}
@@ -355,11 +355,6 @@ function base64ToImageFile(base64String, fileName, fileType,len) {
    
    </Dialog>
   
-
-       
-
-
-
 <Dialog open= {openrenderedimage} onClose={handlecloseimage} hideBackdrop >
 
 
