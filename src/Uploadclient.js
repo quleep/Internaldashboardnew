@@ -116,7 +116,6 @@ const Uploadclient = () => {
                   setFormData({
                     productname : '',
                     brandname : '',
-                 
                     length: '',
                     width : '',
                     height : '',
@@ -339,8 +338,6 @@ const Uploadclient = () => {
        <TextField fullWidth label="Product page url" type='text' name = 'pageurl' value={formdata.pageurl} onChange={handleinputchange} variant="outlined" />
      </Grid>
 
-
-   
        < >
 
        <Grid item xs= {12} style={{ display:'flex'}} >

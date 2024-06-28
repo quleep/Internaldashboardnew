@@ -14,6 +14,7 @@ const Modelerasignpage = () => {
     const updateimgstatusurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/updateimagestatusclient'
      const assignmodelerurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/assignmodelerclient'
      const finalstatusuploadurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/updatestatusclientupload'
+     const statusdataurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/getclientdatastatus'
 
     const [clientdata, setClientData] = useState()
     const [imagestatus, setImageStatus] = useState()
@@ -25,8 +26,9 @@ const Modelerasignpage = () => {
     const [renderedimage, setRenderedImage] = useState()
     const [clientprodid, setClientProdId] = useState()
     const [dataupdate, setDataUpdate] = useState(false)
-    const [qrcodeimage, setQrcodeImage] = useState()
+    const [qrcodeimage, setQrcodeImage] = useState('')
     const [qrcodeurl, setQrcodeUrl] = useState()
+    const [currentstatus, setCurrentStatus] = useState()
 
     const handlepopupclose = ()=>{
       setPopUp(false)
@@ -48,11 +50,19 @@ const Modelerasignpage = () => {
 
      useEffect(()=>{
 
+      console.log('getttingcalled')
+
 
         const fetchdata = async ()=>{
+
+          const body ={
+            statusvalue: currentstatus
+          }
           try{
 
-            const response = await axios.get(dataurl)
+            const response = await axios.post(statusdataurl, body).catch(err=>{
+              console.log(err)
+            })
             setClientData(response.data)
 
           }catch(err){
@@ -62,20 +72,18 @@ const Modelerasignpage = () => {
 
         }
 
-   
-
         fetchdata()
       
-     },[dataupdate])
+     },[dataupdate, currentstatus])
 
 
 
      const updateimgstatus = async (id, index)=>{
 
-            if(document.getElementById(`imageselect_${index}`).value === ''){
-               window.alert('Please accept of reject image')
-               return
-            }
+            // if(document.getElementById(`imageselect_${index}`).value === ''){
+            //    window.alert('Please accept of reject image')
+            //    return
+            // }
         
         const body = {
              Id : id,
@@ -102,19 +110,17 @@ const Modelerasignpage = () => {
 
         }
 
-
-
      }
      const assignModeler = async (id,  index, statusvalue)=>{
 
-      if( document.getElementById(`imageselect_${index}`).value === '' ){
-         window.alert('Please accept or reject the image first')
-         return
-      }
-      if(statusvalue === 'Image Rejected'){
-         window.alert('Please accept the image to assign modeler')
-         return 
-      }
+      // if( document.getElementById(`imageselect_${index}`).value === '' ){
+      //    window.alert('Please accept or reject the image first')
+      //    return
+      // }
+      // if(statusvalue === 'Image Rejected'){
+      //    window.alert('Please accept the image to assign modeler')
+      //    return 
+      // }
 
       if(document.getElementById(`modelerselect_${index}`).value === ''){
         window.alert('please select a modeler')
@@ -166,10 +172,13 @@ const Modelerasignpage = () => {
          }
    
          }
-   
-            
 
-         
+                      
+     if(qrcodeimage === ''){
+      window.alert('please save the qr code first')
+      return
+    }
+     
        const body ={
           Id: id,
           statusvalue : document.getElementById(`finalstatus_${index}`).value,
@@ -205,7 +214,7 @@ const Modelerasignpage = () => {
 
           if(e.target.value === 'Product live'){
 
-      
+
      
              
           }
@@ -310,11 +319,8 @@ function base64ToImageFile(base64String, fileName, fileType,len) {
     
     }
     
-
- 
-
      const handlesaveqrcode = ()=>{
-    
+
 
        const qrcodevalue = document.getElementById(`productqrcode`)
   
@@ -325,14 +331,41 @@ function base64ToImageFile(base64String, fileName, fileType,len) {
        })
      }
 
+
+    //  const handlegetliveproduct = async (val)=>{
+
+    //   const body = {
+    //     statusvalue: val
+    //   }
+
+    //   const response = await axios.post(statusdataurl, body).catch(err=>{
+    //     console.log(err)
+    //   })
+
+    //   console.log(response.data)
+
+    //  }
  
-
-    
-
   return (
     <div>
 
         <Navbar/>
+        <div className='statusbardiv'>
+        <button onClick={()=>setCurrentStatus('Images Uploaded')} >Images Uploaded</button>
+
+              <button onClick={()=>setCurrentStatus('Image Rejected')} >Images Rejected</button>
+              <button onClick={()=>setCurrentStatus('Modeler assigned')} >Modeler Assigned</button>
+
+              <button onClick={()=>setCurrentStatus('Models Uploaded')} >Models Uploaded</button>
+              <button onClick={()=>setCurrentStatus('Model Accepted')} >Models Accepted</button>
+              <button onClick={()=>setCurrentStatus('Model Rejected')} >Models Rejected</button>
+
+              <button onClick={()=>setCurrentStatus('Product live')}>Product Live</button>
+          </div>
+
+          <div>
+            <p>Product Count : {clientdata && clientdata.length}</p>
+          </div>
 
         <div className='clientalldatacontainer'>
 
@@ -341,7 +374,7 @@ function base64ToImageFile(base64String, fileName, fileType,len) {
           <div id= 'productqrcode' className='qrcodecontainer'>
    
    <QRCode
-      size={256}
+      size={80}
       style={{ height: "auto", maxWidth: "100%", width: "100%", padding: '20px'}}
    
    value = {`https://viewar.arnxt.com/arview/viewinar?id=${clientprodid}`}
@@ -355,11 +388,6 @@ function base64ToImageFile(base64String, fileName, fileType,len) {
    
    </Dialog>
   
-
-       
-
-
-
 <Dialog open= {openrenderedimage} onClose={handlecloseimage} hideBackdrop >
 
 
@@ -368,7 +396,7 @@ function base64ToImageFile(base64String, fileName, fileType,len) {
 </div>
 
 </Dialog>
-             
+ 
              <div className='clientdatamain'>
 
                 {
@@ -419,7 +447,7 @@ function base64ToImageFile(base64String, fileName, fileType,len) {
                              <div style={{marginTop:'10px', display:'flex', width:'100%'}}>
                              <select  style={{minWidth: '140px'}} id= {`imageselect_${index}`} onChange={(e)=>setImageStatus(e.target.value)} >
                                      <option  disabled selected value={''}>Image Status</option>
-                                     <option><p>Image Accepted</p></option>
+                             
                                      <option><p>Image Rejected</p></option>
      
                                   </select>
@@ -430,9 +458,7 @@ function base64ToImageFile(base64String, fileName, fileType,len) {
                                    <div className='alertstatusimage' id = {`alertstatus_${index}`} >
                                    <Alert severity="success" variant='filled' ></Alert>
                                     </div>
-                                      
-                                
-     
+                               
                              </div>
                              <div style={{marginTop:'10px', display:'flex', width:'100%'}}>
 
@@ -445,9 +471,7 @@ function base64ToImageFile(base64String, fileName, fileType,len) {
                                      <option value={'modeler4@arnxt.com'}><p>Modeler4</p></option>
                                      <option value={'modeler5@arnxt.com'}><p>Modeler5</p></option>
                                      <option value={'modeler6@arnxt.com'}><p>Modeler6</p></option>
-     
-     
-                                  </select>
+                                      </select>
                                   <div style={{marginLeft:'5px'}}>
                                   <Button variant='contained' onClick={()=>assignModeler(item.Id, index, item.statusval)}>Assign</Button>
 
