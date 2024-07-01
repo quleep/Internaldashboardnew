@@ -280,7 +280,7 @@ const Luxeadmin = () => {
 
           <div className=''>
             <Select id="categoryName" value={formData.categoryName} className='allTheField' name="categoryName" style={{ width: '223px', margin: 'auto', color: formData.categoryName === '' ? '#c4c4c4' : 'inherit' }} onChange={handleFormChange} displayEmpty inputProps={{ 'aria-label': 'Without label' }}>
-              <MenuItem value="" >Select Category</MenuItem>
+              <MenuItem value="" style={{display:"none"}}>Select Category</MenuItem>
               <MenuItem value="NEW ARRIVAL">NEW ARRIVAL</MenuItem>
               <MenuItem value="VIEW ALL RUGS">VIEW ALL RUGS</MenuItem>
               <MenuItem value="BESTSELLERS">BEST SELLERS</MenuItem>
@@ -293,7 +293,7 @@ const Luxeadmin = () => {
 
           <div className=''>
             <Select id="styleName" value={formData.style} name="style" style={{ width: '223px', margin: 'auto', color: formData.style === '' ? '#c4c4c4' : 'inherit' }} onChange={handleFormChange} displayEmpty inputProps={{ 'aria-label': 'Without label' }}>
-              <MenuItem value="">Select Style</MenuItem>
+              <MenuItem value="" style={{display:"none"}}>Select Style</MenuItem>
               <MenuItem value="Modern">Modern</MenuItem>
               <MenuItem value="Transitional">Transitional</MenuItem>
               <MenuItem value="Traditional">Traditional</MenuItem>
@@ -301,7 +301,7 @@ const Luxeadmin = () => {
           </div>
           <div className=''>
             <Select id="designName" value={formData.design} name="design" style={{ width: '223px', color: formData.design === '' ? '#c4c4c4' : 'inherit' }} onChange={handleFormChange} displayEmpty inputProps={{ 'aria-label': 'Without label' }}>
-              <MenuItem value="">Select Design</MenuItem>
+              <MenuItem value="" style={{display:"none"}}>Select Design</MenuItem>
               <MenuItem value="Abstract">Abstract</MenuItem>
               <MenuItem value="Oriental and Traditional">Oriental and Traditional</MenuItem>
               <MenuItem value="Moroccan and Tribal">Moroccan and Tribal</MenuItem>
@@ -315,7 +315,7 @@ const Luxeadmin = () => {
           </div>
           <div className=''>
             <Select id="collectionName" value={formData.collection} name="collection" style={{ width: '223px', color: formData.collection === '' ? '#c4c4c4' : 'inherit' }} onChange={handleFormChange} displayEmpty inputProps={{ 'aria-label': 'Without label' }}>
-              <MenuItem value="">Select Collection</MenuItem>
+              <MenuItem value="" style={{display:"none"}}>Select Collection</MenuItem>
               <MenuItem value="Acar">Acar</MenuItem>
               <MenuItem value="Aurora">Aurora</MenuItem>
               <MenuItem value="Clan">Clan</MenuItem>
@@ -345,16 +345,19 @@ const Luxeadmin = () => {
                 })}
               </div>
               <Select id="styleTags" value={''} name="tags" style={{ width: '207px', color: formData.tags.length === 0 ? '#c4c4c4' : 'inherit' }} onChange={handletagchange} displayEmpty inputProps={{ 'aria-label': 'Without label' }}>
-                <MenuItem value="">Select Tags</MenuItem>
-                <MenuItem value="Acar"> {tagArr.includes("Acar") ? <CheckIcon style={{ color: 'green' }} /> : null} Acar</MenuItem>
-                <MenuItem value="Aurora"> {tagArr.includes("Aurora") ? <CheckIcon style={{ color: 'green' }} /> : null} Aurora</MenuItem>
-                <MenuItem value="Clan"> {tagArr.includes("Clan") ? <CheckIcon style={{ color: 'green' }} /> : null} Clan</MenuItem>
-                <MenuItem value="Cyanna"> {tagArr.includes("Cyanna") ? <CheckIcon style={{ color: 'green' }} /> : null} Cyanna</MenuItem>
+                <MenuItem style={{display:"none"}} value="">Select Tags</MenuItem>
                 <MenuItem value="Letest"> {tagArr.includes("Letest") ? <CheckIcon style={{ color: 'green' }} /> : null} Letest</MenuItem>
+                <MenuItem value="Modern"> {tagArr.includes("Modern") ? <CheckIcon style={{ color: 'green' }} /> : null} Modern</MenuItem>
                 <MenuItem value="Transitional">{tagArr.includes("Transitional") ? <CheckIcon style={{ color: 'green' }} /> : null} Transitional</MenuItem>
                 <MenuItem value="Traditional">{tagArr.includes("Traditional") ? <CheckIcon style={{ color: 'green' }} /> : null} Traditional</MenuItem>
+                <MenuItem value="Abstract"> {tagArr.includes("Abstract") ? <CheckIcon style={{ color: 'green' }} /> : null} Abstract</MenuItem>
+                <MenuItem value="Oriental and Traditional"> {tagArr.includes("Oriental and Traditional") ? <CheckIcon style={{ color: 'green' }} /> : null} Oriental and Traditional</MenuItem>
+                <MenuItem value="Moroccan and Tribal"> {tagArr.includes("Moroccan and Tribal") ? <CheckIcon style={{ color: 'green' }} /> : null} Moroccan and Tribal</MenuItem>
+                <MenuItem value="Acar"> {tagArr.includes("Acar") ? <CheckIcon style={{ color: 'green' }} /> : null} Acar</MenuItem>
+                <MenuItem value="Aurora"> {tagArr.includes("Aurora") ? <CheckIcon style={{ color: 'green' }} /> : null} Aurora</MenuItem>
+                <MenuItem value="Cyanna"> {tagArr.includes("Cyanna") ? <CheckIcon style={{ color: 'green' }} /> : null} Cyanna</MenuItem>
               </Select>
-            </div>
+            </div>  
           </div>
 
           <div className=''>
@@ -369,7 +372,7 @@ const Luxeadmin = () => {
                   serviceList && serviceList.map((item, index) => (
                     <div key={index} className='' style={{ display: 'grid', gridTemplateColumns: "repeat(4, 1fr)", gap: '10px', marginLeft: '10px', justifyContent: 'center', alignItems: 'center', marginTop: '15px' }} >
                       <Select id="styleSize" value={item.productsize ? item.productsize : ""} name="productsize" onChange={(e) => handleServiceChange(e, index)} style={{ color: item.productsize === '' ? '#c4c4c4' : 'inherit' }} displayEmpty inputProps={{ 'aria-label': 'Without label' }}>
-                        <MenuItem value="">Select Size</MenuItem>
+                        <MenuItem style={{display:"none"}} value="">Select Size</MenuItem>
                         <MenuItem value="60X90">60X90</MenuItem>
                         <MenuItem value="90X150">90X150</MenuItem>
                         <MenuItem value="120X180">120X180</MenuItem>
@@ -434,8 +437,8 @@ const Luxeadmin = () => {
                         disabled
                         value={item.productgst ? item.productgst : "GST"}
                         // onChange={(e) => handleServiceChange(e, index)}
-                        required
-                        InputLabelProps={{ sx: { '& .MuiFormLabel-asterisk': { color: 'red', fontSize: '1.5rem' } } }}
+                        // required
+                        // InputLabelProps={{ sx: { '& .MuiFormLabel-asterisk': { color: 'red', fontSize: '1.5rem' } } }}
                       />
 
 
@@ -443,7 +446,7 @@ const Luxeadmin = () => {
                         name="productfreight"
                         type="text"
                         id="service"
-                        label="Freight"
+                        label="Freight%"
                         variant='outlined'
 
                         value={item.productfreight}
@@ -498,7 +501,7 @@ const Luxeadmin = () => {
               startIcon={<CloudUploadIcon />}
             >
               Upload file
-              <VisuallyHiddenInput type="file" multiple onChange={fileselectglb} />
+              <VisuallyHiddenInput type="file" multiple accept=".jpeg,.jpg,.png" onChange={fileselectglb} />
             </Button>
 
           </div>
