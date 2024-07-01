@@ -15,6 +15,11 @@ const Modelerasignpage = () => {
      const assignmodelerurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/assignmodelerclient'
      const finalstatusuploadurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/updatestatusclientupload'
      const statusdataurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/getclientdatastatus'
+    const uploadfileurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/uploadfilerepo'
+    const updateclientdataurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/updateclientdata'
+    const updateClientLiveurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/updateclientlivestatus'
+
+     const singleproducturl = ''
 
     const [clientdata, setClientData] = useState()
     const [imagestatus, setImageStatus] = useState()
@@ -29,6 +34,10 @@ const Modelerasignpage = () => {
     const [qrcodeimage, setQrcodeImage] = useState('')
     const [qrcodeurl, setQrcodeUrl] = useState()
     const [currentstatus, setCurrentStatus] = useState()
+    const [edit, setEdit] = useState(false)
+    const [singleclientdata, setSingleClientData] = useState()
+    const [imagefile, setImageFile] = useState([])
+   
 
     const handlepopupclose = ()=>{
       setPopUp(false)
@@ -38,7 +47,24 @@ const Modelerasignpage = () => {
       setPopUp(true)
       setClientProdId(id)
 
+   
+
      
+    }
+      const handleeditopen = (id)=>{
+        setEdit(true)
+
+        const newdata = clientdata.filter(item=>{
+             return item.Id === id
+        })
+
+    
+
+        setSingleClientData(newdata)
+         
+      }
+    const handleeditclose = ()=>{
+      setEdit(false)
     }
     const handelopenimage = (renderedimage)=>{
       setOpenRenderedImage(true)
@@ -49,9 +75,6 @@ const Modelerasignpage = () => {
     }
 
      useEffect(()=>{
-
-      console.log('getttingcalled')
-
 
         const fetchdata = async ()=>{
 
@@ -157,6 +180,31 @@ const Modelerasignpage = () => {
 
      }
 
+    const updateClientLiveStatus = async  (id, status)=>{
+      
+      const body = {
+          Id: id,
+          statusvalue : status
+      }
+
+      try{
+         const response = await axios.post(updateClientLiveurl , body)
+         if(response.status === 200){
+            setDataUpdate(true)
+            setTimeout(() => {
+            setDataUpdate(false)
+               
+            }, 3000);
+          return true
+         }
+      }catch(error){
+        console.log(error)
+      }
+
+   
+
+    }
+
      const handleFinalStatusUpdate = async (id, index)=>{
         
          if(document.getElementById(`finalstatus_${index}`).value === ''){
@@ -171,6 +219,14 @@ const Modelerasignpage = () => {
 
          }
    
+         }
+
+         if(document.getElementById(`finalstatus_${index}`).value === 'Live on client site'){
+           const res=    await updateClientLiveStatus( id , document.getElementById(`finalstatus_${index}`).value)
+
+           if(res){
+            return
+           }
          }
 
                       
@@ -345,7 +401,155 @@ function base64ToImageFile(base64String, fileName, fileType,len) {
     //   console.log(response.data)
 
     //  }
+
+    const handleinputchange = (e)=>{
+       const {name, value } = e.target
+        
+       const newarray = [...singleclientdata]
  
+        newarray[0][name] = value
+ 
+        setSingleClientData(newarray)
+           
+
+    }
+
+    
+    const fileToBase64 = (file, cb) => {
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = function () {
+        cb(null, reader.result)
+      }
+      reader.onerror = function (error) {
+        cb(error, null)
+      }
+    }
+
+    const handleselectupdateimage = (e)=>{
+
+       
+      let val = document.getElementById("updatefileimage").value;
+      let indx = val.lastIndexOf(".") + 1;
+      let filetype = val.substr(indx, val.length).toLowerCase();
+  
+      if (filetype === "jpg" || filetype === "png" || filetype === "jpeg") {
+        let files = Array.from(e.target.files);
+        files.forEach((file) => {
+          fileToBase64(file, (err, result) => {
+            if (result) {
+              // setFile(result);
+              // setFileName(file);
+      
+           
+            }
+          });
+  
+          const reader = new FileReader();
+  
+          reader.onload = () => {
+            if (reader.readyState === 2) {
+              // setImagesPreview((oldArray) => [...oldArray, reader.result]);
+              setImageFile((oldArray) => [...oldArray, file]);
+            }
+          };
+  
+          reader.readAsDataURL(file);
+        });
+      } else {
+        window.alert('please select png,jpg or jpeg file')
+      }
+        
+    }
+
+
+    const handleuploadeditimages= async ()=>{
+      if(imagefile.length === 0){
+        window.alert('Please select the file first')
+        return
+      }
+      let temparray = []
+              
+      {
+
+       for(let img of imagefile){
+
+        const url=  uploadfileurl;
+        await fetch(url,{
+         method: "POST",
+         body:  img.name
+       
+       }).then((res)=>res.json())
+          .then((res)=>{
+          
+         fetch(res.uploadURL, {
+             
+             method: "PUT",
+             headers: {
+               "ContentType": "image/jpeg",
+             
+             },
+       
+           body: img
+           
+       
+           })
+              .then((res)=>{
+             
+                 if(res.status === 200){
+     
+                   let resnew= res.url.split('?')
+                   let imgurl= resnew[0]
+
+                   temparray.push(imgurl)
+                  
+                  window.alert('Images added successfully')
+                 document.getElementById("updatefileimage").value = ''
+
+                 }
+     
+              })
+              .catch((err)=>console.log(err))
+            
+          })
+          .catch((err)=>console.log(err))
+
+       }
+      }
+      const newarray = [...singleclientdata]
+ 
+      newarray[0]['images'] = temparray
+
+      setSingleClientData(newarray)
+    
+     
+    }
+
+
+    const handleupdatedatasubmit = async ()=>{
+          
+         const response = await axios.post(updateclientdataurl, singleclientdata[0]).catch(err=>{
+          console.log(err)
+         })
+
+ 
+         if(response.status === 200){
+          window.alert('Data updated successfully')
+          setImageFile([])
+         
+         setDataUpdate(true)
+         setTimeout(() => {
+       
+         setEdit(false)
+         setDataUpdate(false)
+          
+         }, 2000);
+
+         }
+
+    }
+
+  
   return (
     <div>
 
@@ -361,6 +565,8 @@ function base64ToImageFile(base64String, fileName, fileType,len) {
               <button onClick={()=>setCurrentStatus('Model Rejected')} >Models Rejected</button>
 
               <button onClick={()=>setCurrentStatus('Product live')}>Product Live</button>
+              <button onClick={()=>setCurrentStatus('Live on client site')}>Live on client site</button>
+
           </div>
 
           <div>
@@ -368,6 +574,78 @@ function base64ToImageFile(base64String, fileName, fileType,len) {
           </div>
 
         <div className='clientalldatacontainer'>
+          
+        <Dialog open= {edit} onClose={handleeditclose}   >
+          <div className='editdiv'>
+          <DialogContent>
+
+            {
+              singleclientdata && singleclientdata.map(item=>(
+                
+                <div>
+                     <label>Product name</label>
+           <TextField  value= {item.productname} onChange={handleinputchange} name='productname' ></TextField>
+           <label>Brand</label>
+           <TextField value={item.brandname} onChange={handleinputchange} name='brandname' ></TextField>
+           <label>Product pageurl</label>
+           <TextField value={item.productpageurl} onChange={handleinputchange} name='productpageurl'></TextField>
+           <label>Product length</label>
+           <TextField value={item.productlength} onChange={handleinputchange} name='productlength'></TextField>
+           <label>Product width</label>
+           <TextField value={item.productwidth} onChange={handleinputchange} name='productwidth'></TextField>
+           <label>Product height</label>
+           <TextField value={item.productheight} onChange={handleinputchange} name='productheight'></TextField>
+           <label>Unit</label>
+           <TextField value={item.dimensionunit} onChange={handleinputchange} name='dimensionunit'></TextField>
+            <div style={{marginTop:'10px'}}>
+              <input type='file' id = {'updatefileimage'}  onChange={(e)=>handleselectupdateimage(e)} multiple />
+
+                <div style={{marginTop:"10px", borderRadius:"5px", maxWidth: '500px', display:'flex', justifyContent:'center', overflowX:'scroll', border:'2px solid grey', margin:'10px'}}>
+                {
+               item.images.map(item=>(
+                  <img  src={item} style={{width:'200px' ,height:'200px', padding:'10px'}}/>
+                ))
+                }
+
+                </div>
+            
+               <div style={{marginTop:'10px', display:'flex'}}>
+                <div>
+               <Button variant='contained' onClick={handleuploadeditimages} >Upload image</Button>
+                  <div className='alertstatusimage' id = {`alertupdateimageupload`} >
+                       <Alert severity="success" variant='filled' ></Alert>
+                          </div>
+
+                </div>
+            
+               </div>
+                  
+             
+            </div>
+
+                <div style={{marginTop:'10px', display:'flex'}}>
+                  <div>
+                  <Button variant='contained' onClick={handleupdatedatasubmit} >Submit</Button>
+
+                  </div>
+                </div>
+                   <div className='alertstatusimage' id = {`alertupdatesubmit`} >
+                                   <Alert severity="success" variant='filled' ></Alert>
+                                    </div>
+
+                </div>  
+              ))
+            }
+        
+
+          </DialogContent>
+
+          </div>
+
+        
+
+
+   </Dialog>
 
           
           <Dialog open= {popup} onClose={handlepopupclose}   >
@@ -514,8 +792,24 @@ function base64ToImageFile(base64String, fileName, fileType,len) {
                                  
      
                              </div>
+                             <div style={{marginTop:'5px', display:'flex', width:'100%'}}>
 
+
+
+                                        <div style={{marginLeft:'5px', display:'flex', gap:'5px'}}>
+                            <Button variant='contained' color='primary' onClick={()=>handleeditopen(item.Id)}>
+                            Edit 
+                            </Button>
+                            <Button variant='contained'>
+                            <a href={item.glburl} target= '_blank' style={{color:'white'}} >Download glb</a>
+                            </Button>
+                           
                           
+
+                          </div> 
+
+</div>
+
                               <div style={{marginTop:'5px', display:'flex', width:'100%'}}>
 
                                 {
@@ -523,6 +817,7 @@ function base64ToImageFile(base64String, fileName, fileType,len) {
 
                                   : 
                                   <div style={{marginLeft:'5px', display:'flex', gap:'5px'}}>
+                                   
                                   <Button variant='contained' color='primary' onClick={()=>handlemodelopen(item.Id)}>
                                    View Model
                                   </Button>
@@ -545,6 +840,8 @@ function base64ToImageFile(base64String, fileName, fileType,len) {
                                      <option value = {'Model Accepted'}><p>Model Accepted</p></option>
                                      <option value = {'Model Rejected'}><p>Model Rejected</p></option>
                                       <option value = {'Product live'}><p>Product live</p></option>
+                                      <option value = {'Live on client site'}><p>Live on client site</p></option>
+
      
                                   </select>
 

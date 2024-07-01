@@ -918,6 +918,10 @@ body {
 
 
 }
+.editdiv{
+  width: 700px;
+  height: 600px;
+}
 
 .header {
   display: flex;
