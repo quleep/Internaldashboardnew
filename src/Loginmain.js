@@ -1637,6 +1637,11 @@ const handlemodelerassignclient = ()=>{
   history.push('/assignmodeler')
 
 }
+const handlemodelerassignquleep = ()=>{
+
+  history.push('/managequleep')
+
+}
 const searchHandlerMerchant=()=>{
   const body={
     merchantid: Number(merchantinput)
@@ -1782,6 +1787,16 @@ const searchHandlerQualityMerchant=()=>{
  }
     
  }
+ const handleQuleepData = ()=>{
+  if(roleuse === 'modelhead' || roleuse === 'admin' ){
+
+    history.push('/uploadquleep')
+
+ }else{
+   window.alert('Access Denied')
+ }
+    
+ }
 
  const handleManageLuxe = ()=>{
   if(roleuse === 'modelhead' || roleuse === 'admin' ){
@@ -1804,6 +1819,11 @@ const searchHandlerQualityMerchant=()=>{
    
  }
 
+
+ const handleclickarnxtdata = ()=>{
+   document.getElementById('arnxtdatadiv').style.display= 'flex'
+ 
+ }
 
 
 
@@ -1846,6 +1866,11 @@ const searchHandlerQualityMerchant=()=>{
       </div>
       <img src={Divider} alt="Your SVG" className="divider-svg" />
       <div >
+        <p  className="navoperation"  style={{cursor:'pointer'}}><a onClick={handleQuleepData}  >Upload Quleep data</a></p>
+        <div className="alert-box warning3" id='warning3' >Access Denied !</div>
+      </div>
+      <img src={Divider} alt="Your SVG" className="divider-svg" />
+      <div >
         <p  className="navoperation"  style={{cursor:'pointer'}}><a  onClick={handleManageLuxe}  >Manage Luxe</a></p>
         <div className="alert-box warning3" id='warning3' >Access Denied !</div>
       </div>
@@ -1869,16 +1894,31 @@ const searchHandlerQualityMerchant=()=>{
         <div className='homepage'  >
 
             <div className='inputdiv' >
-                <div className='inputdiv' >
-                <input  type='number'  onChange={event=> setMerchantInput(event.target.value)} />
-
-
-                </div>
+               <div id='restquleepdiv' style={{display:'flex'}}>
                 <div className='search'>
                     <button 
                     onClick={handlemodelerassignclient}
                     >Assign modeler for client data</button>
                 </div>
+                <div className='search'>
+                    <button 
+                    onClick={handlemodelerassignquleep}
+                    >Assign modeler for quleep data</button>
+                </div>
+                </div>
+                <div className='search'>
+                    <button 
+                    onClick={handleclickarnxtdata}
+                    >Assign modeler for Arnxt </button>
+                </div>
+                 <div style={{display:'none'}} id = 'arnxtdatadiv' className='arnxtalldatadiv'>
+
+                 <div className='inputdiv' >
+                <input  type='number'  onChange={event=> setMerchantInput(event.target.value)} />
+
+
+                </div>
+
                 <div className='search'>
                     <button 
                     onClick={searchHandlerProduct}
@@ -1931,7 +1971,7 @@ const searchHandlerQualityMerchant=()=>{
                     >Status Product live</button>
                 </div>
              
-
+                </div>
             </div>
 
             <div>

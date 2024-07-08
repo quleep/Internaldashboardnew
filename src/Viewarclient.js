@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react'
 const Viewarclient = () => {
 
     const modelRef =  useRef();
-    const itemdetails= 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/getclientdatabyid'
+    const itemdetails= 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/getquleepdatabyid'
     const params= new URLSearchParams(window.location.search)
     const pid= params.get('id')
     const [glburl, setGlbUrl] = useState()
