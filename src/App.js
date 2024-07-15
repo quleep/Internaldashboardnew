@@ -34,6 +34,9 @@ import Uploadclient from "./Uploadclient";
 import Modelerasignpage from "./Modelerasignpage";
 import Uploadclientmodel from "./Uploadclientmodel";
 import Viewarclient from "./Viewarclient";
+import Modelerassignquleep from "./Modelerassignquleep";
+import Uploadquleep from "./Uploadquleep";
+import Uploadquleepmodels from "./Uploadquleepmodels";
 
 
 function App() {
@@ -66,7 +69,13 @@ function App() {
           <Route path="/uploadclient" component={Uploadclient} />
           <Route path="/assignmodeler" component={Modelerasignpage} />
           <Route path="/modeluploadclient" component={Uploadclientmodel} />
+          <Route path="/modeluploadquleep" component={Uploadquleepmodels} />
+
           <Route path="/viewmodel" component={Viewarclient} />
+          <Route path="/managequleep" component={Modelerassignquleep} />
+          <Route path="/uploadquleep" component={Uploadquleep} />
+
+
 
 
 

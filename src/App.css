@@ -918,6 +918,17 @@ body {
 
 
 }
+.arnxtalldatadiv{
+  display: flex;
+  width: 95%;
+ 
+  flex-wrap: wrap;
+  overflow: scroll;
+}
+.editdiv{
+  width: 700px;
+  height: 600px;
+}
 
 .header {
   display: flex;

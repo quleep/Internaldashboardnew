@@ -368,16 +368,12 @@ const Uploadclient = () => {
      
        </Button>
        <DoneAllIcon style={{display:'none'}} className='iconglburl' />
-
-     
-      
+   
    </Grid>
    </Grid>
   
        </Grid>
- 
-      
-       </>
+     </>
    
    </Grid>
    <Grid item xs={12}  style={{ display:'flex', justifyContent:'center', alignItems:'center', marginTop:"60px"}}>

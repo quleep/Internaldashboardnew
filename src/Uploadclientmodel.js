@@ -3,10 +3,13 @@ import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar';
 import { Container, TextField, Grid, Button, Select, MenuItem, InputLabel, FormControl, styled, Typography, autocompleteClasses, Alert } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom';
 
 
 
 const Uploadclientmodel = () => {
+
+  const history = useHistory()
 
     const VisuallyHiddenInput = styled('input')({
         clip: 'rect(0 0 0 0)',
@@ -25,54 +28,41 @@ const Uploadclientmodel = () => {
       const [imagefilename, setImageFileName] = useState()
 
       const [glbfile, setGlbFile] = useState()
+      const [fbxfile, setFbxFile] = useState()
+
       const [usdzfile, setUsdzFile] = useState()
       const [imagefile, setImageFile] = useState()
 
 
 const modelernameurl= 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/fetchmodelerclient';
+const modelernameurlquleep= 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/getmodelertaskquleep';
+
 const uploadfileurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/uploadfilerepo'
+const uploadallfilesquleepurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/uploadfilesquleep'
 const uploadallfilesurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/uploadfilesclient'
 
-
   const [clientdata, setClientData] = useState()
+
 
   const [uploadurls, setUploadUrls] = useState({
       glburl : '',
       usdzurl : '',
-      imageurl: ''
+      imageurl: '',
+      fbxurl: ''
+  
        
   })
 
+
+  const userdata= sessionStorage.getItem('user')
+  let useremail= JSON.parse(userdata)
+   let loginuser= useremail.email
+
     useEffect(()=>{
 
-        const userdata= sessionStorage.getItem('user')
-        let useremail= JSON.parse(userdata)
-         let loginuser= useremail.email
+      
 
-        const fetchuser = async()=>{
-            
-    const emailbody={
-        modeler: loginuser
-      }
-
-      try{
-        const response = await   axios.post(modelernameurl, emailbody )
-
-        
-          if(response.data.length > 0){
-            setClientData(response.data)
-          }else{
-            window.alert('currently you dont have any task assigned')
-          }
-    
-
-      }catch(error){
-        console.log(error)
-      }
-
-        }
-
-        fetchuser()
+   
 
     },[])
     
@@ -130,9 +120,6 @@ const uploadallfilesurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.c
       
     }
 
-
-
-    
     const fileselectusdz = (e,index)=>{
           
         let val = document.getElementById(`usdzfile_${index}`).value;
@@ -223,6 +210,62 @@ const uploadallfilesurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.c
      
     }
 
+
+    const uploadFbxFile = async (index)=>{
+
+      console.log(document.getElementById(`fbxfile_${index}`).value)
+      if(document.getElementById(`fbxfile_${index}`).value === ''){
+        window.alert('Please select a fbx file')
+        return
+     }
+
+        const url=  uploadfileurl;
+        await fetch(url,{
+         method: "POST",
+         body:  fbxfile.name
+       
+       }).then((res)=>res.json())
+          .then((res)=>{
+          
+         fetch(res.uploadURL, {
+             
+             method: "PUT",
+             headers: {
+               "ContentType": "image/jpeg",
+             
+             },
+       
+           body: fbxfile
+           
+       
+           })
+              .then((res)=>{
+             
+                 if(res.status === 200){
+     
+                   let resnew= res.url.split('?')
+                   let imgurl= resnew[0]
+
+                  setUploadUrls({
+                    ...uploadurls,
+                    ['fbxurl'] : imgurl
+                  })
+   
+               document.getElementById(`alertdivfbxfile_${index}`).style.display = 'flex'
+
+          
+ 
+                 }
+     
+              })
+              .catch((err)=>console.log(err))
+            
+          })
+          .catch((err)=>console.log(err))
+
+     
+    }
+
   
 
 
@@ -292,6 +335,47 @@ const uploadallfilesurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.c
           };
           img.src = base64;
       });
+  }
+
+
+  const fileselectfbx = (e, index)=>{
+
+    let val = document.getElementById(`fbxfile_${index}`).value;
+    let indx = val.lastIndexOf(".") + 1;
+    let filetype = val.substr(indx, val.length).toLowerCase();
+
+
+    if (filetype === 'fbx') {
+      let files = Array.from(e.target.files);
+      files.forEach((file) => {
+        fileToBase64(file, (err, result) => {
+          if (result) {
+            setFbxFile(file);
+         
+          }
+        });
+
+        const reader = new FileReader();
+
+        reader.onload = () => {
+          if (reader.readyState === 2) {
+         
+          }
+        };
+
+        reader.readAsDataURL(file);
+      });
+
+ 
+    } else {
+
+        window.alert('please select a fbx file')
+         document.getElementById(`fbxfile_${index}`).value = ''
+        
+        return
+  
+    }
+
   }
  
 
@@ -396,8 +480,8 @@ const uploadallfilesurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.c
 
    
 
-    const handlesubmitdata = async (id)=>{
-         if(uploadurls.glburl === '' || uploadurls.imageurl === '' || uploadurls.usdzurl === ''){
+    const handlesubmitdata = async (id, index)=>{
+         if(uploadurls.glburl === '' || uploadurls.imageurl === '' || uploadurls.usdzurl === '' ){
             window.alert('please upload all files')
             return
          }else{
@@ -406,18 +490,27 @@ const uploadallfilesurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.c
              Id: id,
              glburl: uploadurls.glburl,
              usdzurl : uploadurls.usdzurl,
-             imageurl : uploadurls.imageurl,
+              imageurl : uploadurls.imageurl,
              modeluploaddate: new Date().toString()
           }
 
           const response = await axios.post(uploadallfilesurl, body)
           if(response.status === 200){
             window.alert('Date submitted')
+            document.getElementById(`glbfile_${index}`).value = ''
+            document.getElementById(`alertdivglbfile_${index}`).style.display = 'none'
+                document.getElementById(`usdzfile_${index}`).value = ''
+            document.getElementById(`alertdivusdzfile_${index}`).style.display = 'none'
+        
+                document.getElementById(`imagefile_${index}`).value = ''
+            document.getElementById(`alertdivimagefile_${index}`).style.display = 'none'
             setUploadUrls({
               glburl : '',
               usdzurl : '',
-              imageurl: ''
+              imageurl: '',
+             
             })
+            handlecheckclienttask()
 
           }
 
@@ -425,12 +518,121 @@ const uploadallfilesurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.c
 
     }
 
+    const handlesubmitdataquleep = async (id, index)=>{
+
+      if(uploadurls.glburl === '' || uploadurls.imageurl === '' || uploadurls.usdzurl === '' || uploadurls.fbxurl === ''){
+        window.alert('please upload all files')
+        return
+     }else{
+        
+      const body ={
+         Id: id,
+         glburl: uploadurls.glburl,
+         usdzurl : uploadurls.usdzurl,
+         fbxurl : uploadurls.fbxurl,
+         imageurl : uploadurls.imageurl,
+         modeluploaddate: new Date().toString()
+      }
+
+      const response = await axios.post(uploadallfilesquleepurl, body)
+      if(response.status === 200){
+        window.alert('Date submitted')
+         document.getElementById(`glbfile_${index}`).value = ''
+         document.getElementById(`alertdivglbfile_${index}`).style.display = 'none'
+             document.getElementById(`usdzfile_${index}`).value = ''
+         document.getElementById(`alertdivusdzfile_${index}`).style.display = 'none'
+             document.getElementById(`fbxfile_${index}`).value = ''
+         document.getElementById(`alertdivfbxfile_${index}`).style.display = 'none'
+             document.getElementById(`imagefile_${index}`).value = ''
+         document.getElementById(`alertdivimagefile_${index}`).style.display = 'none'
+        setUploadUrls({
+          glburl : '',
+          usdzurl : '',
+          imageurl: '',
+          fbxurl : ''
+        })
+        handlecheckquleeptask()
+
+      }
+
+     }
+
+    }
+
+    const handlecheckclienttask = ()=>{
+
+      const fetchuser = async()=>{
+            
+        const emailbody={
+            modeler: loginuser
+          }
+    
+          try{
+            const response = await   axios.post(modelernameurl, emailbody )
+    
+            
+              if(response.data.length > 0){
+                setClientData(response.data)
+              }else{
+                window.alert('currently you dont have any task assigned')
+                setClientData()
+              }
+        
+    
+          }catch(error){
+            console.log(error)
+          }
+    
+            }
+    
+            fetchuser()
+
+    }
+
+    const handlecheckquleeptask = ()=>{
+      const fetchuser = async()=>{
+            
+        const emailbody={
+            modeler: loginuser
+          }
+    
+          try{
+            const response = await   axios.post(modelernameurlquleep, emailbody )
+    
+            
+              if(response.data.length > 0){
+                setClientData(response.data)
+              }else{
+                window.alert('currently you dont have any task assigned')
+                setClientData()
+              }
+        
+    
+          }catch(error){
+            console.log(error)
+          }
+    
+            }
+    
+            fetchuser()
+      
+    }
+
+  
+
  
   return (
     <div>
         <Navbar/>
+        <div style={{display:'flex', width:'100%', justifyContent:'center', alignItems:'center',  marginTop:'40px'}}>
+              <button style={{margin:'10px', border:'1px solid grey', borderRadius:'5px'}} onClick={handlecheckclienttask} >Check client task</button>
+              <button style={{margin:'10px', border:'1px solid grey', borderRadius:'5px'}}  onClick={handlecheckquleeptask}>Check quleep task</button>
+
+            </div>
 
         <div className='clientalldatacontainer'>
+
+         
              
              <div className='clientdatamain'>
 
@@ -442,9 +644,25 @@ const uploadallfilesurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.c
                              <div className='clientdatadiv1'>
                                 <span style={{display:'flex'}}>  <p className='labelclient'>product Id : </p>  <p >{item.Id}</p></span>
                                 <span style={{display:'flex'}}>  <p className='labelclient'>product name : </p>  <p>{item.productname}</p></span>
-                                <span style={{display:'flex'}}>  <p className='labelclient'>brand : </p>  <p>{item.brandname}</p></span>
+                              {
+                                item.timegiven ? 
+                                <span style={{display:'flex'}}>  <p className='labelclient'>platformname : </p>  <p>{item.platformname}</p></span> : 
+                                <span style={{display:'flex'}}>  <p className='labelclient'>Brand : </p>  <p>{item.brandname}</p></span>
+
+
+                              }
+                              
                                 <span style={{display:'flex'}}>  <p className='labelclient'>Uploaded by :</p>  <p>{item.uploadedby}</p></span>
                                 <span style={{display:'flex'}}>  <p className='labelclient'>uploaded date :</p>  <p>{item.uploaddate.split(' ').slice(0,4).join(' ')}</p></span>
+                              {
+                                item.timegiven ?  <span style={{display:'flex'}}>  <p className='labelclient'>Assigned on :</p>  <p>{item.modelerassigntime.split(' ').slice(0,5).join(' ')}</p></span> : ''
+
+                              }  
+
+                              {
+                                
+                                  item.timegiven ? <span style={{display:'flex'}}>  <p className='labelclient'>Time given :</p>  <p>{item.timegiven}</p></span> : ''
+                              }
 
                              </div>
      
@@ -529,6 +747,44 @@ const uploadallfilesurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.c
                                  
      
                              </div>
+
+                             {
+                                item.timegiven ? 
+                             
+
+                             <div style={{marginTop:'10px', display:'flex', width:'100%'}}>
+
+<div >
+{/* <Button
+component="label"
+role={undefined}
+variant="contained"
+tabIndex={-1}
+startIcon={<CloudUploadIcon />}
+>
+Upload Usdz file
+<VisuallyHiddenInput type="file" id ={`usdzfile_${index}`} onChange={(e)=>fileselectusdz(e,index)} />
+</Button> */}
+
+<input  type="file" id ={`fbxfile_${index}`} onChange={(e)=>fileselectfbx(e,index)}/>
+
+</div>
+
+     <div style={{marginLeft:'5px'}}>
+     <Button variant='contained' onClick={()=>uploadFbxFile(index)} >Upload Fbx</Button>
+
+     </div>
+     <div className='alertstatusimage' id = {`alertdivfbxfile_${index}`} >
+      <Alert severity="success" variant='filled' ></Alert>
+       </div>
+    
+
+</div> : ''
+}
+
+
+
+
                              <div style={{marginTop:'10px', display:'flex', width:'100%'}}>
 
         <div >
@@ -559,7 +815,7 @@ Upload image
 
 <div style={{marginTop:'20px', display:'flex', justifyContent:'center', alignItems:'center', width:'100%'}}>
 <div >
-                                  <Button variant='contained' color='secondary' onClick={()=>handlesubmitdata(item.Id)} >Submit Data</Button>
+                                  <Button variant='contained' color='secondary' onClick={ item.timegiven ? ()=>handlesubmitdataquleep(item.Id, index)  : ()=>handlesubmitdata(item.Id, index)} >Submit Data</Button>
 
                                   </div>
       
