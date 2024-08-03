@@ -660,7 +660,7 @@ function base64ToImageFile(base64String, fileName, fileType,len) {
   size={80}
   style={{ height: "auto", maxWidth: "100%", width: "100%", padding: '20px'}}
 
-value = {`http://192.168.0.149:3000/viewmodel?id=${clientprodid}`}
+value = {`https://www.admin.arnxt.com/viewmodel?id=${clientprodid}`}
 
 />
 
