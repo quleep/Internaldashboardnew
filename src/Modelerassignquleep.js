@@ -572,8 +572,8 @@ function base64ToImageFile(base64String, fileName, fileType,len) {
           <button onClick={()=>setCurrentStatus('Model Accepted')} >Models Accepted</button>
           <button onClick={()=>setCurrentStatus('Model Rejected')} >Models Rejected</button>
 
-          <button onClick={()=>setCurrentStatus('Product live')}>Product Live</button>
-          <button onClick={()=>setCurrentStatus('Live on client site')}>Live on client site</button>
+          {/* <button onClick={()=>setCurrentStatus('Product live')}>Product Live</button>
+          <button onClick={()=>setCurrentStatus('Live on client site')}>Live on client site</button> */}
 
       </div>
 
@@ -818,9 +818,9 @@ value = {`https://www.admin.arnxt.com/viewmodel?id=${clientprodid}`}
                         <Button variant='contained' color='primary' onClick={()=>handleeditopen(item.Id)}>
                         Edit 
                         </Button>
-                        <Button variant='contained'>
+                        {/* <Button variant='contained'>
                         <a href={item.glburl} target= '_blank' style={{color:'white'}} >Download glb</a>
-                        </Button>
+                        </Button> */}
                        
                       
 

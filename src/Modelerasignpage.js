@@ -813,10 +813,10 @@ function base64ToImageFile(base64String, fileName, fileType,len) {
                             <Button variant='contained' color='primary' onClick={()=>handleeditopen(item.Id)}>
                             Edit 
                             </Button>
-                            <Button variant='contained'>
+                            {/* <Button variant='contained'>
                             <a href={item.glburl} target= '_blank' style={{color:'white'}} >Download glb</a>
                             </Button>
-                           
+                            */}
                           
 
                           </div> 
