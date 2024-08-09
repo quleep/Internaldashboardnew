@@ -1855,11 +1855,11 @@ const searchHandlerQualityMerchant=()=>{
         <div className="alert-box warning3" id='warning3' >Access Denied !</div>
       </div>
       <img src={Divider} alt="Your SVG" className="divider-svg" />
-      <div >
+      {/* <div >
         <p  className="navoperation"  style={{cursor:'pointer'}}><a  onClick={handleBulkUpload}  >Bulk Upload</a></p>
         <div className="alert-box warning3" id='warning3' >Access Denied !</div>
-      </div>
-      <img src={Divider} alt="Your SVG" className="divider-svg" />
+      </div> */}
+    
       <div >
         <p  className="navoperation"  style={{cursor:'pointer'}}><a onClick={handleClientImages}  >Upload client data</a></p>
         <div className="alert-box warning3" id='warning3' >Access Denied !</div>
@@ -1870,11 +1870,11 @@ const searchHandlerQualityMerchant=()=>{
         <div className="alert-box warning3" id='warning3' >Access Denied !</div>
       </div>
       <img src={Divider} alt="Your SVG" className="divider-svg" />
-      <div >
+      {/* <div >
         <p  className="navoperation"  style={{cursor:'pointer'}}><a  onClick={handleManageLuxe}  >Manage Luxe</a></p>
         <div className="alert-box warning3" id='warning3' >Access Denied !</div>
-      </div>
-      <img src={Divider} alt="Your SVG" className="divider-svg" />
+      </div> */}
+  
       <div >
         <p  className="navoperation"  style={{cursor:'pointer'}}><a href="" onClick={handleclientupload}   >Upload client models</a></p>
         <div className="alert-box warning3" id='warning3' >Access Denied !</div>
@@ -1906,11 +1906,11 @@ const searchHandlerQualityMerchant=()=>{
                     >Assign modeler for quleep data</button>
                 </div>
                 </div>
-                <div className='search'>
+                {/* <div className='search'>
                     <button 
                     onClick={handleclickarnxtdata}
                     >Assign modeler for Arnxt </button>
-                </div>
+                </div> */}
                  <div style={{display:'none'}} id = 'arnxtdatadiv' className='arnxtalldatadiv'>
 
                  <div className='inputdiv' >
