@@ -623,7 +623,9 @@ const Luxeadmin = () => {
 
                             <span
                               onClick={handleServiceAdd}
-                              className="add-btn" ><i style={{ fontSize: '30px' }} class='bx bx-message-square-add'></i></span>
+                              className="add-btn" >
+                                <i style={{ fontSize: '30px' }} class='bx bx-message-square-add'></i>
+                            </span>
                           )}
                         </div>
 
