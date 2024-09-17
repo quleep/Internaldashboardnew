@@ -7,11 +7,6 @@ const orderurl= 'https://1t4lfd0rz7.execute-api.ap-south-1.amazonaws.com/razorpa
 const merchantprofileurl= 'https://eh16rizdbi.execute-api.ap-south-1.amazonaws.com/production/getmerchantprofile'
 
 
-
-
-
-
-
 const Success = () => {
     const [amount, setAmount] = useState('');
     const [o_id, setO_id] = useState('');
@@ -74,12 +69,6 @@ console.log(merchantdata)
 
 
   },[])
-
-
-
-
- 
-
 
 
   window.onload = function () {

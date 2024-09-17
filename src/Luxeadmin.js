@@ -541,7 +541,6 @@ const Luxeadmin = () => {
                         <MenuItem value="300X420">300X420</MenuItem>
                         <MenuItem value="360X450">360X450</MenuItem>
                         <MenuItem value="Oversize">Oversize</MenuItem>
-
                       </Select>
 
 

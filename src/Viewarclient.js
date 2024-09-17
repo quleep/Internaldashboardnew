@@ -41,7 +41,7 @@ const Viewarclient = () => {
                    environment-image="neutral"
                   camera-controls touch-action="pan-y"
                   
-                  shadow-intensity="1"
+                  shadow-intensity="0"
                   crossorigin="anonymous" 
                
               ref={modelRef.current}

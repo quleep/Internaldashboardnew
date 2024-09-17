@@ -240,7 +240,7 @@ const Modelerasignpage = () => {
           statusvalue : document.getElementById(`finalstatus_${index}`).value,
           rejectionreason : document.getElementById(`rejectionvalue_${index}`).value,
           modelqrcode : qrcodeimage,
-          modelarurl : qrcodeurl
+          modelarurl : `https://viewar.arnxt.com/arview/viewinar?id=${id}`
        }
 
        try{
@@ -549,6 +549,9 @@ function base64ToImageFile(base64String, fileName, fileType,len) {
 
     }
 
+
+    
+
   
   return (
     <div>
@@ -700,8 +703,18 @@ function base64ToImageFile(base64String, fileName, fileType,len) {
                                 <span style={{display:'flex'}}>  <p className='labelclient'>product height :  </p>  <p>{item.productheight}</p></span>
                                 <span style={{display:'flex'}}>  <p className='labelclient'>Unit :</p>  <p>{item.dimensionunit}</p></span>
                                 <span style={{display:'flex'}}>  <a href={item.productpageurl} target='blank' >Open page url</a></span>
-                         
-     
+                                 <p>{}</p>
+                                 {
+
+                                item.modelarurl?.split('=').slice(1).toString() === item.Id ? 
+                                <span style={{display:'flex'}}>  <a href={item.modelarurl} target='blank' >Mobile view link</a></span>
+                                  : 
+                                  <span style={{display:'flex'}}>  <p style={{color:'red'}} >Id not matching please change status again</p></span>
+                                 }
+                               
+
+                                <span style={{display:'flex'}}>  <a href={item.modelqrcode} target='blank' >QR code Image</a></span>
+                           
                              </div> 
                           </div>
                           <div>
@@ -800,10 +813,10 @@ function base64ToImageFile(base64String, fileName, fileType,len) {
                             <Button variant='contained' color='primary' onClick={()=>handleeditopen(item.Id)}>
                             Edit 
                             </Button>
-                            <Button variant='contained'>
+                            {/* <Button variant='contained'>
                             <a href={item.glburl} target= '_blank' style={{color:'white'}} >Download glb</a>
                             </Button>
-                           
+                            */}
                           
 
                           </div> 
