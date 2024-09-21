@@ -1,10 +1,11 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar';
-import { Container, TextField, Grid, Button, Select, MenuItem, InputLabel, FormControl, styled, Typography, autocompleteClasses, Alert } from '@mui/material';
+import { Container, TextField, Grid, Button, Select, MenuItem, InputLabel, FormControl, styled, Typography, autocompleteClasses, Alert, Dialog } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom';
 import { Toaster, toast } from "react-hot-toast";
+import QRCode from 'react-qr-code';
 
 
 const Uploadclientmodel = () => {
@@ -598,6 +599,7 @@ const Uploadclientmodel = () => {
 
       try {
         const response = await axios.post(modelernameurlquleep, emailbody)
+        console.log(response.data);
         if (response.data.length > 0) {
           setClientData(response.data)
         } else {
@@ -694,14 +696,6 @@ const Uploadclientmodel = () => {
       "Commode"
     ]
   }
-
-  const [searchTerm, setSearchTerm] = useState('');
-  const [debouncedTerm, setDebouncedTerm] = useState('');
-
-  const [requestModel, setRequestModel] = useState(false);
-  const [selectedModel, setSelectedModel] = useState();
-  let debounceTimer;
-
   // const handleInputChange = (event) => {
   //   setSearchTerm(event.target.value);
 
@@ -719,15 +713,31 @@ const Uploadclientmodel = () => {
 
 
   // let searchbox = [];
+
+  const [searchTerm, setSearchTerm] = useState('');
+  const [debouncedTerm, setDebouncedTerm] = useState('');
+  const [suggestionIndex, setSuggestionIndex] = useState();
+
+  const [requestModel, setRequestModel] = useState(false);
+  const [selectedModel, setSelectedModel] = useState();
+  let debounceTimer;
+
   const [searchbox, setSearchbox] = useState([]);
   const [showProductImage, setShowProductImage] = useState(false);
 
   const [perameter, setPerameter] = useState([]);
 
-  const handleInputChange = (event) => {
-    setSearchTerm(event.target.value);
+  const handleInputChange = (event, index) => {
+    // const newTerms = [...searchTerm];
+    // setSearchTerm(newTerms);
+    // newTerms[index] = event.target.value;
+    // setSearchTerm(event.target.value);
+    setSuggestionIndex(index);
     setShowProductImage(false);
     setRequestModel(false);
+
+    const newTerms = document.getElementById(`searchModel_${index}`).value;
+    setSearchTerm(newTerms);
 
     if (debounceTimer) {
       clearTimeout(debounceTimer);
@@ -768,7 +778,7 @@ const Uploadclientmodel = () => {
   }
 
 
-  async function searchedData(item) {
+  async function searchedData(item, index) {
     setSearchTerm(item);
     setSearchbox([]);
     setDebouncedTerm(item.toLowerCase());
@@ -783,16 +793,18 @@ const Uploadclientmodel = () => {
   }
 
 
-  async function sendModel() {
+
+
+  async function sendModel(Id) {
     console.log(selectedModel);
     try {
       const userEmail = JSON.parse(sessionStorage.getItem("user"));
       console.log(userEmail.email)
-      const obj = { updateKey: "modelerRequest", data: {modelerId: userEmail.email, status: true}, productKey: selectedModel };
+      const obj = { updateKey: "modelerRequest", data: { modelerId: userEmail.email, status: true, productId: selectedModel }, productKey: Id };
       console.log(obj);
       const res = await axios.patch("https://eozoyxa2xl.execute-api.ap-south-1.amazonaws.com/prod/quleepdataformodel", obj);
       console.log(res);
-      if(res.data === "Reassigned"){
+      if (res.data === "Reassigned") {
         return toast.error("Model Already Assigned!!!");
       }
       toast.success("Model Assigned Successfully!!!")
@@ -803,7 +815,7 @@ const Uploadclientmodel = () => {
   }
 
   // "ExpressionAttributeValues must not be empty"
-  
+
 
 
   async function submitModel(data) {
@@ -844,6 +856,54 @@ const Uploadclientmodel = () => {
     console.log(searchbox);
   }, [searchbox])
 
+
+  const [file, setFile] = useState();
+
+  useEffect(() => {
+    // console.log(clientdata[0]?.modeler);
+    if (Array.isArray(clientdata) && clientdata.length > 0) {
+
+      const requestedModel = async () => {
+        try {
+          const res = await axios.get(`https://eozoyxa2xl.execute-api.ap-south-1.amazonaws.com/prod/arnxtrequestmodel?Id=${clientdata[0]?.modeler}`);
+          console.log(res);
+          const obj = res.data.map((item) => {
+            return item.modelerRequest.filter((item_) => {
+              return item_.status === false;
+            })
+          })
+          // const finalObj = obj.filter((item)=>{
+          //   return item.stat
+          // })
+          console.log(obj);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      requestedModel();
+    }
+  }, [clientdata])
+
+  const [popup, setPopUp] = useState(false)
+  const handlepopupclose = () => {
+    setPopUp(false)
+  }
+
+  const [requestedModelId, setRequestedModelId] = useState();
+  const [requestedModelImage, setRequestedModelImage] = useState();
+  const handlemodelopen = (item) => {
+    console.log(item);
+    setPopUp(true)
+    // setClientProdId(id)
+    setRequestedModelId(item.productId);
+    setRequestedModelImage(item.glburl);
+
+
+  }
+
+  async function openRequestedModel(item) {
+
+  }
 
 
 
@@ -905,24 +965,25 @@ const Uploadclientmodel = () => {
                       {/* <span style={{ display: 'flex' }}>  input </span> */}
 
 
-                      <div style={{ marginTop: '15px' }}>
+                      <div style={{ marginTop: '30px' }}>
                         {/* Container for input and button aligned in a row */}
                         <div style={{ display: 'flex', gap: '5px' }}>
-                          <input placeholder='Search Model' value={searchTerm} onChange={handleInputChange} />
+                          {/* <input placeholder='Search Model' value={searchTerm[index] || ''} onChange={(e) => handleInputChange(e, index)} /> */}
+                          <TextField variant='outlined' id={`searchModel_${index}`} label='Search Model' style={{ height: "30px" }} onChange={(e) => handleInputChange(e, index)} />
                           {/* <button style={{ backgroundColor: 'blue', color: 'white' }} onClick={submitModel}>Submit</button> */}
                           {/* <div>
                             <Button variant='contained' onClick={submitModel} >Submit</Button>
                           </div> */}
 
                           {/* <button style={{ backgroundColor: 'blue', color: 'white' }} onClick={submitModel}>Submit</button> */}
-                          {requestModel && <div>
-                            <Button variant='contained' onClick={sendModel}>Request Model</Button>
+                          {requestModel && suggestionIndex === index && <div>
+                            <Button variant='contained' onClick={() => sendModel(item.Id)}>Request Model</Button>
                           </div>}
                         </div>
 
                         {/* Search results will be on a new line */}
-                        {showProductImage ? (<div className='flex flex-col gap-2' style={{ marginTop: '15px', width: "190px" }}>
-                          {searchTerm.length >= 1 && searchbox?.map((item, index) => {
+                        {showProductImage ? (<div className='flex flex-col gap-2' style={{ marginTop: '30px', width: "190px" }}>
+                          {searchTerm.length >= 1 && suggestionIndex === index && searchbox?.map((item, index) => {
                             return (
                               <div key={index} className='shadow-sm labelclient' style={{ position: "relative" }}>
                                 {/*  onClick={() => searchedData(item)} */}
@@ -933,10 +994,11 @@ const Uploadclientmodel = () => {
                               </div>
                             );
                           })}
-                        </div>) : (<div className='flex flex-col gap-2' style={{ marginTop: '15px', width: "190px" }}>
-                          {searchTerm.length >= 1 && perameter?.map((item, index) => {
+                        </div>) : (<div className='flex flex-col gap-2' style={{ marginTop: '30px', width: "190px" }}>
+                          {searchTerm.length >= 1 && suggestionIndex === index && perameter?.map((item, index) => {
+                            { console.log(searchTerm) }
                             return (
-                              <div key={index} className='shadow-sm labelclient' style={{ cursor: 'pointer' }} onClick={() => searchedData(item)}>
+                              <div key={index} className='shadow-sm labelclient' style={{ cursor: 'pointer' }} onClick={() => searchedData(item, index)}>
                                 {item}
                               </div>
                             );
@@ -944,13 +1006,64 @@ const Uploadclientmodel = () => {
                         </div>)}
                       </div>
 
+                      <div style={{ marginTop: "30px" }}>
+                        {
+                          item?.modelerRequest?.map((model) => {
+                            console.log(model.status === false);
+                            if (item?.modeler === model?.modelerId && model?.status === false) {
+                              return <p className='labelclient blinking' style={{ backgroundColor: "yellow", cursor: "pointer" }} onClick={() => handlemodelopen(model)}>Requested Model Recevied</p>
+                            }
+                          })
+                        }
+                        <Dialog open={popup} onClose={handlepopupclose} >
+
+                          <div style={{ margin: "10px" }}>
+                            <p>Product Id:- {requestedModelId}</p>
+                          </div>
+
+                          <div>
+                            <img src={requestedModelImage} alt='' />
+                          </div>
+
+                          <div style={{ display: "flex", alignItems: "center" }}>
+
+                            <div id='productqrcode' className='qrcodecontainer'>
+
+
+                              <QRCode
+                                size={80}
+                                style={{ height: "auto", maxWidth: "100%", width: "100%", padding: '20px' }}
+
+                                value={`https://www.admin.arnxt.com/viewmodel?id=${requestedModelId}`}
+
+                              />
+
+                            </div>
+                            {/* <div style={{width:'100%', display:'flex', justifyContent:'center', alignItems:'center'}}>
+                                <button onClick={handlesaveqrcode} style={{margin:'5px', border:'1px solid grey', borderRadius:'5px', backgroundColor:'transparent'}}>Save QR code</button>
+                                </div> */}
+                            <div style={{ width: "50%", margin: "10px" }}>
+                              <Button variant='contained'>
+                                <a href={requestedModelImage} download style={{ color: 'inherit', textDecoration: 'none' }}>
+                                  Download
+                                  {console.log(requestedModelImage)}
+                                </a>
+                              </Button>
+                            </div>
+                          </div>
+
+                        </Dialog>
+                        {/* <span style={{ display: 'flex' }}></span> */}
+                      </div>
+
+
                     </div>
                   </div>
                   <div>
                     <div className='clientdatadiv3'>
 
-                      {item.images.length > 0 ?
-                        item.images.map((img) => (
+                      {item?.images?.length > 0 ?
+                        item?.images?.map((img) => (
                           <img style={{ maxWidth: '300px', maxHeight: '300px', margin: '10px', objectFit: 'contain' }} src={img} />
                         ))
 

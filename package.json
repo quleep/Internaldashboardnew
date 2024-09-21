@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ariakit/react": "^0.4.11",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
     "@google/model-viewer": "^3.2.1",

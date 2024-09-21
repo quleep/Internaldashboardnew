@@ -7,6 +7,36 @@
   pointer-events: none;
 }
 
+
+
+.blinking {
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0% {
+    background-color: yellow;
+  }
+  50% {
+    background-color: red; /* Change this to your desired color */
+  }
+  100% {
+    background-color: yellow;
+  }
+}
+
+.dialog {
+  position: fixed; /* or absolute based on your layout */
+  z-index: 4; /* Set a high value */
+}
+
+.backdrop {
+  position: fixed; /* Ensure it covers the viewport */
+  z-index: 3; 
+}
+
+
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;

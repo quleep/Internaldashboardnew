@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar'
 import axios from 'axios'
-import { Container, TextField, Grid, Button, Select, MenuItem, InputLabel, FormControl, styled, Typography, autocompleteClasses, Alert, Dialog, DialogTitle, DialogContent } from '@mui/material';
+import { Container, TextField, Grid, Button, Select, MenuItem, InputLabel, FormControl, styled, Typography, autocompleteClasses, Alert, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import QRCode from "react-qr-code";
 import GetQrcode from './GetQrcode';
 
@@ -39,6 +39,7 @@ const Modelerassignquleep = () => {
   const [singleclientdata, setSingleClientData] = useState()
   const [imagefile, setImageFile] = useState([])
 
+  const [showModlerRequests, setShowModlerRequest] = useState(false);
 
   const handlepopupclose = () => {
     setPopUp(false)
@@ -90,7 +91,7 @@ const Modelerassignquleep = () => {
 
 
         setClientData(response.data)
-
+        // console.log(response.data)
 
 
       } catch (err) {
@@ -558,8 +559,131 @@ const Modelerassignquleep = () => {
 
   }
 
+  async function openModelDetail() {
+
+  }
+
+  // useEffect(()=>{
+
+  //   const getRequestedModels = async () => {
+  //     try {
+  //       const res = await axios.get("https://eozoyxa2xl.execute-api.ap-south-1.amazonaws.com/prod/quleepdataformodel");
+  //       console.log(res);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }
+  //   getRequestedModels();
+  // }, [])
+
+  const [open, setOpen] = useState(false);
+  const [requestedModelData, setRequestedModelData] = useState();
+  const [storeModelerId, setStoreModelerId] = useState();
+  const [productId, setProductId] = useState(); 
+
+  const handleClickOpen = async (id, modelerId) => {
+    try {
+      console.log(id);
+      setStoreModelerId(modelerId)
+      const res = await axios.get(`https://eozoyxa2xl.execute-api.ap-south-1.amazonaws.com/prod/quleepdataformodel?Id=${id}`);
+      console.log(res);
+      setRequestedModelData(res.data.Item)
+    } catch (error) {
+      console.log(error);
+    }
+    setOpen(true);
+  };
+
+  const handleClose = (value) => {
+    setOpen(false);
+    // setSelectedValue(value);
+  };
+
+  async function sendModel(id){
+    try {
+      const data = {};
+      data.modelerId = storeModelerId;
+      data.productId = productId;
+      data.status = false;
+      data.glburl = requestedModelData.glburl;
+      console.log(data, id, clientdata);
+      // setRequestedModelData();
+      const res = await axios.patch("https://eozoyxa2xl.execute-api.ap-south-1.amazonaws.com/prod/arnxtrequestmodel", data);
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  // useEffect(()=>{
+  //   console.log(requestedModelData);
+  // }, [requestedModelData])
+
+  async function modelerRequestAndId(id){
+    setProductId(id);
+    setShowModlerRequest(!showModlerRequests)
+  }
+
+
   return (
     <div>
+
+
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        PaperProps={{
+          component: 'form',
+          onSubmit: (event) => {
+            event.preventDefault();
+            const formData = new FormData(event.currentTarget);
+            const formJson = Object.fromEntries(formData.entries());
+            const email = formJson.email;
+            console.log(email);
+            handleClose();
+          },
+        }}
+      >
+        <DialogTitle>Requested Model</DialogTitle>
+        <DialogContent>
+          {/* <DialogContentText>
+            To subscribe to this website, please enter your email address here. We
+            will send updates occasionally.
+          </DialogContentText> */}
+          <div>
+            {console.log(requestedModelData)}
+            <p>Product Id: {requestedModelData?.Id}</p>
+            <div style={{ display: "flex" }}>
+              <img src={requestedModelData?.images[0]} alt='' style={{ height: "200px", width: "300px" }} />
+              <QRCode
+                className='shadow-sm'
+                size={80}
+                style={{ height: "auto", maxWidth: "100%", width: "100%", padding: '20px' }}
+
+                value={`https://www.admin.arnxt.com/viewmodel?id=${requestedModelData?.Id}`}
+
+              />
+            </div>
+
+          </div>
+          {/* <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="name"
+            name="email"
+            label="Email Address"
+            type="email"
+            fullWidth
+            variant="standard"
+          /> */}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button type="submit" onClick={()=>sendModel(requestedModelData.Id)}>Send Model</Button>
+        </DialogActions>
+      </Dialog>
+
 
       <Navbar />
       <div className='statusbardiv'>
@@ -666,8 +790,8 @@ const Modelerassignquleep = () => {
 
           </div>
           {/* <div style={{width:'100%', display:'flex', justifyContent:'center', alignItems:'center'}}>
- <button onClick={handlesaveqrcode} style={{margin:'5px', border:'1px solid grey', borderRadius:'5px', backgroundColor:'transparent'}}>Save QR code</button>
-</div> */}
+              <button onClick={handlesaveqrcode} style={{margin:'5px', border:'1px solid grey', borderRadius:'5px', backgroundColor:'transparent'}}>Save QR code</button>
+            </div> */}
 
         </Dialog>
 
@@ -709,7 +833,21 @@ const Modelerassignquleep = () => {
                       <span style={{ display: 'flex' }}>  <p className='labelclient'>Unit :</p>  <p>{item.dimensionunit}</p></span>
                       <span style={{ display: 'flex' }}>  <a href={item.productpageurl} target='blank' >Open page url</a></span>
 
+                      {item?.modelerRequest?.length > 0 && <div style={{ marginTop: '15px' }}>
+                        {/* {console.log(clientdata, item.modelerRequest?.modeler)} */}
+                        <p className='labelclient blinking' style={{ backgroundColor: "yellow", cursor: "pointer" }} onClick={() => modelerRequestAndId(item.Id)}>Model Requested</p>
+                      </div>}
 
+                      {showModlerRequests && <div>
+                        {item?.modelerRequest?.map((item_, index) => {
+                          { console.log(item_) }
+                          return <p className='labelclient shadow-sm' style={{ backgroundColor: "", padding: "5px", cursor: "pointer" }} onClick={() => handleClickOpen(item_.productId, item_.modelerId)}>{index + 1}. {item_.modelerId}</p>
+                        })}
+                      </div>}
+
+                      {/* <div>
+                        {return }
+                      </div> */}
 
 
                     </div>
@@ -719,8 +857,8 @@ const Modelerassignquleep = () => {
 
                       {
 
-                        item.images.length > 0 ?
-                          item.images.map((img) => (
+                        item?.images?.length > 0 ?
+                          item?.images?.map((img) => (
                             <img style={{ maxWidth: '300px', maxHeight: '300px', margin: '10px', objectFit: 'contain' }} src={img} />
                           ))
                           : <p>
@@ -751,7 +889,6 @@ const Modelerassignquleep = () => {
                       <div style={{ marginTop: '5px', display: 'flex', justifyContent: 'start', alignItems: 'start', width: '100%' }}>
                         <div className='clientdatadiv1'>
                           <span style={{ display: 'flex' }}> <TextField variant='outlined' id={`timegiven_${index}`} label='Time given' /> </span>
-
                         </div>
                       </div>
                       <div style={{ marginTop: '10px', display: 'flex', width: '100%' }}>
@@ -859,8 +996,6 @@ const Modelerassignquleep = () => {
                           <option value={'Model Rejected'}><p>Model Rejected</p></option>
                           {/* <option value = {'Product live'}><p>Product live</p></option>
                                   <option value = {'Live on client site'}><p>Live on client site</p></option> */}
-
-
                         </select>
 
 
