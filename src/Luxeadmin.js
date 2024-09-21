@@ -541,7 +541,6 @@ const Luxeadmin = () => {
                         <MenuItem value="300X420">300X420</MenuItem>
                         <MenuItem value="360X450">360X450</MenuItem>
                         <MenuItem value="Oversize">Oversize</MenuItem>
-
                       </Select>
 
 
@@ -623,7 +622,9 @@ const Luxeadmin = () => {
 
                             <span
                               onClick={handleServiceAdd}
-                              className="add-btn" ><i style={{ fontSize: '30px' }} class='bx bx-message-square-add'></i></span>
+                              className="add-btn" >
+                                <i style={{ fontSize: '30px' }} class='bx bx-message-square-add'></i>
+                            </span>
                           )}
                         </div>
 
