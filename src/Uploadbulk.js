@@ -84,7 +84,7 @@ const fileToBase64 = (file, cb) => {
 }
 
 const addItem = (newItem, id) => {
-    console.log(newItem)
+  
     
     const existingItem = images.findIndex(item => item.id === id);
   

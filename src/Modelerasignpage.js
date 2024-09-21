@@ -549,10 +549,6 @@ function base64ToImageFile(base64String, fileName, fileType,len) {
 
     }
 
-
-    
-
-  
   return (
     <div>
 

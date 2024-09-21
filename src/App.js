@@ -75,10 +75,6 @@ function App() {
           <Route path="/managequleep" component={Modelerassignquleep} />
           <Route path="/uploadquleep" component={Uploadquleep} />
 
-
-
-
-
           <Route path="/test" component={Test} />
 
         </Switch>
