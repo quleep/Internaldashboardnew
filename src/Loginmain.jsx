@@ -33,14 +33,9 @@ const updatemodelstatus= 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.co
 const statusdataurl= 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/getstatusproducts'
 const itemdetails= 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/getsingleitemdetails'
 const merchantdataurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/merchantallproduct'
-
-const Loginmain = ({history}) => {
-
- 
-
-  
-
-
+import { useNavigate } from 'react-router-dom';
+const Loginmain = () => {
+  const navigate=useNavigate();
     const [userid, setUserId] = useState('');
     const [modeluploadstatus, setModelUploadStatus] = useState('')
     const [modelrejectreason, setModelRejectReason] = useState('')
@@ -1109,7 +1104,7 @@ const logoutHandler=(e)=>{
   e.preventDefault();
   sessionStorage.removeItem('user');
   sessionStorage.removeItem('token');
-  history.push('/')
+  navigate('/')
 
 }
 
@@ -1634,12 +1629,12 @@ const searchHandlerProduct=()=>{
 
 const handlemodelerassignclient = ()=>{
 
-  history.push('/assignmodeler')
+  navigate('/assignmodeler')
 
 }
 const handlemodelerassignquleep = ()=>{
 
-  history.push('/managequleep')
+  navigate('/managequleep')
 
 }
 const searchHandlerMerchant=()=>{
@@ -1769,7 +1764,7 @@ const searchHandlerQualityMerchant=()=>{
 
   if(roleuse === 'user' || roleuse === 'admin' ){
 
-     history.push('/modeluploadclient')
+     navigate('/modeluploadclient')
 
   }else{
     window.alert('Access Denied')
@@ -1780,7 +1775,7 @@ const searchHandlerQualityMerchant=()=>{
  const handleClientImages = ()=>{
   if(roleuse === 'modelhead' || roleuse === 'admin' ){
 
-    history.push('/uploadclient')
+    navigate('/uploadclient')
 
  }else{
    window.alert('Access Denied')
@@ -1790,7 +1785,7 @@ const searchHandlerQualityMerchant=()=>{
  const handleQuleepData = ()=>{
   if(roleuse === 'modelhead' || roleuse === 'admin' ){
 
-    history.push('/uploadquleep')
+    navigate('/uploadquleep')
 
  }else{
    window.alert('Access Denied')
@@ -1801,7 +1796,7 @@ const searchHandlerQualityMerchant=()=>{
  const handleManageLuxe = ()=>{
   if(roleuse === 'modelhead' || roleuse === 'admin' ){
 
-    history.push('/luxeadmin')
+    navigate('/luxeadmin')
 
  }else{
    window.alert('Access Denied')
@@ -1811,7 +1806,7 @@ const searchHandlerQualityMerchant=()=>{
  const handleBulkUpload = ()=>{
   if(roleuse === 'modelhead' || roleuse === 'admin' ){
 
-    history.push('/uploadbulk')
+    navigate('/uploadbulk')
 
  }else{
    window.alert('Access Denied')

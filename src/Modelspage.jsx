@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 import axios from 'axios'
 import { FaCheck } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 const searchurl= 'https://eh16rizdbi.execute-api.ap-south-1.amazonaws.com/production/fetchurl';
 const getdimensionurl= 'https://eh16rizdbi.execute-api.ap-south-1.amazonaws.com/production/fetchdimension';
 const uplodanameurl= 'https://eh16rizdbi.execute-api.ap-south-1.amazonaws.com/production/modelername';
@@ -14,8 +15,8 @@ const uploadmodelfbx= 'https://eh16rizdbi.execute-api.ap-south-1.amazonaws.com/p
 const urlimagesend= 'https://qt028wy4w7.execute-api.ap-south-1.amazonaws.com/default/ARnxt_models_new'
 const getmodelfinaldataurl='https://eh16rizdbi.execute-api.ap-south-1.amazonaws.com/production/getfinalmodeldata'
 
-const Modelspage = ({history}) => {
-
+const Modelspage = () => {
+     const navigate=useNavigate()
     const [userid, setUserId] = useState();
 
     const [urldata, setUrlData]= useState();
@@ -881,7 +882,7 @@ const logoutHandler=(e)=>{
   e.preventDefault();
   sessionStorage.removeItem('user');
   sessionStorage.removeItem('token');
-  history.push('/')
+  navigate('/')
 
 }
 

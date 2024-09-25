@@ -3,15 +3,16 @@ import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar';
 import { Container, TextField, Grid, Button, Select, MenuItem, InputLabel, FormControl, styled, Typography, autocompleteClasses, Alert, Dialog } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { useHistory } from 'react-router-dom/cjs/react-router-dom';
+
+
 import { Toaster, toast } from "react-hot-toast";
 import QRCode from 'react-qr-code';
+// import { useNavigate } from 'react-router-dom';
 
 
 const Uploadclientmodel = () => {
 
-  const history = useHistory()
-
+//  const navigate=useNavigate();
   const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
     clipPath: 'inset(50%)',
@@ -60,8 +61,6 @@ const Uploadclientmodel = () => {
   let loginuser = useremail.email
 
   useEffect(() => {
-
-
 
 
 

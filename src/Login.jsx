@@ -3,9 +3,9 @@ import { setUserSession } from './service/AuthService';
 import axios from 'axios';
 import TextField from '@mui/material/TextField';
 const adminloginurl= 'https://4xuh6eqvr6.execute-api.ap-south-1.amazonaws.com/production/adminlogin';
-
-const Login = ({history}) => {
-
+import { useNavigate } from 'react-router-dom';
+const Login = () => {
+    const navigate=useNavigate()
     const [loginemail, setLoginEmail] = useState();
     const [loginpassword, setLoginPassword] = useState();
     const [res, setRes]= useState('')
@@ -15,9 +15,9 @@ const Login = ({history}) => {
 
     useEffect(()=>{
         if(res === 200){
-          history.push('/main')
+          navigate('/main')
         }
-      },[history, res])
+      },[navigate, res])
 
     
   const loginHandler=(e)=>{

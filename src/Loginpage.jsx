@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 
 import { setUserSession } from './service/AuthService';
+import { useNavigate } from 'react-router-dom';
 
 const adminurl='https://4xuh6eqvr6.execute-api.ap-south-1.amazonaws.com/production/adminroute';
 const adminloginurl= 'https://4xuh6eqvr6.execute-api.ap-south-1.amazonaws.com/production/adminlogin';
 const verifyadminurl= 'https://4xuh6eqvr6.execute-api.ap-south-1.amazonaws.com/production/verifyadmin'
 
-const Loginpage = ({history}) => {
-
+const Loginpage = () => {
+  const navigate=useNavigate();
   const [email, setEmail] = useState();
   const [employeeid, setEmployeeId] = useState();
   const [role, setRole] = useState();
@@ -19,9 +20,9 @@ const Loginpage = ({history}) => {
   
 useEffect(()=>{
   if(res === 200){
-    history.push('/admin')
+    navigate('/admin')
   }
-},[history, res])
+},[ res])
   const submitHandler=(e)=>{
     e.preventDefault();
 const requestBody= {

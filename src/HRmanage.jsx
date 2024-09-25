@@ -1,12 +1,16 @@
 import React, { useState } from "react";
-
-import { useHistory, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom"; // Retain if you need to access the location
 import Divider from "./images/divider.svg";
 import axios from "axios";
+
 const adminurl =
   "https://4xuh6eqvr6.execute-api.ap-south-1.amazonaws.com/production/adminroute";
 
 const HRmanage = () => {
+  const [email, setEmail] = useState("");
+  const [employeeid, setEmployeeId] = useState("");
+  const [role, setRole] = useState("");
+
   const submitHandler = (e) => {
     e.preventDefault();
     const requestBody = {
@@ -17,17 +21,11 @@ const HRmanage = () => {
     axios
       .post(adminurl, requestBody)
       .then((res) => {
-        
-          
-        if(res.status === 201){
-         
-          
-          document.getElementById('submitmessage').innerHTML= 'submitted Successfully'
+        if (res.status === 201) {
+          document.getElementById("submitmessage").innerHTML = "Submitted Successfully";
           setTimeout(() => {
-          document.getElementById('submitmessage').innerHTML=''
-
-            
-          }, [2000]);
+            document.getElementById("submitmessage").innerHTML = "";
+          }, 2000);
         }
       })
       .catch((error) => {
@@ -40,18 +38,12 @@ const HRmanage = () => {
     document.getElementById("addrolesdiv").style.display = "block";
   };
 
-
- 
-
-  const [email, setEmail] = useState();
-  const [employeeid, setEmployeeId] = useState();
-  const [role, setRole] = useState();
   return (
     <div>
       <div className="navbar">
         <div>
-          <p className=" navoperation">
-            <a href="" onClick={rolesHandler}>
+          <p className="navoperation">
+            <a href="#" onClick={rolesHandler}>
               Assign roles
             </a>
           </p>
@@ -65,7 +57,7 @@ const HRmanage = () => {
         <img src={Divider} alt="Your SVG" className="divider-svg" />
         <div>
           <p className="navoperation">
-            <a href="/viewapplicants"> View Applicants Info</a>
+            <a href="/viewapplicants">View Applicants Info</a>
           </p>
         </div>
       </div>
@@ -77,31 +69,32 @@ const HRmanage = () => {
           type="email"
           onChange={(event) => setEmail(event.target.value)}
           placeholder="ARnxt email"
+          required
         />
         <input
-          type="password"
+          type="text"
           onChange={(event) => setEmployeeId(event.target.value)}
-          placeholder="employee id"
+          placeholder="Employee ID"
+          required
         />
 
         <select
           className="admindropdown"
-          onChange={(event) => setRole(event.target.value)}>
-          <option selected="selected" className="optroles">
+          onChange={(event) => setRole(event.target.value)}
+          required
+        >
+          <option value="" disabled selected>
             Assign roles
           </option>
-
-          <option value="modelhead">modelhead</option>
-          <option value="user">user</option>
-          <option value="ql">ql</option>
-          <option value="hr">hr</option>
-          <option value="admin">admin</option>
-
-
+          <option value="modelhead">Model Head</option>
+          <option value="user">User</option>
+          <option value="ql">QL</option>
+          <option value="hr">HR</option>
+          <option value="admin">Admin</option>
         </select>
 
         <input type="submit" value="Submit" style={{ cursor: "pointer" }} />
-        <p  style={{color:'green'}} id='submitmessage'></p>
+        <p style={{ color: 'green' }} id="submitmessage"></p>
       </form>
     </div>
   );
