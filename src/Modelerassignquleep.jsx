@@ -6,6 +6,7 @@ import QRCode from "react-qr-code";
 import GetQrcode from './GetQrcode';
 
 import * as htmlToImage from 'html-to-image';
+import { useNavigate } from 'react-router-dom';
 
 const Modelerassignquleep = () => {
 
@@ -397,7 +398,7 @@ const Modelerassignquleep = () => {
     })
   }
 
-
+  
   //  const handlegetliveproduct = async (val)=>{
 
   //   const body = {
@@ -575,61 +576,66 @@ const Modelerassignquleep = () => {
   //   }
   //   getRequestedModels();
   // }, [])
-
+  const navigate=useNavigate()
   const [open, setOpen] = useState(false);
   const [requestedModelData, setRequestedModelData] = useState();
   const [storeModelerId, setStoreModelerId] = useState();
   const [productId, setProductId] = useState(); 
-
-  const handleClickOpen = async (id, modelerId) => {
-    try {
-      console.log(id);
-      setStoreModelerId(modelerId)
-      const res = await axios.get(`https://eozoyxa2xl.execute-api.ap-south-1.amazonaws.com/prod/quleepdataformodel?Id=${id}`);
-      console.log(res);
-      setRequestedModelData(res.data.Item)
-    } catch (error) {
-      console.log(error);
-    }
-    setOpen(true);
-  };
+  const[fetchedTableData,setFetchedTableData]=useState([])
+  // const handleClickOpen = async (id, modelerId) => {
+  //   try {
+  //     console.log(id);
+  //     setStoreModelerId(modelerId)
+  //     const res = await axios.get(`https://eozoyxa2xl.execute-api.ap-south-1.amazonaws.com/prod/quleepdataformodel?Id=${id}`);
+  //     console.log("res is ",res);
+  //     setRequestedModelData(res.data.Item)
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  //   setOpen(true);
+  // };
 
   const handleClose = (value) => {
     setOpen(false);
     // setSelectedValue(value);
   };
 
-  async function sendModel(id){
-    try {
-      const data = {};
-      data.modelerId = storeModelerId;
-      data.productId = productId;
-      data.status = false;
-      data.glburl = requestedModelData.glburl;
-      console.log(data, id, clientdata);
-      // setRequestedModelData();
-      const res = await axios.patch("https://eozoyxa2xl.execute-api.ap-south-1.amazonaws.com/prod/arnxtrequestmodel", data);
-      console.log(res);
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  // async function sendModel(id){
+  //   try {
+  //     const data = {};
+  //     data.modelerId = storeModelerId;
+  //     data.productId = productId;
+  //     data.status = false;
+  //     data.glburl = requestedModelData.glburl;
+   
+  //     console.log(data, id, clientdata);
+  //     // setRequestedModelData();
+  //     const res = await axios.patch("https://eozoyxa2xl.execute-api.ap-south-1.amazonaws.com/prod/arnxtrequestmodel", data);
+  //     console.log('send model res is',res);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 
   // useEffect(()=>{
   //   console.log(requestedModelData);
   // }, [requestedModelData])
-
-  async function modelerRequestAndId(id){
+ 
+  async function modelerRequestAndId(id,modelerRequest){
+     
     setProductId(id);
-    setShowModlerRequest(!showModlerRequests)
+    setShowModlerRequest(!showModlerRequests)  
+   
+    // navigate('/modelrequesttable',{state:{data:modelerRequest,requestedId:id}})
+    navigate('/modelrequesttable',{state:{requestedId:id}})
   }
 
 
   return (
     <div>
 
-
-      <Dialog
+     {/* this dialog funcationality showed in modelrequestedtable */}
+      {/* <Dialog
         open={open}
         onClose={handleClose}
         PaperProps={{
@@ -646,10 +652,7 @@ const Modelerassignquleep = () => {
       >
         <DialogTitle>Requested Model</DialogTitle>
         <DialogContent>
-          {/* <DialogContentText>
-            To subscribe to this website, please enter your email address here. We
-            will send updates occasionally.
-          </DialogContentText> */}
+         
           <div>
             {console.log(requestedModelData)}
             <p>Product Id: {requestedModelData?.Id}</p>
@@ -666,23 +669,13 @@ const Modelerassignquleep = () => {
             </div>
 
           </div>
-          {/* <TextField
-            autoFocus
-            required
-            margin="dense"
-            id="name"
-            name="email"
-            label="Email Address"
-            type="email"
-            fullWidth
-            variant="standard"
-          /> */}
+         
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button type="submit" onClick={()=>sendModel(requestedModelData.Id)}>Send Model</Button>
         </DialogActions>
-      </Dialog>
+      </Dialog>  */}
 
 
       <Navbar />
@@ -835,19 +828,17 @@ const Modelerassignquleep = () => {
 
                       {item?.modelerRequest?.length > 0 && <div style={{ marginTop: '15px' }}>
                         {/* {console.log(clientdata, item.modelerRequest?.modeler)} */}
-                        <p className='labelclient blinking' style={{ backgroundColor: "yellow", cursor: "pointer" }} onClick={() => modelerRequestAndId(item.Id)}>Model Requested</p>
+                        <p className='labelclient blinking' style={{ backgroundColor: "yellow", cursor: "pointer" }} onClick={() => modelerRequestAndId(item.Id,item?.modelerRequest)}>Model Requested</p>
                       </div>}
 
-                      {showModlerRequests && <div>
+                      {/* {showModlerRequests && <div>
                         {item?.modelerRequest?.map((item_, index) => {
                           { console.log(item_) }
                           return <p className='labelclient shadow-sm' style={{ backgroundColor: "", padding: "5px", cursor: "pointer" }} onClick={() => handleClickOpen(item_.productId, item_.modelerId)}>{index + 1}. {item_.modelerId}</p>
                         })}
-                      </div>}
+                      </div>} */}
 
-                      {/* <div>
-                        {return }
-                      </div> */}
+                     
 
 
                     </div>

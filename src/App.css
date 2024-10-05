@@ -2422,6 +2422,31 @@ hr {
   cursor: pointer;
 }
 
+/* ModelRequestedTable.css */
+.center-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  text-align: center; 
+  
+}
+.requestmodelheading{
+  margin-bottom: 20px;
+  font-family: 'Roboto', 'sans-serif';
+
+}
+
+.header-theme {
+  background-color: #cfccdc; /* Header background color */
+  font-weight: bold;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  text-align: center;
+  height: 60px;
+  line-height: 60px; 
+}
 
 iframe#webpack-dev-server-client-overlay{display:none!important}
 

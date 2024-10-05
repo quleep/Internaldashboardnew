@@ -1,6 +1,5 @@
 import logo from "./logo.svg";
 import "./App.css";
-// Pankaj Kumar
 import Modelspage from "./Modelspage";
 import Loginpage from "./Loginpage";
 import {
@@ -35,6 +34,8 @@ import Viewarclient from "./Viewarclient";
 import Modelerassignquleep from "./Modelerassignquleep";
 import Uploadquleep from "./Uploadquleep";
 import Uploadquleepmodels from "./Uploadquleepmodels";
+import ModelRequestedTable from "./ModelRequestedTable";
+import ClientRequestModelTable from "./ClientRequestModelTable";
 
 function App() {
   return (
@@ -69,6 +70,8 @@ function App() {
           <Route path="/viewmodel" element={<Viewarclient />} />
           <Route path="/managequleep" element={<Modelerassignquleep />} />
           <Route path="/uploadquleep" element={<Uploadquleep />} />
+          <Route path="/modelrequesttable" element={<ModelRequestedTable/>}/>
+          <Route path="/clientrequesttable" element={<ClientRequestModelTable/>}/>
           <Route path="/test" element={<Test />} />
         </Routes>
       </Router>

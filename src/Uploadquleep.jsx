@@ -1,193 +1,251 @@
-import React, { useState } from 'react'
-import { Container, TextField, Grid, Button, Select, MenuItem, InputLabel, FormControl, styled, Typography, autocompleteClasses } from '@mui/material';
-import { FileType, Upload } from 'lucide-react';
-import DownloadDoneIcon from '@mui/icons-material/DownloadDone';
-import axios from 'axios'
-import Alert from '@mui/material/Alert';
-import DoneAllIcon from '@mui/icons-material/DoneAll';
-import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
-import { FaCross, FaTimes } from 'react-icons/fa';
+import React, { useState } from "react";
+import {
+  Container,
+  TextField,
+  Grid,
+  Button,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
+  styled,
+  Typography,
+  autocompleteClasses,
+} from "@mui/material";
+import { FileType, Upload } from "lucide-react";
+import DownloadDoneIcon from "@mui/icons-material/DownloadDone";
+import axios from "axios";
+import Alert from "@mui/material/Alert";
+import DoneAllIcon from "@mui/icons-material/DoneAll";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
+import { FaCross, FaTimes } from "react-icons/fa";
 
-const InputFile = styled('input')({
-  display: 'none',
+const InputFile = styled("input")({
+  display: "none",
 });
 
 const Uploadquleep = () => {
-  const user = sessionStorage.getItem('user')
+  const user = sessionStorage.getItem("user");
   const emailID = JSON.parse(user);
 
-
-  const uploadfileurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/uploadfilerepo'
-  const registerurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/uploadquleepmodels'
-  const deleteitemurl = 'https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/deletecenteralrepoitem'
-  const [category, setCategory] = useState('');
+  const uploadfileurl =
+    "https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/uploadfilerepo";
+  const registerurl =
+    "https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/uploadquleepmodels";
+  const deleteitemurl =
+    "https://ymxx21tb7l.execute-api.ap-south-1.amazonaws.com/production/deletecenteralrepoitem";
+  const [category, setCategory] = useState("");
   // const [subcategory, setSubcategory] = useState('');
-  const [tempglbfile, setTempGlbFile] = useState()
-  const [errortext, setErrorText] = useState()
-  const [uploadeditem, setUploadedItem] = useState()
+  const [tempglbfile, setTempGlbFile] = useState();
+  const [errortext, setErrorText] = useState();
+  const [uploadeditem, setUploadedItem] = useState();
   const [images, setImages] = useState([]);
   const [imagepreview, setImagesPreview] = useState([]);
-  const [file, setFile] = useState()
-  const [filename, setFileName] = useState()
+  const [file, setFile] = useState();
+  const [filename, setFileName] = useState();
   const [formdata, setFormData] = useState({
-    productname: '',
-    platformname: '',
+    productname: "",
+    platformname: "",
 
-    length: '',
-    width: '',
-    height: '',
+    length: "",
+    width: "",
+    height: "",
     images: [],
-    unit: '',
-    pageurl: ''
-
-  })
+    unit: "",
+    pageurl: "",
+  });
 
   const handleinputchange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formdata,
-      [name]: value
-    })
-  }
-  console.log(formdata)
+      [name]: value,
+    });
+  };
+  console.log(formdata);
 
-  // const handleCategoryChange = (event) => {
-  //   setCategory(event.target.value);
-  // };
-
-  // const handleSubcategoryChange = (event) => {
-  //   setSubcategory(event.target.value);
-  // };
-
+ 
 
   const handleformsubmit = async (e) => {
+    e.preventDefault();
 
-    e.preventDefault()
-
-    if (formdata.productname === '') {
-      setErrorText('Product name is required')
-      document.querySelector('.erroralert').style.display = 'flex'
+   
+    if (formdata.productname === "") {
+      setErrorText("Product name is required");
+      document.querySelector(".erroralert").style.display = "flex";
       setTimeout(() => {
-        document.querySelector('.erroralert').style.display = 'none'
-
+        document.querySelector(".erroralert").style.display = "none";
       }, 3000);
-      return
-    }
-    if (formdata.brandname === '') {
-      setErrorText('Brand name is required')
-      document.querySelector('.erroralert').style.display = 'flex'
-      setTimeout(() => {
-        document.querySelector('.erroralert').style.display = 'none'
-
-      }, 3000);
-      return
+      return;
     }
 
-    document.querySelector('.loadingbox').style.display = 'flex'
+    if (formdata.brandname === "") {
+      setErrorText("Brand name is required");
+      document.querySelector(".erroralert").style.display = "flex";
+      setTimeout(() => {
+        document.querySelector(".erroralert").style.display = "none";
+      }, 3000);
+      return;
+    }
 
+  
+    let temparray = [];
+
+    
+    for (let img of images) {
+      try {
+        const url = uploadfileurl;
+
+        
+        const res = await fetch(url, {
+          method: "POST",
+          body: img.name,
+        });
+
+        const result = await res.json();
+
+        
+        const uploadResponse = await fetch(result.uploadURL, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "image/jpeg", 
+          },
+          body: img, 
+        });
+
+        
+        if (uploadResponse.status === 200) {
+          const imageUrl = uploadResponse.url.split("?")[0]; 
+          temparray.push(imageUrl); 
+        } else {
+          console.log("Image upload failed:", uploadResponse.status);
+        }
+      } catch (error) {
+        console.log("Error uploading image:", error);
+      }
+    }
+
+   
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      images: temparray, 
+    }));
+
+    
+    document.querySelector(".loadingbox").style.display = "flex";
+
+    
     const body = {
-      Id: new Date().getTime().toString(),
+      Id: new Date().getTime().toString(), 
       productname: formdata.productname.toLowerCase(),
       platformname: formdata.platformname.toLowerCase(),
       productpageurl: formdata.pageurl,
       productlength: formdata.length,
       productwidth: formdata.width,
       productheight: formdata.height,
-      images: formdata.images,
+      images: temparray, // Use the updated image array
       dimensionunit: formdata.unit.toLowerCase(),
-      statusval: 'Images Uploaded',
+      statusval: "Images Uploaded",
       category: selectedCategory.toLowerCase(),
-      subcategory: selectedSubCategory.toLowerCase(),
+      subcategory: selectedSubCategory ? selectedSubCategory.toLowerCase() : "",
       uploadedby: emailID?.email,
-      uploaddate: new Date().toString()
-    }
+      uploaddate: new Date().toString(),
+    };
+
+    console.log("body is",body)
     try {
-      await axios.post(registerurl, body).then(res => {
-        if (res.status === 200) {
-          setUploadedItem(res.data.Item)
+      const response = await axios.post(registerurl, body);
 
-          document.querySelector('.alertdiv').style.display = 'flex'
-          setTimeout(() => {
-            document.querySelector('.alertdiv').style.display = 'none'
+      
+      if (response.status === 200) {
+        setUploadedItem(response.data.Item);
+        
+        document.querySelector(".alertdiv").style.display = "flex";
+        setTimeout(() => {
+          document.querySelector(".alertdiv").style.display = "none";
+        }, 3000);
 
-          }, 3000);
+        setFormData({
+          productname: "",
+          platformname: "",
+          length: "",
+          width: "",
+          height: "",
+          images: [],
+          unit: "",
+          pageurl: "",
+        });
+        setSelectedCategory("");
+        setSelectedSubCategory("");
+        setImages([]);
 
-
-          setFormData({
-            productname: '',
-            platformname: '',
-            length: '',
-            width: '',
-            height: '',
-            images: [],
-            unit: '',
-            pageurl: ''
-          })
-          setSelectedCategory("");
-          setSelectedSubCategory("");
-
-        }
-        document.querySelector('.loadingbox').style.display = 'none'
-
-
-      }).catch(error => {
-        console.log(error)
-        document.querySelector('.loadingbox').style.display = 'none'
-
-      })
+      }
     } catch (error) {
-      console.log(error)
-      document.querySelector('.loadingbox').style.display = 'none'
-
+      console.log("Error submitting form:", error);
+    } finally {
+      // Hide loading indicator
+      document.querySelector(".loadingbox").style.display = "none";
     }
+  };
 
-  }
+  // Helper functions
+  const showError = (message) => {
+    setErrorText(message);
+    document.querySelector(".erroralert").style.display = "flex";
+    setTimeout(() => {
+      document.querySelector(".erroralert").style.display = "none";
+    }, 3000);
+  };
 
+  const showSuccess = (selector) => {
+    document.querySelector(selector).style.display = "flex";
+    setTimeout(() => {
+      document.querySelector(selector).style.display = "none";
+    }, 3000);
+  };
 
   const fileToBase64 = (file, cb) => {
-    const reader = new FileReader()
-    reader.readAsDataURL(file)
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
     reader.onload = function () {
-      cb(null, reader.result)
-    }
+      cb(null, reader.result);
+    };
     reader.onerror = function (error) {
-      cb(error, null)
-    }
-  }
+      cb(error, null);
+    };
+  };
 
   async function checktypeglb(filename, type) {
-    let newval = filename.name
+    let newval = filename.name;
     let indx = newval.lastIndexOf(".") + 1;
     let filetype = newval.substr(indx, newval.length).toLowerCase();
     if (filetype === type) {
-      return true
-    }
-    else {
-      return false
+      return true;
+    } else {
+      return false;
     }
   }
   async function checkfiletypeimage(filename, type1, type2, type3) {
-    let newval = filename.name
+    let newval = filename.name;
     let indx = newval.lastIndexOf(".") + 1;
     let filetype = newval.substr(indx, newval.length).toLowerCase();
     if (filetype === type1 || filetype === type2 || filetype === type3) {
-      return true
+      return true;
+    } else {
+      return false;
     }
-    else {
-      return false
-    }
-
   }
 
   const handlefileselectglb = async (e, type, type2, type3) => {
-
     let val = document.getElementById("glbfile").value;
+
     let indx = val.lastIndexOf(".") + 1;
     let filetype = val.substr(indx, val.length).toLowerCase();
-
+    console.log(filetype);
     if (filetype === "jpg" || filetype === "png" || filetype === "jpeg") {
       let files = Array.from(e.target.files);
+
       files.forEach((file) => {
         fileToBase64(file, (err, result) => {
           if (result) {
@@ -208,110 +266,100 @@ const Uploadquleep = () => {
         reader.readAsDataURL(file);
       });
     } else {
-
     }
+  };
 
-  }
+  // const handleuploadfileglb = async (e) => {
 
+  //   let temparray = []
 
+  //   {
 
-  const handleuploadfileglb = async (e) => {
+  //     for (let img of images) {
 
-    let temparray = []
+  //       const url = uploadfileurl;
+  //       await fetch(url, {
+  //         method: "POST",
+  //         body: img.name
 
-    {
+  //       }).then((res) => res.json())
+  //         .then((res) => {
 
-      for (let img of images) {
+  //           fetch(res.uploadURL, {
 
-        const url = uploadfileurl;
-        await fetch(url, {
-          method: "POST",
-          body: img.name
+  //             method: "PUT",
+  //             headers: {
+  //               "ContentType": "image/jpeg",
 
-        }).then((res) => res.json())
-          .then((res) => {
+  //             },
 
-            fetch(res.uploadURL, {
+  //             body: img
 
-              method: "PUT",
-              headers: {
-                "ContentType": "image/jpeg",
+  //           })
+  //             .then((res) => {
 
-              },
+  //               if (res.status === 200) {
 
-              body: img
+  //                 let resnew = res.url.split('?')
+  //                 let imgurl = resnew[0]
 
+  //                 temparray.push(imgurl)
+  //                 document.getElementById('glbfile').value = ''
 
-            })
-              .then((res) => {
+  //                 document.querySelector('.alertdivimage').style.display = 'flex'
 
-                if (res.status === 200) {
+  //                 setTimeout(() => {
+  //                   document.querySelector('.alertdivimage').style.display = 'none'
 
-                  let resnew = res.url.split('?')
-                  let imgurl = resnew[0]
+  //                 }, 3000);
 
-                  temparray.push(imgurl)
-                  document.getElementById('glbfile').value = ''
+  //                 setImages([])
 
+  //               }
 
-                  document.querySelector('.alertdivimage').style.display = 'flex'
+  //             })
+  //             .catch((err) => console.log(err))
 
-                  setTimeout(() => {
-                    document.querySelector('.alertdivimage').style.display = 'none'
+  //         })
+  //         .catch((err) => console.log(err))
 
-                  }, 3000);
+  //     }
+  //   }
 
-                  setImages([])
+  //   setFormData({
+  //     ...formdata,
+  //     images: temparray
+  //   })
 
-
-
-                }
-
-              })
-              .catch((err) => console.log(err))
-
-          })
-          .catch((err) => console.log(err))
-
-      }
-    }
-
-    setFormData({
-      ...formdata,
-      images: temparray
-    })
-
-
-  }
-
+  // }
 
   const handledeleteitem = async (idvalue) => {
     const body = {
-      id: idvalue
-    }
+      id: idvalue,
+    };
     try {
-      await axios.post(deleteitemurl, body).then(res => {
-        if (res.status === 200) {
-          window.alert('Item deleted')
-        }
-        document.querySelector('.uploadedmodal').style.display = 'none'
-
-      }).catch(error => {
-        console.log(error)
-      })
+      await axios
+        .post(deleteitemurl, body)
+        .then((res) => {
+          if (res.status === 200) {
+            window.alert("Item deleted");
+          }
+          document.querySelector(".uploadedmodal").style.display = "none";
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
   const handlecloseuploadedmodel = () => {
-    document.querySelector('.uploadedmodal').style.display = 'none'
-  }
+    document.querySelector(".uploadedmodal").style.display = "none";
+  };
 
   const removeImage = (val) => {
     setImages((oldArray) => oldArray.filter((item) => item !== val));
   };
-
-
 
   const categories = [
     "Furniture",
@@ -322,8 +370,8 @@ const Uploadquleep = () => {
     "Upholstery",
     "Electronics",
     "Electrical",
-    "Bathroom"
-  ]
+    "Bathroom",
+  ];
 
   const subcategories = {
     Furniture: [
@@ -344,35 +392,14 @@ const Uploadquleep = () => {
       "Bookshelf",
       "Study Table",
       "Bench",
-      "Table"
-    ]
-    ,
+      "Table",
+    ],
     Walls: [],
-    Floors: [
-      "Tiles",
-      "Natural Stone",
-      "Wood",
-      "Vinyl"
-    ],
-    Furnishing: [
-      "Rugs",
-      "Blinds",
-      "Quilts",
-      "Curtains"
-    ],
-    Decorative: [
-      "Metal Art",
-      "Painting",
-      "Indoor plants"
-    ],
+    Floors: ["Tiles", "Natural Stone", "Wood", "Vinyl"],
+    Furnishing: ["Rugs", "Blinds", "Quilts", "Curtains"],
+    Decorative: ["Metal Art", "Painting", "Indoor plants"],
     Upholstery: [],
-    Electronics: [
-      "AC",
-      "Microwave",
-      "Washing Machine",
-      "Refrigerator",
-      "TV"
-    ],
+    Electronics: ["AC", "Microwave", "Washing Machine", "Refrigerator", "TV"],
     Electrical: [
       "Light",
       "Chandelier",
@@ -381,29 +408,21 @@ const Uploadquleep = () => {
       "Fan",
       "Water Filter",
       "Chimney",
-      "Geyser"
+      "Geyser",
     ],
-    Bathroom: [
-      "Bathtub",
-      "Basin",
-      "Faucet",
-      "Shower",
-      "Commode"
-    ]
-  }
+    Bathroom: ["Bathtub", "Basin", "Faucet", "Shower", "Commode"],
+  };
 
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSubCategory, setSelectedSubCategory] = useState("");
 
   const handleCategoryChange = (event) => {
-    const newCategory = event.target.value
+    const newCategory = event.target.value;
     setSelectedCategory(newCategory);
     setSubCategoryData(subcategories[newCategory]);
     setSelectedSubCategory("");
     console.log(selectedCategory);
   };
-
-  
 
   const [subCategoriesData, setSubCategoryData] = useState([]);
 
@@ -412,130 +431,248 @@ const Uploadquleep = () => {
     console.log(event.target.value);
   };
 
-
-
   return (
-    <div className='uploadrepomain'>
-
-      <Container maxWidth="md" >
-        <Grid container display={'none'} position={'absolute'} marginTop={'20px'} left={'0'} top={'0'} xs={8} className='erroralert' alignContent={'center'} justifyContent={'center'}>
-          <Alert severity="error" variant='filled' > {errortext}</Alert>
+    <div className="uploadrepomain">
+      <Container maxWidth="md">
+        <Grid
+          container
+          display={"none"}
+          position={"absolute"}
+          marginTop={"20px"}
+          left={"0"}
+          top={"0"}
+          xs={8}
+          className="erroralert"
+          alignContent={"center"}
+          justifyContent={"center"}
+        >
+          <Alert severity="error" variant="filled">
+            {" "}
+            {errortext}
+          </Alert>
         </Grid>
         <form autoComplete="off">
           <Grid container spacing={3} alignItems="center">
             <Grid item xs={3}>
-              <TextField fullWidth label="Product name" value={formdata.productname} name='productname' onChange={handleinputchange} variant="outlined" />
+              <TextField
+                fullWidth
+                label="Product name"
+                value={formdata.productname}
+                name="productname"
+                onChange={handleinputchange}
+                variant="outlined"
+              />
             </Grid>
             <Grid item xs={3}>
-              <TextField fullWidth label="platform name" value={formdata.platformname} name='platformname' onChange={handleinputchange} variant="outlined" />
+              <TextField
+                fullWidth
+                label="platform name"
+                value={formdata.platformname}
+                name="platformname"
+                onChange={handleinputchange}
+                variant="outlined"
+              />
             </Grid>
             <Grid item xs={3}>
-              <TextField fullWidth label="Length" type='number' name='length' value={formdata.length} onChange={handleinputchange} variant="outlined" />
+              <TextField
+                fullWidth
+                label="Length"
+                type="number"
+                name="length"
+                value={formdata.length}
+                onChange={handleinputchange}
+                variant="outlined"
+              />
             </Grid>
             <Grid item xs={3}>
-              <TextField fullWidth label="Width" type='number' name='width' value={formdata.width} onChange={handleinputchange} variant="outlined" />
+              <TextField
+                fullWidth
+                label="Width"
+                type="number"
+                name="width"
+                value={formdata.width}
+                onChange={handleinputchange}
+                variant="outlined"
+              />
             </Grid>
             <Grid item xs={3}>
-              <TextField fullWidth label="Height" type='number' name='height' value={formdata.height} onChange={handleinputchange} variant="outlined" />
+              <TextField
+                fullWidth
+                label="Height"
+                type="number"
+                name="height"
+                value={formdata.height}
+                onChange={handleinputchange}
+                variant="outlined"
+              />
             </Grid>
             <Grid item xs={3}>
-              <TextField fullWidth label="Unit" type='text' name='unit' value={formdata.unit} onChange={handleinputchange} variant="outlined" />
+              <TextField
+                fullWidth
+                label="Unit"
+                type="text"
+                name="unit"
+                value={formdata.unit}
+                onChange={handleinputchange}
+                variant="outlined"
+              />
             </Grid>
             <Grid item xs={3}>
-              <TextField fullWidth label="Product page url" type='text' name='pageurl' value={formdata.pageurl} onChange={handleinputchange} variant="outlined" />
+              <TextField
+                fullWidth
+                label="Product page url"
+                type="text"
+                name="pageurl"
+                value={formdata.pageurl}
+                onChange={handleinputchange}
+                variant="outlined"
+              />
             </Grid>
             <Grid item xs={3}>
-              <Select fullWidth onChange={handleCategoryChange} value={selectedCategory?selectedCategory:""} name="categories" displayEmpty>
+              <Select
+                fullWidth
+                onChange={handleCategoryChange}
+                value={selectedCategory ? selectedCategory : ""}
+                name="categories"
+                displayEmpty
+              >
                 <MenuItem value="">Categories</MenuItem>
                 {categories?.map((item) => {
-                  return (<MenuItem value={item}>{item}</MenuItem>)
+                  return <MenuItem value={item}>{item}</MenuItem>;
                 })}
               </Select>
             </Grid>
 
             <Grid item xs={3}>
-              <Select fullWidth onChange={handleSubcategoryChange} value={selectedSubCategory} name="sub categories" displayEmpty>
+              <Select
+                fullWidth
+                onChange={handleSubcategoryChange}
+                value={selectedSubCategory}
+                name="sub categories"
+                displayEmpty
+              >
                 <MenuItem value="">Sub Categories</MenuItem>
                 {subCategoriesData?.map((item) => {
-                  return (<MenuItem value={item}>{item}</MenuItem>)
+                  return <MenuItem value={item}>{item}</MenuItem>;
                 })}
               </Select>
             </Grid>
 
-            < >
-
-
-
-              <Grid item xs={12} style={{ display: 'flex' }} >
-                <Grid item xs={3} style={{ paddingTop: '10px' }}>
+            <>
+              <Grid item xs={12} style={{ display: "flex" }}>
+                <Grid item xs={3} style={{ paddingTop: "10px" }}>
                   <Typography variant="body2" gutterBottom>
                     Please upload the image files
                   </Typography>
                 </Grid>
-                <Grid item xs={5} style={{ display: 'flex' }}>
-
-                  <label htmlFor='glbfile' >
-                    <InputFile id={`glbfile`} type="file" multiple onChange={(e) => handlefileselectglb(e, 'image')} />
+                <Grid item xs={5} style={{ display: "flex" }}>
+                  <label htmlFor="glbfile">
+                    <InputFile
+                      id={`glbfile`}
+                      type="file"
+                      multiple
+                      onChange={(e) => handlefileselectglb(e, "image")}
+                    />
                     <Button
-
                       variant="contained"
                       component="span"
-                      sx={{ width: '100%' }}>
+                      sx={{ width: "100%" }}
+                    >
                       Choose File
                     </Button>
                   </label>
                   <Grid item xs={3}>
-                    <Button
+                    {/* <Button
                       onClick={(e) => handleuploadfileglb(e, 'glburl', 'image')}
                       variant="contained"
                       component="span"
                       startIcon={<Upload />}
                       sx={{ width: '50%' }}>
 
-                    </Button>
-                    <DoneAllIcon style={{ display: 'none' }} className='iconglburl' />
-
+                    </Button> */}
+                    <DoneAllIcon
+                      style={{ display: "none" }}
+                      className="iconglburl"
+                    />
                   </Grid>
                 </Grid>
-
               </Grid>
             </>
-
           </Grid>
-          <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: "60px" }}>
-
-
+          <Grid
+            item
+            xs={12}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: "60px",
+            }}
+          >
             <Button
-              type='submit'
+              type="submit"
               onClick={handleformsubmit}
               variant="contained"
               component="span"
-              sx={{ width: '50%' }}>
+              sx={{ width: "50%" }}
+            >
               Submit
-              <Box sx={{ display: 'none' }} className='loadingbox'>
-                <CircularProgress style={{ color: 'white', marginLeft: '10px' }} size={20} />
+              <Box sx={{ display: "none" }} className="loadingbox">
+                <CircularProgress
+                  style={{ color: "white", marginLeft: "10px" }}
+                  size={20}
+                />
               </Box>
             </Button>
-
-
-
           </Grid>
         </form>
-        <Grid container display={'none'} xs={12} marginTop={'20px'} className='alertdiv' alignContent={'center'} justifyContent={'center'}>
-          <Alert severity="success" variant='filled' > Data Uploaded</Alert>
+        <Grid
+          container
+          display={"none"}
+          xs={12}
+          marginTop={"20px"}
+          className="alertdiv"
+          alignContent={"center"}
+          justifyContent={"center"}
+        >
+          <Alert severity="success" variant="filled">
+            {" "}
+            Data Uploaded
+          </Alert>
         </Grid>
-        <Grid container display={'none'} xs={12} marginTop={'20px'} className='alertdivimage' alignContent={'center'} justifyContent={'center'}>
-          <Alert severity="success" variant='filled' > Images uploaded</Alert>
+        <Grid
+          container
+          display={"none"}
+          xs={12}
+          marginTop={"20px"}
+          className="alertdivimage"
+          alignContent={"center"}
+          justifyContent={"center"}
+        >
+          <Alert severity="success" variant="filled">
+            {" "}
+            Images uploaded
+          </Alert>
         </Grid>
       </Container>
 
       <Container>
-        <Grid width={'1000px'} overflow={'scroll'} height={'300px'} display={'flex'} marginTop={'20px'} flexWrap={'wrap'} flexDirection={'column'} >
-          {
-            images && images.map(img => (
-              <div style={{ display: 'flex', flexDirection: 'row-reverse' }} >
-
-                <FaTimes onClick={() => removeImage(img)} style={{ fontSize: '15px', cursor: 'pointer' }} />
+        <Grid
+          width={"1000px"}
+          overflow={"scroll"}
+          height={"300px"}
+          display={"flex"}
+          marginTop={"20px"}
+          flexWrap={"wrap"}
+          flexDirection={"column"}
+        >
+          {images &&
+            images.map((img) => (
+              <div style={{ display: "flex", flexDirection: "row-reverse" }}>
+                <FaTimes
+                  onClick={() => removeImage(img)}
+                  style={{ fontSize: "15px", cursor: "pointer" }}
+                />
                 <img
                   src={URL.createObjectURL(img)}
                   key={img}
@@ -547,22 +684,14 @@ const Uploadquleep = () => {
                     borderRadius: "10px",
                   }}
                 />
-
               </div>
-
-
-            ))
-          }
+            ))}
 
           <img />
-
         </Grid>
       </Container>
-
-
-
     </div>
-  )
-}
+  );
+};
 
-export default Uploadquleep
+export default Uploadquleep;

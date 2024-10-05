@@ -44,7 +44,7 @@ const Navbar = () => {
     <div>
       <div className="header">
         <div className="profile-info">
-          <img src={Arnxt} alt="Avatar" className="profile-img" />
+          <img src={Arnxt} alt="Avatar" className="profile-img" onClick={()=>navigate('/modelpath')} />
           <div className="profile-name">{uname && uname.email}</div>
         </div>
         <div className="profile-name">Welcome to Arxnt Internal Dashboard</div>

@@ -62,86 +62,231 @@ const Uploadclient = () => {
       };
     
   
-      const handleformsubmit = async (e)=>{
+     
       
-        e.preventDefault()
-  
-        if(formdata.productname === ''){
-          setErrorText('Product name is required')
-          document.querySelector('.erroralert').style.display = 'flex'
-          setTimeout(() => {
-          document.querySelector('.erroralert').style.display = 'none'
-            
-          }, 3000);
-          return
-        }
-        if(formdata.brandname === ''){
-          setErrorText('Brand name is required')
-          document.querySelector('.erroralert').style.display = 'flex'
-          setTimeout(() => {
-          document.querySelector('.erroralert').style.display = 'none'
-            
-          }, 3000);
-          return
-        }
+        
+    //   const handleformsubmit = async (e) => {  //pankaj kumar
+    //     e.preventDefault();
+    
+    //     if (formdata.productname === '') {
+    //         setErrorText('Product name is required');
+    //         document.querySelector('.erroralert').style.display = 'flex';
+    //         setTimeout(() => {
+    //             document.querySelector('.erroralert').style.display = 'none';
+    //         }, 3000);
+    //         return;
+    //     }
+    
+    //     if (formdata.brandname === '') {
+    //         setErrorText('Brand name is required');
+    //         document.querySelector('.erroralert').style.display = 'flex';
+    //         setTimeout(() => {
+    //             document.querySelector('.erroralert').style.display = 'none';
+    //         }, 3000);
+    //         return;
+    //     }
+    
+    //     document.querySelector('.loadingbox').style.display = 'flex';
+    //     let temparray = [];
+    
+    //     for (let img of images) {
+    //         try {
+    //             // Step 1: Upload file name and get upload URL
+    //             const url = uploadfileurl;
+    //             const res = await fetch(url, {
+    //                 method: "POST",
+    //                 body: img.name
+    //             });
+    
+    //             const data = await res.json();
+    
+    //             // Step 2: Use the upload URL to upload the file
+    //             const uploadres = await fetch(data.uploadURL, {
+    //                 method: "PUT",
+    //                 headers: {
+    //                     "Content-Type": "image/jpeg",
+    //                 },
+    //                 body: img
+    //             });
+    
+    //             if (uploadres.status === 200) {
+    //                 const imgurl = data.uploadURL.split('?')[0];  // Getting the image URL before query params
+    //                 temparray.push(imgurl);
+    
+    //                 document.querySelector('.alertdivimage').style.display = 'flex';
+    //                 setTimeout(() => {
+    //                     document.querySelector('.alertdivimage').style.display = 'none';
+    //                 }, 3000);
+    //             }
+    //         } catch (err) {
+    //             console.log(err);
+    //             document.querySelector('.loadingbox').style.display = 'none';
+    //             return;
+    //         }
+    //     }
+    
+    //     setFormData({
+    //         ...formdata,
+    //         images: temparray
+    //     });
+    
+    //     const body = {
+    //         Id: new Date().getTime().toString(),
+    //         productname: formdata.productname.toLowerCase(),
+    //         brandname: formdata.brandname.toLowerCase(),
+    //         productpageurl: formdata.pageurl,
+    //         productlength: formdata.length,
+    //         productwidth: formdata.width,
+    //         productheight: formdata.height,
+    //         images: temparray,
+    //         dimensionunit: formdata.unit.toLowerCase(),
+    //         statusval: 'Images Uploaded',
+    //         uploadedby: emailID?.email,
+    //         uploaddate: new Date().toString()
+    //     };
+    //     console.log("Body data is", body);
+    
+    //     try {
+    //         const res = await axios.post(registerurl, body);
+    //         if (res.status === 200) {
+    //             setUploadedItem(res.data.Item);
+    //             console.log("Uploaded item", res.data.Item);
+    
+    //             document.querySelector('.alertdiv').style.display = 'flex';
+    //             setTimeout(() => {
+    //                 document.querySelector('.alertdiv').style.display = 'none';
+    //             }, 3000);
+    
+    //             setFormData({
+    //                 productname: '',
+    //                 brandname: '',
+    //                 length: '',
+    //                 width: '',
+    //                 height: '',
+    //                 images: [],
+    //                 unit: '',
+    //                 pageurl: ''
+    //             });
+    //         }
+    //     } catch (error) {
+    //         console.log(error);
+    //     } finally {
+    //         document.querySelector('.loadingbox').style.display = 'none';
+    //     }
+    // };
+    
 
-        document.querySelector('.loadingbox').style.display = 'flex'
   
-         const body = {
-            Id : new Date().getTime().toString(),
-            productname : formdata.productname.toLowerCase(),
-            brandname : formdata.brandname.toLowerCase(),
-            productpageurl: formdata.pageurl,
-            productlength : formdata.length,
-            productwidth : formdata.width,
-            productheight : formdata.height,
-            images : formdata.images,
-            dimensionunit : formdata.unit.toLowerCase(),
-            statusval: 'Images Uploaded',
-            uploadedby : emailID?.email,
-            uploaddate : new Date().toString()
-         }
-            try{
-              await axios.post(registerurl, body).then(res=>{
-                 if(res.status === 200){
-                  setUploadedItem(res.data.Item)
-                 
-                   document.querySelector('.alertdiv').style.display = 'flex'
-                   setTimeout(() => {
-                   document.querySelector('.alertdiv').style.display = 'none'
-                    
-                   }, 3000);
+    const handleformsubmit = async (e) => {
+      e.preventDefault();
   
-               
-                  setFormData({
-                    productname : '',
-                    brandname : '',
-                    length: '',
-                    width : '',
-                    height : '',
-                     images: [],
-                    unit : '',
-                    pageurl: ''
-                  })
+      if (formdata.productname === '') {
+          setErrorText('Product name is required');
+          document.querySelector('.erroralert').style.display = 'flex';
+          setTimeout(() => {
+              document.querySelector('.erroralert').style.display = 'none';
+          }, 3000);
+          return;
+      }
   
-                 }
-        document.querySelector('.loadingbox').style.display = 'none'
+      if (formdata.brandname === '') {
+          setErrorText('Brand name is required');
+          document.querySelector('.erroralert').style.display = 'flex';
+          setTimeout(() => {
+              document.querySelector('.erroralert').style.display = 'none';
+          }, 3000);
+          return;
+      }
   
-                 
-              }).catch(error=>{
-                console.log(error)
-        document.querySelector('.loadingbox').style.display = 'none'
+      document.querySelector('.loadingbox').style.display = 'flex';
+      let temparray = [];
   
-              })
-            }catch(error){
-              console.log(error)
-        document.querySelector('.loadingbox').style.display = 'none'
+      for (let img of images) {
+          try {
+              
+              const url = uploadfileurl;
+              const res = await fetch(url, {
+                  method: "POST",
+                  body: img.name
+              });
   
-            }
-           
-        }
+              const data = await res.json();
   
+              
+              const uploadres = await fetch(data.uploadURL, {
+                  method: "PUT",
+                  headers: {
+                      "Content-Type": "image/jpeg",
+                  },
+                  body: img
+              });
   
+              if (uploadres.status === 200) {
+                  const imgurl = data.uploadURL.split('?')[0]; 
+                  temparray.push(imgurl);
+  
+                  document.querySelector('.alertdivimage').style.display = 'flex';
+                  setTimeout(() => {
+                      document.querySelector('.alertdivimage').style.display = 'none';
+                  }, 3000);
+              }
+          } catch (err) {
+              console.log(err);
+              document.querySelector('.loadingbox').style.display = 'none';
+              return;
+          }
+      }
+  
+      setFormData({
+          ...formdata,
+          images: temparray
+      });
+  
+      const body = {
+          Id: new Date().getTime().toString(),
+          productname: formdata.productname.toLowerCase(),
+          brandname: formdata.brandname.toLowerCase(),
+          productpageurl: formdata.pageurl,
+          productlength: formdata.length,
+          productwidth: formdata.width,
+          productheight: formdata.height,
+          images: temparray,
+          dimensionunit: formdata.unit.toLowerCase(),
+          statusval: 'Images Uploaded',
+          uploadedby: emailID?.email,
+          uploaddate: new Date().toString()
+      };
+      
+  
+      try {
+          const res = await axios.post(registerurl, body);
+          if (res.status === 200) {
+              setUploadedItem(res.data.Item);
+              document.querySelector('.alertdiv').style.display = 'flex';
+              setTimeout(() => {
+                  document.querySelector('.alertdiv').style.display = 'none';
+              }, 3000);
+  
+              setFormData({
+                  productname: '',
+                  brandname: '',
+                  length: '',
+                  width: '',
+                  height: '',
+                  images: [],
+                  unit: '',
+                  pageurl: ''
+              });
+          }
+      } catch (error) {
+          console.log(error);
+      } finally {
+          document.querySelector('.loadingbox').style.display = 'none';
+      }
+  };
+  
+
+    
         const fileToBase64 = (file, cb) => {
           const reader = new FileReader()
           reader.readAsDataURL(file)
@@ -212,72 +357,72 @@ const Uploadclient = () => {
          
      
   
-         const handleuploadfileglb = async (e)=>{
+        //  const handleuploadfileglb = async (e)=>{
 
-            let temparray = []
+        //     let temparray = []
               
-          {
+        //   {
 
-           for(let img of images){
+        //    for(let img of images){
 
-            const url=  uploadfileurl;
-            await fetch(url,{
-             method: "POST",
-             body:  img.name
+        //     const url=  uploadfileurl;
+        //     await fetch(url,{
+        //      method: "POST",
+        //      body:  img.name
            
-           }).then((res)=>res.json())
-              .then((res)=>{
+        //    }).then((res)=>res.json())
+        //       .then((res)=>{
               
-             fetch(res.uploadURL, {
+        //      fetch(res.uploadURL, {
                  
-                 method: "PUT",
-                 headers: {
-                   "ContentType": "image/jpeg",
+        //          method: "PUT",
+        //          headers: {
+        //            "ContentType": "image/jpeg",
                  
-                 },
+        //          },
            
-               body: img
+        //        body: img
                
            
-               })
-                  .then((res)=>{
+        //        })
+        //           .then((res)=>{
                  
-                     if(res.status === 200){
+        //              if(res.status === 200){
          
-                       let resnew= res.url.split('?')
-                       let imgurl= resnew[0]
+        //                let resnew= res.url.split('?')
+        //                let imgurl= resnew[0]
 
-                       temparray.push(imgurl)
+        //                temparray.push(imgurl)
                       
-                   document.querySelector('.alertdivimage').style.display = 'flex'
+        //            document.querySelector('.alertdivimage').style.display = 'flex'
 
-                   setTimeout(() => {
-                   document.querySelector('.alertdivimage').style.display = 'none'
+        //            setTimeout(() => {
+        //            document.querySelector('.alertdivimage').style.display = 'none'
                     
-                   }, 3000);
+        //            }, 3000);
 
-                       setImages([])
+        //                setImages([])
                      
 
                       
-                     }
+        //              }
          
-                  })
-                  .catch((err)=>console.log(err))
+        //           })
+        //           .catch((err)=>console.log(err))
                 
-              })
-              .catch((err)=>console.log(err))
+        //       })
+        //       .catch((err)=>console.log(err))
 
-           }
-          }
+        //    }
+        //   }
 
-            setFormData({
-                ...formdata,
-                 images : temparray
-            })
+        //     setFormData({
+        //         ...formdata,
+        //          images : temparray
+        //     })
          
   
-         }
+        //  }
 
   
          const handledeleteitem = async (idvalue)=>{
@@ -358,7 +503,7 @@ const Uploadclient = () => {
          Choose File
        </Button>
      </label>
-     <Grid item xs={3}>
+     {/* <Grid item xs={3}>
    <Button 
          onClick={(e)=>handleuploadfileglb(e ,'glburl', 'image')}
          variant="contained" 
@@ -369,7 +514,7 @@ const Uploadclient = () => {
        </Button>
        <DoneAllIcon style={{display:'none'}} className='iconglburl' />
    
-   </Grid>
+   </Grid> */}
    </Grid>
   
        </Grid>
