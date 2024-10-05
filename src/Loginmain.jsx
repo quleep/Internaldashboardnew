@@ -1793,6 +1793,16 @@ const searchHandlerQualityMerchant=()=>{
     
  }
 
+ const handleeditproducts = ()=>{
+  if(roleuse === 'modelhead' || roleuse === 'admin' ){
+
+    navigate('/edit')
+
+ }else{
+   window.alert('Access Denied')
+ }
+ }
+
  const handleManageLuxe = ()=>{
   if(roleuse === 'modelhead' || roleuse === 'admin' ){
 
@@ -1868,7 +1878,7 @@ const searchHandlerQualityMerchant=()=>{
       </div>
       <img src={Divider} alt="Your SVG" className="divider-svg" />
       <div >
-        <p  className="navoperation"  style={{cursor:'pointer'}}><a href="/edit"   >Edit Products</a></p>
+        <p  className="navoperation"  style={{cursor:'pointer'}}><a onClick={handleeditproducts}  >Edit Products</a></p>
         <div className="alert-box warning3" id='warning3' >Access Denied !</div>
       </div>
       {/* <div >
